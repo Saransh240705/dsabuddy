@@ -1,12 +1,18 @@
 import bcrypt from "bcrypt"
 import User from "../models/user.model.js";
 import jwt from "jsonwebtoken";
-import { loginPostRequestBodySchema } from "../validation/request.validation.js";
+import { loginPostRequestBodySchema, signupPostRequestBodySchema } from "../validation/request.validation.js";
 import { BlacklistedToken } from "../models/user.model.js";
 
 
 export const signup = async (req, res) => {
-  const { name, userName, email, password } = req.body;
+ const validationResult = await signupPostRequestBodySchema.safeParseAsync(req.body);
+
+  if (validationResult.error) {
+    return res.status(400).json({ error: validationResult.error.format() });
+  }
+
+  const { name, userName, email, password } = validationResult.data;
 
   const existingUser = await User.findOne({
     $or: [{ email }, { userName }],
@@ -118,7 +124,7 @@ export const updatePassword = async (req, res) => {
 
         const { currentPassword, newPassword } = req.body;
 
-        
+
 
         if (newPassword.length < 6) {
             return res.status(400).json({ 
