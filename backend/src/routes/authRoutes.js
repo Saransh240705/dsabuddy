@@ -9,7 +9,7 @@ router.get("/google", passport.authenticate("google", { scope: ["profile", "emai
 // Google Callback
 router.get(
   "/google/callback",
-  passport.authenticate("google", { failureRedirect: "/api/auth/fail" }),
+  passport.authenticate("google", { failureRedirect: "/api/oauth/fail" }),
   (req, res) => {
     res.redirect(`${process.env.FRONTEND_URL}/dashboard`);
   }
@@ -27,5 +27,7 @@ router.get("/logout", (req, res, next) => {
     res.redirect(process.env.FRONTEND_URL);
   });
 });
+
+
 
 export default router;
