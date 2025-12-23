@@ -49,9 +49,9 @@ export const FeaturesSection = memo(() => {
       >
         <h1>
           Why{" "}
-          <Badge variant="primary" className="rounded-full px-4 py-2 text-lg inline-block">
+          <span className="bg-(--primary-color) text-black px-2">
             DSABuddy?
-          </Badge>
+          </span>
         </h1>
       </motion.div>
       
