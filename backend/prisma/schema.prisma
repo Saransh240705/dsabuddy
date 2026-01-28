@@ -1,0 +1,286 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Platform {
+  LEETCODE
+  CODECHEF
+  CODEFORCES
+  GFG
+}
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+enum Frequency {
+  VERY_HIGH
+  HIGH
+  OCCASIONAL
+}
+
+enum UserQuestionStatus {
+  UNSOLVED
+  IN_PROGRESS
+  SOLVED
+}
+
+enum AuthProvider {
+  GOOGLE
+}
+
+model User {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Auth / identity
+  name         String
+  userName     String   @unique
+  email        String   @unique
+  passwordHash String?  // for local auth (if used)
+  salt         String?  // legacy-compatible; can be removed later
+
+  // Profile used by frontend
+  avatarUrl String?
+  college   String?
+  branch    String?
+  year      String?
+  role      String? // e.g. "CS - 2024" (can be derived but stored for convenience)
+
+  // Leaderboard / gamification
+  points      Int @default(0)
+  overallRank Int?
+
+  // Relations
+  platformConnections PlatformConnection[]
+  dailyActivity       DailyActivity[]
+  questionStatuses    UserQuestion[]
+  accounts            Account[]
+}
+
+model Account {
+  id String @id @default(cuid())
+
+  userId   String
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  provider AuthProvider
+
+  // For Google this is the "sub" (subject) id
+  providerAccountId String
+
+  accessToken   String?
+  refreshToken  String?
+  tokenExpiresAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model PlatformConnection {
+  id String @id @default(cuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  platform Platform
+  username String
+
+  // Platform-specific stats shown in UI
+  rating         Int?
+  stars          Int?   
+  problemsSolved Int?
+  rankLabel      String? //  "Knight", "Newbie"
+  synced         Boolean @default(false)
+  lastSyncedAt   DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, platform])
+  @@index([platform])
+}
+
+model DailyActivity {
+  id String @id @default(cuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Store as date (use midnight UTC consistently)
+  date  DateTime
+  count Int @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, date])
+  @@index([date])
+}
+
+model Company {
+  id String @id @default(cuid())
+
+  name          String @unique
+  slug          String @unique
+  questionCount Int    @default(0)
+  logoUrl       String?
+
+  interviewSets  InterviewSet[]
+  companyQuestions CompanyQuestion[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model InterviewSet {
+  id String @id @default(cuid())
+
+  companyId String
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  name        String
+  tag         String?
+  lastUpdated String? // UI shows "2 days ago" - store raw for now; can be replaced with DateTime later
+
+  easyCount   Int @default(0)
+  easyTotal   Int @default(0)
+  mediumCount Int @default(0)
+  mediumTotal Int @default(0)
+  hardCount   Int @default(0)
+  hardTotal   Int @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([companyId])
+}
+
+model Question {
+  id String @id @default(cuid())
+
+  // Basic info used in QuestionView + PYQs list
+  title       String
+  displayName String? // e.g. "1. Two Sum"
+  difficulty  Difficulty
+  leetcodeUrl String?
+
+  // Source tracking (for ingestion from multiple platforms)
+  sourcePlatform Platform?
+  sourceId       String? // stable id per platform (e.g. "1234A", "two-sum")
+  sourceSlug     String? // optional human slug
+  sourceUrl      String? // canonical URL to open the problem
+  sourceRating   Int?    // e.g. Codeforces rating
+  paidOnly       Boolean?
+
+  // Metadata
+  acceptanceRate Float?
+  frequency      Frequency?
+
+  statement   String?
+  examples    Json?
+  constraints Json?
+
+  acceptedCount   Int?
+  submissionCount Int?
+
+  // Relations
+  tags            QuestionTag[]
+  companies       CompanyQuestion[]
+  relatedFrom     RelatedQuestion[] @relation("RelatedFrom")
+  relatedTo       RelatedQuestion[] @relation("RelatedTo")
+  userStatuses    UserQuestion[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([sourcePlatform, sourceId])
+  @@index([sourcePlatform])
+}
+
+model Tag {
+  id   String @id @default(cuid())
+  name String @unique
+
+  questions QuestionTag[]
+}
+
+model QuestionTag {
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  tagId String
+  tag   Tag @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([questionId, tagId])
+  @@index([tagId])
+}
+
+model CompanyQuestion {
+  companyId String
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  // Company-specific metadata used by PYQs UI
+  frequency Frequency?
+  solved    Boolean? // global "solved" in mock data; real solved is per-user (see UserQuestion)
+  order     Int?
+
+  @@id([companyId, questionId])
+  @@index([questionId])
+}
+
+model RelatedQuestion {
+  fromId String
+  from   Question @relation("RelatedFrom", fields: [fromId], references: [id], onDelete: Cascade)
+
+  toId String
+  to   Question @relation("RelatedTo", fields: [toId], references: [id], onDelete: Cascade)
+
+  @@id([fromId, toId])
+  @@index([toId])
+}
+
+model UserQuestion {
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  status   UserQuestionStatus @default(UNSOLVED)
+  solvedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([userId, questionId])
+  @@index([questionId])
+}
+
+model BlacklistedToken {
+  id String @id @default(cuid())
+
+  token     String   @unique
+  expiresAt DateTime
+
+  createdAt DateTime @default(now())
+
+  @@index([expiresAt])
+}

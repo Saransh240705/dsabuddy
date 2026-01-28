@@ -1,4 +1,4 @@
-import { BlacklistedToken } from "../models/user.model.js";
+import { prisma } from "../config/prismaClient.js";
 
 
 export const logoutUser = async (req, res) => {
@@ -8,7 +8,10 @@ export const logoutUser = async (req, res) => {
      }
      const token = req.headers.authorization?.split(" ")[1];
 
-     await BlacklistedToken.create({ token, expiresAt: new Date(Date( req.user.exp*1000)) });
+     const expSeconds = req.user?.exp;
+     const expiresAt = typeof expSeconds === "number" ? new Date(expSeconds * 1000) : new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+
+     await prisma.blacklistedToken.create({ data: { token, expiresAt } });
 
      return res.status(200).json({ status: "success", message: "Logged out successfully" });
    } catch (error) {

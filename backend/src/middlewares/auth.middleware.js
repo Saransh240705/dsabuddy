@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { BlacklistedToken } from "../models/user.model.js";
+import { prisma } from "../config/prismaClient.js";
 
 /**
  * 
@@ -21,7 +21,10 @@ export const authMiddleware = async (req, res, next) => {
         }
         const token = tokenHeader.split(' ')[1];
 
-        const isBlacklisted = await BlacklistedToken.findOne({ token });
+        const isBlacklisted = await prisma.blacklistedToken.findUnique({
+            where: { token },
+            select: { id: true },
+        });
 
         if(isBlacklisted) {
             return res.status(401).json({ error: "You are not authorized" });
@@ -32,7 +35,7 @@ export const authMiddleware = async (req, res, next) => {
         req.user = decoded;
         return next();
     } catch (error) {
-        next()
+        return next();
     }
 }
 
