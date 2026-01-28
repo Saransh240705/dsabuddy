@@ -1,7 +1,6 @@
 import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
-import { connectDB } from "./config/db.js";
 import { prisma } from "./config/prismaClient.js";
 import routes from "./routes/index.js";
 import session from "express-session";
@@ -24,9 +23,6 @@ const app = express();
 
 async function connectDatabases() {
   await prisma.$connect();
-  if (process.env.MONGO_URI) {
-    await connectDB();
-  }
 }
 
 app.use(
