@@ -96,7 +96,9 @@ export async function syncLeetCodeProblemsByTags({
   let pages = 0;
   let processed = 0;
 
-  const uniqueTagSlugs = [...new Set(tagSlugs.map(normalizeTag))].filter(Boolean);
+  const uniqueTagSlugs = [...new Set(tagSlugs.map(normalizeTag))].filter(
+    Boolean,
+  );
 
   const targets = uniqueTagSlugs.length ? uniqueTagSlugs : [null];
 
@@ -154,7 +156,7 @@ export async function syncLeetCodeProblemsByTags({
               sourceSlug: titleSlug,
               sourceUrl: url,
               acceptanceRate:
-                typeof q.acRate === "number" ? q.acRate : q.acRate ?? null,
+                typeof q.acRate === "number" ? q.acRate : (q.acRate ?? null),
               paidOnly: Boolean(q.paidOnly),
             },
             update: {
@@ -164,7 +166,7 @@ export async function syncLeetCodeProblemsByTags({
               leetcodeUrl: url,
               sourceUrl: url,
               acceptanceRate:
-                typeof q.acRate === "number" ? q.acRate : q.acRate ?? null,
+                typeof q.acRate === "number" ? q.acRate : (q.acRate ?? null),
               paidOnly: Boolean(q.paidOnly),
             },
             select: { id: true },
@@ -206,7 +208,7 @@ export async function syncLeetCodeProblemsByTags({
       skip += limit;
       if (skip >= total) break;
       if (questions.length === 0) break;
-      if (skip > 2000) break; 
+      if (skip > 2000) break;
       if (processed >= maxItems) break;
     }
   }
@@ -215,77 +217,87 @@ export async function syncLeetCodeProblemsByTags({
 }
 
 export async function fetchLeetCodeUserStats({ username }) {
-  if (!username) throw new Error("LeetCode username is required");
+  try {
+    if (!username) throw new Error("LeetCode username is required");
 
-  const cookies = buildLeetCodeCookiesFromEnv();
-  await sleep(800); 
+    const cookies = buildLeetCodeCookiesFromEnv();
+    await sleep(800);
 
-  const data = await leetcodeGraphqlRequest({
-    query: USER_PROFILE_QUERY,
-    variables: { username },
-    cookies,
-  });
+    const data = await leetcodeGraphqlRequest({
+      query: USER_PROFILE_QUERY,
+      variables: { username },
+      cookies,
+    });
 
-  const user = data?.matchedUser;
-  if (!user) {
-    throw new Error(`LeetCode user '${username}' not found`);
+    const user = data?.matchedUser;
+    if (!user) {
+      throw new Error(`LeetCode user '${username}' not found`);
+    }
+
+    const submitStats = user.submitStats?.acSubmissionNum ?? [];
+    const easyItem = submitStats.find((s) => s.difficulty === "Easy");
+    const mediumItem = submitStats.find((s) => s.difficulty === "Medium");
+    const hardItem = submitStats.find((s) => s.difficulty === "Hard");
+    const allItem = submitStats.find((s) => s.difficulty === "All");
+
+    const easySolved = easyItem?.count ?? 0;
+    const mediumSolved = mediumItem?.count ?? 0;
+    const hardSolved = hardItem?.count ?? 0;
+    const totalSolved = allItem?.count ?? easySolved + mediumSolved + hardSolved;
+
+    const ranking = user.profile?.ranking ?? null;
+
+    return {
+      username: user.username,
+      problemsSolved: totalSolved,
+      easySolved,
+      mediumSolved,
+      hardSolved,
+      rating: null,
+      globalRanking: null,
+      ranking,
+      reputation: user.profile?.reputation ?? null,
+      starRating: user.profile?.starRating ?? null,
+    };
+  } catch (error) {
+    console.error(`Error fetching LeetCode stats for ${username}:`, error);
+    throw new Error(`LeetCode stats fetch failed: ${error.message}`);
   }
-
-  const submitStats = user.submitStats?.acSubmissionNum ?? [];
-  const easyItem = submitStats.find((s) => s.difficulty === "Easy");
-  const mediumItem = submitStats.find((s) => s.difficulty === "Medium");
-  const hardItem = submitStats.find((s) => s.difficulty === "Hard");
-  const allItem = submitStats.find((s) => s.difficulty === "All");
-
-  const easySolved = easyItem?.count ?? 0;
-  const mediumSolved = mediumItem?.count ?? 0;
-  const hardSolved = hardItem?.count ?? 0;
-  const totalSolved = allItem?.count ?? easySolved + mediumSolved + hardSolved;
-
-  const ranking = user.profile?.ranking ?? null;
-
-  return {
-    username: user.username,
-    problemsSolved: totalSolved,
-    easySolved,
-    mediumSolved,
-    hardSolved,
-    rating: null,
-    globalRanking: null,
-    ranking,
-    reputation: user.profile?.reputation ?? null,
-    starRating: user.profile?.starRating ?? null,
-  };
 }
 
 export async function fetchLeetCodeCalendar({ username, year }) {
-  if (!username) throw new Error("LeetCode username is required");
-
-  const cookies = buildLeetCodeCookiesFromEnv();
-  await sleep(800);
-  
-  const data = await leetcodeGraphqlRequest({
-    query: LEETCODE_CALENDAR_QUERY,
-    variables: { username, year },
-    cookies,
-  });
-
-  const calendar = data?.matchedUser?.userCalendar;
-  if (!calendar) return null;
-
-  let submissionCalendar = {};
   try {
-    if (calendar.submissionCalendar) {
-      submissionCalendar = JSON.parse(calendar.submissionCalendar);
-    }
-  } catch (e) {
-    console.error("Failed to parse LeetCode submissionCalendar:", e);
-  }
+    if (!username) throw new Error("LeetCode username is required");
 
-  return {
-    activeYears: calendar.activeYears || [],
-    streak: calendar.streak || 0,
-    totalActiveDays: calendar.totalActiveDays || 0,
-    submissionCalendar
-  };
+    const cookies = buildLeetCodeCookiesFromEnv();
+    await sleep(800);
+
+    const data = await leetcodeGraphqlRequest({
+      query: LEETCODE_CALENDAR_QUERY,
+      variables: { username, year },
+      cookies,
+    });
+
+    const calendar = data?.matchedUser?.userCalendar;
+    if (!calendar) return null;
+
+    let submissionCalendar = {};
+    try {
+      if (calendar.submissionCalendar) {
+        submissionCalendar = JSON.parse(calendar.submissionCalendar);
+      }
+    } catch (e) {
+      console.error("Failed to parse LeetCode submissionCalendar:", e);
+    }
+
+    return {
+      activeYears: calendar.activeYears || [],
+      streak: calendar.streak || 0,
+      totalActiveDays: calendar.totalActiveDays || 0,
+      submissionCalendar,
+    };
+  } catch (error) {
+    console.error(`Error fetching LeetCode calendar for ${username}:`, error);
+    throw new Error(`LeetCode calendar fetch failed: ${error.message}`);
+  }
 }

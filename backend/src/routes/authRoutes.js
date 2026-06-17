@@ -15,7 +15,15 @@ router.get(
     if (!token) {
       return res.redirect(`${process.env.FRONTEND_URL}/login?error=auth_token_missing`);
     }
-    res.redirect(`${process.env.FRONTEND_URL}/dashboard?token=${token}`);
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+    const needsOnboarding = !req.user?.branch || !req.user?.year;
+    const targetPath = needsOnboarding ? "/onboarding" : "/dashboard";
+    res.redirect(`${process.env.FRONTEND_URL}${targetPath}?token=${token}`);
   }
 );
 

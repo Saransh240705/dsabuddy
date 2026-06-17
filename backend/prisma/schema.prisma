@@ -59,6 +59,7 @@ model User {
   branch    String?
   year      String?
   role      String? // e.g. "CS - 2024" (can be derived but stored for convenience)
+  branchChangesCount Int @default(0)
 
   // Leaderboard / gamification
   points      Int @default(0)
@@ -69,6 +70,9 @@ model User {
   dailyActivity       DailyActivity[]
   questionStatuses    UserQuestion[]
   accounts            Account[]
+  forumPosts          ForumPost[]
+  comments            Comment[]
+  votes               Vote[]
 }
 
 model Account {
@@ -298,4 +302,56 @@ model CompanyPyq {
 
   @@unique([question_id, company])
   @@map("companypyq")
+}
+
+model ForumPost {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  title     String
+  content   String
+  tags      String[] // PostgreSQL string array
+
+  // Relations
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  comments  Comment[]
+  votes     Vote[]
+
+  @@index([userId])
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  content   String
+
+  // Relations
+  postId    String
+  post      ForumPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Threading relations
+  parentId  String?
+  parent    Comment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies   Comment[] @relation("CommentReplies")
+
+  @@index([postId])
+  @@index([userId])
+  @@index([parentId])
+}
+
+model Vote {
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  postId    String
+  post      ForumPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  value     Int       // 1 for upvote, -1 for downvote
+
+  @@id([userId, postId])
+  @@index([postId])
 }

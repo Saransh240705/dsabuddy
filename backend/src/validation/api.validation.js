@@ -9,6 +9,8 @@ export const idParamSchema = z.object({
 export const paginationQuerySchema = z.object({
   take: z.coerce.number().int().min(1).max(100).optional(),
   skip: z.coerce.number().int().min(0).optional(),
+  filter: z.enum(["college", "branch", "year"]).optional(),
+  sortBy: z.enum(["all", "leetcode", "codeforces", "codechef"]).optional(),
 });
 
 export const userNameParamSchema = z.object({
@@ -18,7 +20,8 @@ export const userNameParamSchema = z.object({
 export const updateMeBodySchema = z
   .object({
     name: z.string().min(1).optional(),
-    avatarUrl: z.string().url().optional().nullable(),
+    userName: z.string().min(1).optional(),
+    avatarUrl: z.string().url().or(z.string().startsWith("data:")).optional().nullable(),
     college: z.string().min(1).optional().nullable(),
     branch: z.string().min(1).optional().nullable(),
     year: z.string().min(1).optional().nullable(),

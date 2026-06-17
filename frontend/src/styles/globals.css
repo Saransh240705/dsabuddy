@@ -1,24 +1,35 @@
-@import url('https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Instrument+Serif:ital@0;1&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 @import "tailwindcss";
 
 body{
-	background-color: #f4f4f0;
+	background-color: #000000;
+	color: #ffffff;
+	font-family: 'Inter', sans-serif;
+}
+
+h1 {
+	font-family: 'Instrument Serif', serif;
+}
+
+h2, h3, h4, h5, h6 {
+	font-family: 'Inter', sans-serif;
 }
 
 :root {
-  --primary-color: #faf506;
-  --light-primary-color: rgba(250, 245, 6, 0.4);
-  --heading-color: #181810;
-  --content-color: #6c7280;
-  --highlight-color: #f7f6be;
-  --font-SF-Pro: "SF Pro", sans-serif;
-  --font-JetBrains-Mono: "JetBrains Mono", monospace;
-  --font-Spline-Sans: "Spline Sans", sans-serif;
+  --primary-color: #35b9f1;
+  --light-primary-color: rgba(53, 185, 241, 0.4);
+  --heading-color: #ffffff;
+  --content-color: #a1a1aa;
+  --highlight-color: #1a1a1a;
+  --font-SF-Pro: 'Inter', sans-serif;
+  --font-JetBrains-Mono: 'IBM Plex Mono', monospace;
+  --font-Spline-Sans: 'Inter', sans-serif;
+  --font-Instrument-Serif: 'Instrument Serif', serif;
 }
 
 
 ::selection {
-  background: #faf506; 
+  background: #35b9f1; 
   color: black;      
 }
 
@@ -51,6 +62,10 @@ body{
 	font-family: var(--font-Spline-Sans);
 }
 
+.font-Instrument-Serif {
+	font-family: var(--font-Instrument-Serif);
+}
+
 @keyframes blink {
 	0%, 100% {
 		opacity: 1;
@@ -68,24 +83,24 @@ body{
 }
 
 ::-webkit-scrollbar-track {
-	background: #0D1117;
+	background: #000000;
 	border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-	background: linear-gradient(180deg, #FBBF24 0%, #D97706 100%);
+	background: linear-gradient(180deg, #35b9f1 0%, #10a3e0 100%);
 	border-radius: 10px;
-	border: 2px solid #0D1117;
+	border: 2px solid #000000;
 	transition: all 0.3s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-	background: linear-gradient(180deg, #FCD34D 0%, #FBBF24 100%);
-	box-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+	background: linear-gradient(180deg, #6fd3ff 0%, #35b9f1 100%);
+	box-shadow: 0 0 10px rgba(53, 185, 241, 0.5);
 }
 
 ::-webkit-scrollbar-thumb:active {
-	background: #D97706;
+	background: #10a3e0;
 }
 
 /* Thin scrollbar variant for smaller containers */
@@ -95,13 +110,13 @@ body{
 }
 
 .scrollbar-thin::-webkit-scrollbar-thumb {
-	border: 1px solid #0D1117;
+	border: 1px solid #000000;
 }
 
 /* Firefox scrollbar */
 * {
 	scrollbar-width: thin;
-	scrollbar-color: #FBBF24 #0D1117;
+	scrollbar-color: #35b9f1 #000000;
 }
 
 /* Smooth scrolling */
@@ -138,3 +153,16 @@ html {
 	background: linear-gradient(180deg, #34D399 0%, #10B981 100%);
 	box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
 }
+
+/* Custom focus highlight for onboarding input cards */
+.onboarding-input-wrapper {
+	transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.onboarding-input-wrapper:hover {
+	border-color: #9ca3af !important;
+}
+.onboarding-input-wrapper:focus-within {
+	border-color: #35b9f1 !important;
+	box-shadow: 0 0 0 1px #35b9f1 !important;
+}
+

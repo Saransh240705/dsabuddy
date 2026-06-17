@@ -5,6 +5,7 @@ import {
   signupPostRequestBodySchema,
 } from "../validation/request.validation.js";
 import { prisma } from "../config/prismaClient.js";
+import { enrichUserWithRanks } from "./user.controller.js";
 
 export const signup = async (req, res) => {
   const validationResult = await signupPostRequestBodySchema.safeParseAsync(
@@ -52,6 +53,7 @@ export const signup = async (req, res) => {
       year: true,
       points: true,
       overallRank: true,
+      branchChangesCount: true,
       createdAt: true,
     },
   });
@@ -164,10 +166,12 @@ export const me = async (req, res) => {
       userName: true,
       email: true,
       avatarUrl: true,
+      college: true,
       branch: true,
       year: true,
       points: true,
       overallRank: true,
+      branchChangesCount: true,
     },
   });
 
@@ -175,7 +179,8 @@ export const me = async (req, res) => {
     return res.status(404).json({ error: "User not found" });
   }
 
-  return res.status(200).json({ user });
+  const enriched = await enrichUserWithRanks(user);
+  return res.status(200).json({ user: enriched });
 };
 
 export const updatePassword = async (req, res) => {

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Badge, Spinner } from '../../../components/common';
 import { mockQuestion } from './mockData';
-import { API_BASE_URL } from '@/config/constants';
+import { leetcodeService } from '@/api/services';
 import DOMPurify from 'dompurify';
 
 export function QuestionView({ titleSlug = 'two-sum' }) {
@@ -14,17 +14,8 @@ export function QuestionView({ titleSlug = 'two-sum' }) {
       try {
         setLoading(true);
         setError(null);
-        const token = localStorage.getItem('token');
-        const headers = { Authorization: `Bearer ${token}` };
-        const res = await fetch(`${API_BASE_URL}/leetcode/questions/${titleSlug}`, { headers });
-        if (!res.ok) {
-          const errText = await res.text();
-          setError(`Failed to fetch question: ${res.statusText}`);
-          console.error(errText);
-        } else {
-          const data = await res.json();
-          setQuestion(data);
-        }
+        const data = await leetcodeService.getQuestion(titleSlug);
+        setQuestion(data);
       } catch (e) {
         console.error(e);
         setError('Network error occurred while fetching the question.');

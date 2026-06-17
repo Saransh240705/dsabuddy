@@ -4,10 +4,10 @@ export const IconBox = ({
   className = "" 
 }) => {
   const variants = {
-    primary: "bg-[#f6f5a8] text-black",
-    info: "bg-[#dbeafe] text-[#2663eb]",
-    success: "bg-[#d1fae5] text-[#059669]",
-    warning: "bg-[#fed7aa] text-[#d97706]",
+    primary: "bg-[#35b9f1]/15 text-[#35b9f1]",
+    info: "bg-[#3B82F6]/15 text-[#60A5FA]",
+    success: "bg-[#10B981]/15 text-[#34D399]",
+    warning: "bg-[#F59E0B]/15 text-[#FBBF24]",
   };
 
   return (

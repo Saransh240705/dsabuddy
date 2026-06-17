@@ -11,7 +11,12 @@ export const validate = (schemas = {}) => {
         if (!parsed.success) {
           return res.status(400).json({ error: parsed.error.format() });
         }
-        req.params = parsed.data;
+        Object.defineProperty(req, 'params', {
+          value: parsed.data,
+          writable: true,
+          configurable: true,
+          enumerable: true
+        });
       }
 
       if (query) {
@@ -19,7 +24,12 @@ export const validate = (schemas = {}) => {
         if (!parsed.success) {
           return res.status(400).json({ error: parsed.error.format() });
         }
-        req.query = parsed.data;
+        Object.defineProperty(req, 'query', {
+          value: parsed.data,
+          writable: true,
+          configurable: true,
+          enumerable: true
+        });
       }
 
       if (body) {
@@ -32,6 +42,7 @@ export const validate = (schemas = {}) => {
 
       return next();
     } catch (err) {
+      console.error("Validation middleware error:", err);
       return res.status(500).json({ error: "Validation failed" });
     }
   };

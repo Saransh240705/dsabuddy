@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   AtSign,
   IdCard,
@@ -9,79 +8,78 @@ import {
 import { Button, Divider } from "@/components/common";
 import { FormField, SocialButton } from "@/components/layout";
 import GoogleLogo from "@/assets/Google.png";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { authService } from "@/api/services";
 import { API_BASE_URL } from "@/config/constants";
 
 export const RegisterForm = () => {
-  const [name, setName] = useState("");
-  const [userName, setUserName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    name: "",
+    userName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const [error, setError] = useState();
   const [loading, setLoading] = useState(false);
 
-  const handleRegister = async (e) => {
+  const handleGoogleLogin = () => {
+    window.location.href = `${API_BASE_URL}/oauth/google`;
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    if (error) setError(null);
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!name || !userName || !email || !password || !confirmPassword) {
-      setError("Please fill in all fields");
-      return;
-    }
-    if (password !== confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    }
     setError("");
-    setLoading(true);
+
+    if (formData.password !== formData.confirmPassword) {
+      setError("Password do not match");
+      return;
+    }
     try {
-      const res = await fetch(`${API_BASE_URL}/auth/signup`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name, userName, email, password }),
+      setLoading(true);
+      await authService.register({
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        userName: formData.userName,
       });
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || "Registration failed");
-      }
-      if (data.token) {
-        localStorage.setItem("token", data.token);
-        window.location.href = "/dashboard";
-      } else {
-        throw new Error("Registration succeeded but no token was returned");
-      }
+      navigate("/onboarding");
     } catch (err) {
-      setError(err.message || "Something went wrong. Please try again.");
+      setError(err.response?.data?.error || "Signup failed. Please try again.");
     } finally {
       setLoading(false);
     }
   };
-
   return (
     <div className="flex justify-center items-center w-full">
-      <div className="mt-6 sm:mt-10 w-full border-t-(--primary-color) border-t-2 max-w-120 p-4 sm:p-6 md:p-10 max-h-fit rounded-xl bg-[#18262b] border border-gray-700 mx-auto">
+      <div className="mt-6 sm:mt-10 w-full border-t-(--primary-color) border-t-2 max-w-120 p-4 sm:p-6 md:p-10 max-h-fit rounded-xl bg-[#0D1117] border border-gray-700 mx-auto">
         {error && (
-          <div className="bg-red-500/10 border border-red-500/30 text-red-500 text-sm px-4 py-2.5 rounded mb-4 text-center">
+          <div className="mb-4 text text-red-500 font-semibold bg-red-950/40 p-3 rounded-lg border border-red-500/3">
             {error}
           </div>
         )}
-        
-        <form onSubmit={handleRegister} className="mx-auto w-full flex flex-col justify-center items-center">
-          <FormField
-            label="Name"
-            labelIcon={IdCard}
-            placeholder="enter_name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
+        <form onSubmit={handleSubmit} className="mx-auto w-full flex flex-col justify-center items-center">
+          <FormField label="Name" labelIcon={IdCard} placeholder="enter_name" name="name" value={formData.name} onChange={handleChange} required />
 
           <FormField
             label="Username"
             labelIcon={IdCardLanyard}
             placeholder="enter_username"
-            value={userName}
-            onChange={(e) => setUserName(e.target.value)}
+            name="userName"
+            value={formData.userName}
+            onChange={handleChange}
             required
           />
 
@@ -90,8 +88,9 @@ export const RegisterForm = () => {
             labelIcon={AtSign}
             type="email"
             placeholder="enter_email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
             required
           />
 
@@ -101,8 +100,9 @@ export const RegisterForm = () => {
               labelIcon={KeyRound}
               type="password"
               placeholder="******"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
               required
             />
 
@@ -111,24 +111,20 @@ export const RegisterForm = () => {
               labelIcon={RotateCcwKey}
               type="password"
               placeholder="******"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={handleChange}
               required
             />
           </div>
-
-          <Button type="submit" variant="accent" disabled={loading} className="w-full text-sm sm:text-base mt-4">
+          <Button type="submit" variant="accent" className="w-full text-sm sm:text-base" disabled={loading}>
             {loading ? "[ Initializing... ]" : "[ Initialize Account ]"}
           </Button>
         </form>
 
         <Divider text="OR" className="mt-5 mb-5" />
 
-        <SocialButton 
-          icon={GoogleLogo} 
-          text="Continue with Google" 
-          onClick={() => window.location.href = `${API_BASE_URL}/oauth/google`}
-        />
+        <SocialButton icon={GoogleLogo} text="Continue with Google" onClick={handleGoogleLogin} />
       </div>
     </div>
   );

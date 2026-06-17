@@ -18,9 +18,9 @@ export const HeroSection = ({ onStartTracking = () => {} }) => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.2 }}
       >
-        <h1 className="font-Spline-Sans font-bold xl:text-7xl 2xl:text-7xl md:text-6xl text-4xl">
+        <h1 className="font-Instrument-Serif font-normal italic xl:text-8xl 2xl:text-8xl md:text-7xl text-5xl">
           Master Algorithms.<br/> Crush{" "} 
-          <span className="bg-linear-to-r from-slate-900 to-gray-400 bg-clip-text text-transparent">
+          <span className="bg-linear-to-r from-white to-[#35b9f1] bg-clip-text text-transparent">
             Interviews.
           </span>
         </h1>
@@ -69,7 +69,7 @@ export const HeroSection = ({ onStartTracking = () => {} }) => {
         transition={{ duration: 0.8, delay: 0.8 }}
       >
         <img 
-          className="rounded-4xl border-2 border-black" 
+          className="rounded-4xl border border-[#35b9f1]/20 shadow-[0_0_40px_rgba(53,185,241,0.12)]" 
           src={DashboardImg} 
           alt="Dashboard Preview"
           loading="lazy"
@@ -78,7 +78,7 @@ export const HeroSection = ({ onStartTracking = () => {} }) => {
 
       {/* Stats Section */}
       <motion.div 
-        className="mt-16 pt-8 pb-8 flex flex-row border-t border-b border-t-gray-300 border-b-gray-300 justify-evenly items-center md:gap-4 xl:gap-4 2xl:gap-4 gap-2 text-center font-SF-Pro bg-white"
+        className="mt-16 pt-8 pb-8 flex flex-row border-t border-b border-t-[#1F2937] border-b-[#1F2937] justify-evenly items-center md:gap-4 xl:gap-4 2xl:gap-4 gap-2 text-center font-SF-Pro bg-[#0a0a0a]"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}

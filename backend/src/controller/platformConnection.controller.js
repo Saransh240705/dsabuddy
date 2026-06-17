@@ -1,5 +1,7 @@
 import { prisma } from "../config/prismaClient.js";
 import { syncUserStats } from "../ingestion/index.js";
+import { recalculateUserPoints } from "../utils/points.js";
+import { clearAnalyticsCache } from "./dailyActivity.controller.js";
 
 const getAuthUserId = (req) => req.user?.userId ?? req.user?._id ?? null;
 
@@ -54,6 +56,10 @@ export const upsertMyPlatformConnection = async (req, res) => {
     },
   });
 
+  if (record && record.username) {
+    clearAnalyticsCache(record.username);
+  }
+
   return res.status(200).json({ platformConnection: record });
 };
 
@@ -62,9 +68,19 @@ export const deleteMyPlatformConnection = async (req, res) => {
   if (!userId) return res.status(401).json({ error: "Unauthorized" });
 
   const { platform } = req.params;
+
+  const existing = await prisma.platformConnection.findUnique({
+    where: { userId_platform: { userId, platform } },
+    select: { username: true },
+  });
+
   await prisma.platformConnection.delete({
     where: { userId_platform: { userId, platform } },
   });
+
+  if (existing && existing.username) {
+    clearAnalyticsCache(existing.username);
+  }
 
   return res.status(204).send();
 };
@@ -118,6 +134,9 @@ export const syncMyPlatformStats = async (req, res) => {
         updatedAt: true,
       },
     });
+
+    // Clear analytics cache for this user since we just synced new data
+    clearAnalyticsCache(existing.username);
 
     return res.status(200).json({
       message: "Platform stats synced successfully",

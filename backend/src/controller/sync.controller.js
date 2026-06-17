@@ -43,7 +43,6 @@ export const startSyncProblems = async (req, res) => {
   // Fire-and-forget background run. (For truly large workloads use a queue worker.)
   (async () => {
     try {
-      await prisma.$connect();
       const result = await syncProblems({
         prisma,
         platforms,
@@ -64,12 +63,6 @@ export const startSyncProblems = async (req, res) => {
         finishedAt: new Date(),
         error: err?.message ?? String(err),
       });
-    } finally {
-      try {
-        await prisma.$disconnect();
-      } catch {
-        // ignore
-      }
     }
   })();
 

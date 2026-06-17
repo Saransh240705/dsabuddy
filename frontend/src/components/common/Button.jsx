@@ -15,8 +15,8 @@ export const Button = ({
   const variants = {
     primary: "bg-black text-white hover:opacity-90",
     secondary: "bg-white text-black hover:opacity-90",
-    accent: "bg-(--primary-color) text-black shadow-[0_0_18px_rgba(250,245,6,0.45)] hover:shadow-[0_0_26px_rgba(250,245,6,0.75)]",
-    outline: "bg-transparent border border-gray-600 text-white hover:border-[#faf506]",
+    accent: "bg-(--primary-color) text-black shadow-[0_0_18px_rgba(53,185,241,0.45)] hover:shadow-[0_0_26px_rgba(53,185,241,0.75)]",
+    outline: "bg-transparent border border-gray-600 text-white hover:border-[#35b9f1]",
   };
 
   const sizes = {

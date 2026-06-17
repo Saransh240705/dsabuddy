@@ -6,6 +6,8 @@ import {
   syncLeetCodeProblemsByTags,
   fetchLeetCodeUserStats,
 } from "./leetcode.js";
+import { fetchCodechefUserStats } from "./codechef.js";
+import { fetchGfgUserStats } from "./gfg.js";
 
 export async function syncProblems({
   prisma,
@@ -19,21 +21,31 @@ export async function syncProblems({
   const results = {};
 
   if (wanted.has("codeforces")) {
-    results.codeforces = await syncCodeforcesProblemsByTags({
-      prisma,
-      tagSlugs,
-      maxItems,
-      dryRun,
-    });
+    try {
+      results.codeforces = await syncCodeforcesProblemsByTags({
+        prisma,
+        tagSlugs,
+        maxItems,
+        dryRun,
+      });
+    } catch (error) {
+      console.error("❌ Codeforces sync failed:", error);
+      results.codeforces = { error: error.message || String(error) };
+    }
   }
 
   if (wanted.has("leetcode")) {
-    results.leetcode = await syncLeetCodeProblemsByTags({
-      prisma,
-      tagSlugs,
-      maxItems,
-      dryRun,
-    });
+    try {
+      results.leetcode = await syncLeetCodeProblemsByTags({
+        prisma,
+        tagSlugs,
+        maxItems,
+        dryRun,
+      });
+    } catch (error) {
+      console.error("❌ LeetCode sync failed:", error);
+      results.leetcode = { error: error.message || String(error) };
+    }
   }
 
   return results;
@@ -50,6 +62,13 @@ export async function syncUserStats({ platform, username }) {
     return await fetchCodeforcesUserStats({ username });
   }
 
+  if (platformLower === "codechef") {
+    return await fetchCodechefUserStats({ username });
+  }
+
+  if (platformLower === "gfg") {
+    return await fetchGfgUserStats({ username });
+  }
+
   throw new Error(`Platform '${platform}' user stats sync not implemented`);
 }
-

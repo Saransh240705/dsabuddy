@@ -6,11 +6,11 @@ export function PlatformCard({ platform }) {
     gfg: '#2F8D46',
   };
 
-  const color = platformColors[platform?.id] || '#FBBF24';
+  const color = platformColors[platform?.id] || '#35b9f1';
   const isSynced = platform?.synced !== false;
 
   return (
-    <div className="bg-[#161B22] rounded-xl p-6 border border-[#1F2937] hover:border-[#FBBF24]/20 transition-all">
+    <div className="bg-[#161B22] rounded-xl p-6 border border-[#1F2937] hover:border-[#35b9f1]/20 transition-all">
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
           <div 
@@ -18,7 +18,11 @@ export function PlatformCard({ platform }) {
             style={{ backgroundColor: `${color}20` }}
           >
             {platform?.logo ? (
-              <img src={platform.logo} alt={platform.name} className="w-7 h-7" />
+              <img 
+                src={platform.logo} 
+                alt={platform.name} 
+                className={`w-7 h-7 object-contain ${platform?.username && platform?.username !== 'Not Connected' ? '' : 'grayscale opacity-40'}`} 
+              />
             ) : (
               <span className="text-xl font-bold" style={{ color }}>{platform?.name?.[0] || 'L'}</span>
             )}
@@ -39,7 +43,7 @@ export function PlatformCard({ platform }) {
         <div className="bg-[#0D1117] rounded-lg p-3">
           <p className="text-[#6B7280] text-xs mb-1 font-JetBrains-Mono">RATING</p>
           <p className="text-[#E5E7EB] text-xl font-bold font-Spline-Sans">
-            {platform?.rating?.toLocaleString() || '1,642'}
+            {platform?.rating !== undefined && platform?.rating !== null ? platform.rating.toLocaleString() : '-'}
           </p>
         </div>
         <div className="bg-[#0D1117] rounded-lg p-3">
@@ -48,8 +52,8 @@ export function PlatformCard({ platform }) {
           </p>
           <p className="text-[#E5E7EB] text-xl font-bold font-Spline-Sans">
             {platform?.id === 'codechef' 
-              ? `${platform?.stars || 2}★` 
-              : platform?.problemsSolved || '342'}
+              ? (platform?.stars !== undefined && platform?.stars !== null ? `${platform.stars}★` : '-') 
+              : (platform?.problemsSolved !== undefined && platform?.problemsSolved !== null ? platform.problemsSolved : '-')}
           </p>
         </div>
       </div>

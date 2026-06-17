@@ -28,7 +28,7 @@ export const Input = ({
           value={value}
           onChange={onChange}
           placeholder={placeholder}
-          className={`w-full ${Icon ? 'pl-10' : 'pl-4'} pr-4 py-3 bg-[#101e22] text-white border border-gray-600 rounded-lg focus:outline-none focus:border-[#faf506] focus:ring-1 focus:ring-[#faf506] transition-colors font-JetBrains-Mono ${inputClassName}`}
+          className={`w-full ${Icon ? 'pl-10' : 'pl-4'} pr-4 py-3 bg-[#0D1117] text-white border border-gray-600 rounded-lg focus:outline-none focus:border-[#35b9f1] focus:ring-1 focus:ring-[#35b9f1] transition-colors font-JetBrains-Mono ${inputClassName}`}
           {...props}
         />
       </div>

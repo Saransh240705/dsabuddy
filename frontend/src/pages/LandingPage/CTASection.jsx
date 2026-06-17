@@ -10,14 +10,14 @@ export const CTASection = ({ onGetStarted = () => {} }) => {
       transition={{ duration: 0.6 }}
     >
       <motion.div
-        className="xl:max-w-270 2xl:max-w-270 md:max-w-190 sm:max-w-150 max-w-90 m-auto mt-13 text-center bg-[#F5F94C] bg-[radial-gradient(circle,_rgba(0,0,0,0.12)_1px,_transparent_1px)] bg-[size:16px_16px] rounded-3xl p-20 pb-10"
+        className="xl:max-w-270 2xl:max-w-270 md:max-w-190 sm:max-w-150 max-w-90 m-auto mt-13 text-center bg-[#0a0a0a] bg-[radial-gradient(ellipse_at_center,_rgba(53,185,241,0.08)_0%,_transparent_70%)] border border-[#1F2937] hover:border-[#35b9f1]/30 transition-all duration-300 rounded-3xl p-20 pb-10"
         initial={{ opacity: 0, scale: 0.9, y: 30 }}
         whileInView={{ opacity: 1, scale: 1, y: 0 }}
         viewport={{ once: true, margin: "-50px" }}
         transition={{ duration: 0.6 }}
       >
         <motion.h1 
-          className="text-5xl font-Spline-Sans font-bold"
+          className="text-5xl font-Instrument-Serif font-normal italic text-white"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -27,7 +27,7 @@ export const CTASection = ({ onGetStarted = () => {} }) => {
         </motion.h1>
         
         <motion.h3 
-          className="text-lg mt-6 font-Spline-Sans"
+          className="text-lg mt-6 font-Spline-Sans text-[#a1a1aa]"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}

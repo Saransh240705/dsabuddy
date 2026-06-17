@@ -45,7 +45,7 @@ export const ComparisonSection = () => {
         {/* Solution Card */}
         <Card variant="highlight" animated={true} className="p-6 relative overflow-hidden">
           <motion.div 
-            className="group-hover:bg-(--primary-color) transition ease-in-out duration-300 bg-[#9b9833] size-35 absolute blur-3xl ml-103 -mt-14"
+            className="group-hover:bg-(--primary-color) transition ease-in-out duration-300 bg-[#35b9f1] size-35 absolute blur-3xl ml-103 -mt-14"
             animate={{ 
               scale: [1, 1.1, 1],
               opacity: [0.5, 0.7, 0.5]

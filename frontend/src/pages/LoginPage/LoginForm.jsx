@@ -1,77 +1,80 @@
-import { useState } from "react";
 import { LockKeyhole, LogIn, UserRound } from "lucide-react";
 import { Button, Divider } from "@/components/common";
 import { FormField, SocialButton } from "@/components/layout";
 import GoogleLogo from "@/assets/Google.png";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { authService } from "@/api/services";
 import { API_BASE_URL } from "@/config/constants";
 
 export const LoginForm = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    email: "",
+    password: ""
+  });
+
+  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = async (e) => {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (error) setError(null);
+  };
+
+  const handleGoogleLogin = () => {
+    window.location.href = `${API_BASE_URL}/oauth/google`;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!email || !password) {
-      setError("Please fill in all fields");
-      return;
-    }
     setError("");
-    setLoading(true);
-    try {
-      const res = await fetch(`${API_BASE_URL}/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
+    try{
+      setLoading(true);
+      const res = await authService.login({
+        email: formData.email,
+        password: formData.password,
       });
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || "Login failed");
+      if (res?.token) {
+        localStorage.setItem('token', res.token);
       }
-      if (data.token) {
-        localStorage.setItem("token", data.token);
-        window.location.href = "/dashboard";
-      } else {
-        throw new Error("Login succeeded but no token was returned");
-      }
-    } catch (err) {
-      setError(err.message || "Something went wrong. Please try again.");
+      navigate('/dashboard');
+    } catch (error) {
+      setError(error.response?.data?.error || 'Login failed. Please try again.');
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   return (
-    <div className="border rounded-lg border-gray-800 border-t-(--primary-color) border-t-2 bg-[#18262b] max-w-90 xl:max-w-130 2xl:max-w-130 md:max-w-130 p-12 mx-auto">
+    <div className="border rounded-lg border-[#1F2937] border-t-(--primary-color) border-t-2 bg-[#0D1117] max-w-90 xl:max-w-130 2xl:max-w-130 md:max-w-130 p-12 mx-auto">
       <div>
         <div className="w-full text-center mx-auto">
-          <h1 className="font-bold text-white font-Spline-Sans text-3xl">
+          <h1 className="font-normal italic text-white font-Instrument-Serif text-3xl">
             Welcome Back
           </h1>
           <p className="content-color">Ready to crush some more problems?</p>
         </div>
 
-        <Divider text="OR" className="mt-6 mb-5" />
-
         {error && (
-          <div className="bg-red-500/10 border border-red-500/30 text-red-500 text-sm px-4 py-2.5 rounded mb-4 text-center">
+          <div className="mt-4 mb-2 text-sm text-red-500 font-semibold bg-red-950/40 p-3 rounded-lg border border-red-500/30">
             {error}
           </div>
         )}
 
+        <Divider text="OR" className="mt-6 mb-5" />
+
         <div>
-          <form onSubmit={handleLogin} className="font-JetBrains-Mono">
+          <form onSubmit={handleSubmit} className="font-JetBrains-Mono">
             <FormField
               label="EMAIL ADDRESS"
               icon={UserRound}
               type="email"
               placeholder="std::cin >> email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
             />
             
             <FormField
@@ -79,25 +82,30 @@ export const LoginForm = () => {
               icon={LockKeyhole}
               type="password"
               placeholder="******"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
             />
-
-            <Button type="submit" variant="accent" disabled={loading} className="mt-8 w-full flex gap-3">
+        <Button type="submit" variant="accent" className="mt-8 w-full flex gap-3" disabled={loading}>
+          {loading ? (
+            <div className="flex items-center gap-2">
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+              <span>Signing in...</span>
+            </div>
+          ) : (
+            <>
               <LogIn />
-              <h3>{loading ? "Logging In..." : "Log In"}</h3>
-            </Button>
+              <h3>Log In</h3>
+            </>
+          )}
+        </Button>
           </form>
         </div>
 
+
         <Divider text="OR" className="mt-5 mb-5" />
 
-        <SocialButton 
-          icon={GoogleLogo} 
-          text="Continue with Google" 
-          onClick={() => window.location.href = `${API_BASE_URL}/oauth/google`}
-        />
+        <SocialButton icon={GoogleLogo} text="Continue with Google" onClick={handleGoogleLogin} />
       </div>
     </div>
   );

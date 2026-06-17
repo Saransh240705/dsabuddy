@@ -16,7 +16,9 @@ import userQuestionRoutes from "./routes/userQuestion.routes.js";
 import dailyActivityRoutes from "./routes/dailyActivity.routes.js";
 import platformConnectionRoutes from "./routes/platformConnection.routes.js";
 import syncRoutes from "./routes/sync.routes.js";
+import forumRoutes from "./routes/forum.routes.js";
 import leetcodeRoutes from "./routes/leetcode.routes.js";
+import uploadRoutes from "./routes/upload.js";
 
 dotenv.config();
 
@@ -47,10 +49,14 @@ if (process.env.FRONTEND_URL) {
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
+      // Allow requests with no origin (like mobile apps, curl, postman) in development
+      if (!origin && process.env.NODE_ENV !== "production") {
+        return callback(null, true);
+      }
+      if (allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
-        callback(null, false);
+        callback(new Error("Not allowed by CORS"));
       }
     },
     credentials: true,
@@ -132,7 +138,9 @@ app.use("/api/user-questions", userQuestionRoutes);
 app.use("/api/daily-activity", dailyActivityRoutes);
 app.use("/api/platform-connections", platformConnectionRoutes);
 app.use("/api/sync", syncRoutes);
+app.use("/api/forum", forumRoutes);
 app.use("/api/leetcode", leetcodeRoutes);
+app.use("/api/upload", uploadRoutes);
 
 app.get("/", (req, res) => res.send("Server running"));
 

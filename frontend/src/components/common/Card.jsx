@@ -9,10 +9,10 @@ export const Card = ({
   ...props 
 }) => {
   const variants = {
-    default: "bg-white border border-gray-300 hover:border-[#f6f5a8] hover:drop-shadow-lg",
-    dark: "bg-[#18262b] border border-gray-700",
-    accent: "bg-[#f3f4f6]",
-    highlight: "bg-black text-white",
+    default: "bg-[#161B22] text-white border border-[#1F2937] hover:border-[var(--primary-color)] hover:drop-shadow-lg",
+    dark: "bg-[#161B22] border border-[#1F2937] text-white",
+    accent: "bg-[#0D1117] text-white border border-[#1F2937] hover:border-[var(--primary-color)]",
+    highlight: "bg-black text-white border border-[#1F2937] hover:border-[var(--primary-color)]",
   };
 
   const Component = animated ? motion.div : "div";

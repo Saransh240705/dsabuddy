@@ -22,7 +22,6 @@ export async function syncCodeforcesProblemsByTags({
   maxItems = 200,
   dryRun = false,
 }) {
-  
   await sleep(2100);
 
   const desired = new Set(tagSlugs.map(normalizeTag));
@@ -37,8 +36,7 @@ export async function syncCodeforcesProblemsByTags({
     const problemTags = Array.isArray(p.tags) ? p.tags : [];
     const normalized = problemTags.map(normalizeTag);
 
-    const keep =
-      desired.size === 0 || normalized.some((t) => desired.has(t));
+    const keep = desired.size === 0 || normalized.some((t) => desired.has(t));
     if (!keep) continue;
     matched += 1;
 
@@ -120,52 +118,93 @@ export async function syncCodeforcesProblemsByTags({
 }
 
 export async function fetchCodeforcesUserStats({ username }) {
-  if (!username) throw new Error("Codeforces username (handle) is required");
+  try {
+    if (!username) throw new Error("Codeforces username (handle) is required");
 
-  await sleep(2100); 
+    await sleep(1000);
 
-  const json = await fetchJson(`${CODEFORCES_API_BASE}/user.info?handles=${username}`);
-  if (json?.status !== "OK") {
-    throw new Error(json?.comment ?? `Codeforces user '${username}' not found`);
+    const infoJson = await fetchJson(
+      `${CODEFORCES_API_BASE}/user.info?handles=${username}`,
+    );
+    if (infoJson?.status !== "OK") {
+      throw new Error(infoJson?.comment ?? `Codeforces user '${username}' not found`);
+    }
+
+    const user = infoJson.result?.[0];
+    if (!user) {
+      throw new Error(`Codeforces user '${username}' not found`);
+    }
+
+    await sleep(1000);
+
+    let problemsSolved = 0;
+    try {
+      const statusJson = await fetchJson(
+        `${CODEFORCES_API_BASE}/user.status?handle=${username}`,
+      );
+      if (statusJson?.status === "OK") {
+        const submissions = statusJson.result ?? [];
+        const uniqueSolved = new Set();
+        submissions.forEach((sub) => {
+          if (sub.verdict === "OK" && sub.problem) {
+            const probId = `${sub.problem.contestId}_${sub.problem.index}`;
+            uniqueSolved.add(probId);
+          }
+        });
+        problemsSolved = uniqueSolved.size;
+      }
+    } catch (err) {
+      console.error("Failed to fetch Codeforces submission status for solved count:", err);
+    }
+
+    return {
+      username: user.handle,
+      rating: user.rating ?? null,
+      maxRating: user.maxRating ?? null,
+      rankLabel: user.rank ?? null,
+      maxRank: user.maxRank ?? null,
+      problemsSolved,
+    };
+  } catch (error) {
+    console.error(`Error fetching Codeforces stats for ${username}:`, error);
+    throw new Error(`Codeforces stats fetch failed: ${error.message}`);
   }
-
-  const user = json.result?.[0];
-  if (!user) {
-    throw new Error(`Codeforces user '${username}' not found`);
-  }
-  return {
-    username: user.handle,
-    rating: user.rating ?? null,
-    maxRating: user.maxRating ?? null,
-    rankLabel: user.rank ?? null, 
-    maxRank: user.maxRank ?? null,
-    problemsSolved: null,
-  };
 }
 
 export async function fetchCodeforcesCalendar({ username }) {
-  if (!username) throw new Error("Codeforces username (handle) is required");
+  try {
+    if (!username) throw new Error("Codeforces username (handle) is required");
 
-  await sleep(1000); 
+    await sleep(1000);
 
-  const json = await fetchJson(`${CODEFORCES_API_BASE}/user.status?handle=${username}`);
-  if (json?.status !== "OK") {
-    throw new Error(json?.comment ?? `Codeforces status for '${username}' failed`);
-  }
-
-  const submissions = json.result ?? [];
-  const submissionCalendar = {};
-  
-  submissions.forEach(sub => {
-    if (sub.verdict === "OK" && Number.isFinite(sub.creationTimeSeconds)) { // Only count successful submissions with valid timestamps
-      // Convert to start of day Unix timestamp (in seconds)
-      const startOfDay = Math.floor(sub.creationTimeSeconds / 86400) * 86400;
-      submissionCalendar[startOfDay] = (submissionCalendar[startOfDay] || 0) + 1;
+    const json = await fetchJson(
+      `${CODEFORCES_API_BASE}/user.status?handle=${username}`,
+    );
+    if (json?.status !== "OK") {
+      throw new Error(
+        json?.comment ?? `Codeforces status for '${username}' failed`,
+      );
     }
-  });
 
-  return {
-    submissionCalendar,
-    totalActiveDays: Object.keys(submissionCalendar).length
-  };
+    const submissions = json.result ?? [];
+    const submissionCalendar = {};
+
+    submissions.forEach((sub) => {
+      if (sub.verdict === "OK" && Number.isFinite(sub.creationTimeSeconds)) {
+        // Only count successful submissions with valid timestamps
+        // Convert to start of day Unix timestamp (in seconds)
+        const startOfDay = Math.floor(sub.creationTimeSeconds / 86400) * 86400;
+        submissionCalendar[startOfDay] =
+          (submissionCalendar[startOfDay] || 0) + 1;
+      }
+    });
+
+    return {
+      submissionCalendar,
+      totalActiveDays: Object.keys(submissionCalendar).length,
+    };
+  } catch (error) {
+    console.error(`Error fetching Codeforces calendar for ${username}:`, error);
+    throw new Error(`Codeforces calendar fetch failed: ${error.message}`);
+  }
 }

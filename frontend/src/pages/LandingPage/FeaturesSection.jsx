@@ -41,15 +41,15 @@ export const FeaturesSection = memo(() => {
       transition={{ duration: 0.6 }}
     >
       <motion.div 
-        className="font-bold text-3xl"
+        className="text-3xl"
         initial={{ opacity: 0, x: -20 }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5 }}
       >
-        <h1>
+        <h1 className="font-normal italic" style={{ fontFamily: "'Instrument Serif', serif" }}>
           Why{" "}
-          <span className="bg-(--primary-color) text-black px-2">
+          <span className="bg-(--primary-color) text-black px-2 not-italic font-bold font-SF-Pro">
             DSABuddy?
           </span>
         </h1>

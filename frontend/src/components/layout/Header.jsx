@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { Button } from "@/components/common";
 import { useState, useEffect } from "react";
+import LogoImg from "@/assets/DSABuddy Logo.png";
 
 export const Header = () => {
   const [isVisible, setIsVisible] = useState(true);
@@ -27,7 +27,8 @@ export const Header = () => {
     <div className={`w-[90%] sm:w-[85%] md:w-[80%] lg:w-[70%] xl:w-[60%] max-w-7xl mx-auto mt-4 sm:mt-6 md:mt-8 rounded-3xl sm:rounded-[3rem] fixed top-0 left-1/2 px-4 sm:px-6 bg-white shadow-lg z-50 transition-all duration-500 ease-in-out ${isVisible ? '-translate-x-1/2 translate-y-0 opacity-100' : '-translate-x-1/2 -translate-y-full opacity-0'}`}>
       <div className="flex text-black justify-between items-center py-3 px-2 sm:p-4">
         <div>
-          <Link to="/">
+          <Link to="/" className="flex items-center gap-2">
+            <img src={LogoImg} alt="DSABuddy Logo" className="w-8 h-8 object-contain" />
             <h1 className="text-xl sm:text-2xl font-bold text-black font-SF-Pro">
               DSABuddy
             </h1>

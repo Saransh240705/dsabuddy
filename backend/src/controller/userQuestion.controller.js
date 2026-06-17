@@ -1,4 +1,5 @@
 import { prisma } from "../config/prismaClient.js";
+import { recalculateUserPoints } from "../utils/points.js";
 
 const getAuthUserId = (req) => req.user?.userId ?? req.user?._id ?? null;
 
@@ -60,6 +61,7 @@ export const upsertMyQuestionStatus = async (req, res) => {
     },
   });
 
+  await recalculateUserPoints(userId);
   return res.status(200).json({ userQuestion: record });
 };
 
@@ -72,6 +74,7 @@ export const deleteMyQuestionStatus = async (req, res) => {
     where: { userId_questionId: { userId, questionId } },
   });
 
+  await recalculateUserPoints(userId);
   return res.status(204).send();
 };
 

@@ -16,6 +16,7 @@ const router = Router();
 
 router.get(
   "/leaderboard",
+  authMiddleware,
   validate({ query: paginationQuerySchema }),
   getLeaderboard
 );
