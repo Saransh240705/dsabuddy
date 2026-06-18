@@ -8,7 +8,7 @@ import { Leaderboard } from "./Leaderboard";
 import { Settings } from "./Settings";
 import { InterviewForum } from "./InterviewForum";
 import { QuestionView } from "./QuestionView";
-import { userData } from "./userData";
+
 import { API_BASE_URL } from "@/config/constants";
 import { useUserStore } from "@/store/useUserStore";
 
@@ -26,7 +26,7 @@ export function DashboardPage() {
   const [selectedQuestionSlug, setSelectedQuestionSlug] = useState("two-sum");
   const storeUser = useUserStore((state) => state.user);
   const [firstLoad, setFirstLoad] = useState(!storeUser);
-  const user = storeUser || userData;
+
   const setUser = useUserStore((state) => state.setUser);
   const [platforms, setPlatforms] = useState([]);
   const [analytics, setAnalytics] = useState(null);
@@ -208,7 +208,7 @@ export function DashboardPage() {
           <PYQs companies={companies} onSelectQuestion={handleSelectQuestion} />
         );
       case "leaderboard":
-        return <Leaderboard user={storeUser || user} />;
+        return <Leaderboard user={storeUser} />;
       case "settings":
         return <Settings platforms={platforms} onUpdate={fetchData} />;
       case "forum":
