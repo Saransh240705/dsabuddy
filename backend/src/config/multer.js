@@ -1,9 +1,5 @@
 import multer from "multer";
 
-// Use in-memory storage instead of multer-storage-cloudinary
-// (which is incompatible with cloudinary v2).
-// After multer parses the file, upload the buffer via
-// cloudinary.uploader.upload_stream() â see cloudinaryUpload.js.
 const storage = multer.memoryStorage();
 
 const upload = multer({

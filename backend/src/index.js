@@ -24,29 +24,19 @@ import leetcodeRoutes from "./routes/leetcode.routes.js";
 import uploadRoutes from "./routes/upload.js";
 
 const app = express();
+const PORT = process.env.PORT || 5000;
 
 async function connectDatabases() {
   await prisma.$connect();
 }
 
-const allowedOrigins = [
+const allowedOrigins = new Set([
   "https://dsabuddy.xyz",
-  "https://dsabuddy.xyz/",
   "https://www.dsabuddy.xyz",
-  "https://www.dsabuddy.xyz/",
   "http://localhost:4173",
-];
-
-if (process.env.FRONTEND_URL) {
-  const envOriginWithoutSlash = process.env.FRONTEND_URL.replace(/\/$/, "");
-  const envOriginWithSlash = envOriginWithoutSlash + "/";
-  if (!allowedOrigins.includes(envOriginWithoutSlash)) {
-    allowedOrigins.push(envOriginWithoutSlash);
-  }
-  if (!allowedOrigins.includes(envOriginWithSlash)) {
-    allowedOrigins.push(envOriginWithSlash);
-  }
-}
+  "http://localhost:5173",
+  process.env.FRONTEND_URL?.replace(/\/$/, ""),
+].filter(Boolean));
 
 app.use(
   cors({
@@ -144,18 +134,15 @@ app.use("/api/forum", forumRoutes);
 app.use("/api/leetcode", leetcodeRoutes);
 app.use("/api/upload", uploadRoutes);
 
-
-
 app.get("/", (req, res) => res.send("Server running"));
 
-const PORT = process.env.PORT || 5000;
 connectDatabases()
   .then(() => {
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
   })
   .catch((err) => {
-    console.error("❌ Failed to connect databases:", err);
+    console.error("Failed to connect databases:", err);
     process.exit(1);
   });
 
