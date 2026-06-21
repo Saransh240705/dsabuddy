@@ -6,6 +6,7 @@ import {
 } from "../validation/request.validation.js";
 import { prisma } from "../config/prismaClient.js";
 import { enrichUserWithRanks } from "./user.controller.js";
+import { sendWelcomeEmail } from "./mailerController.js";
 
 export const signup = async (req, res) => {
   const validationResult = await signupPostRequestBodySchema.safeParseAsync(
@@ -56,6 +57,11 @@ export const signup = async (req, res) => {
       branchChangesCount: true,
       createdAt: true,
     },
+  });
+
+  // Send welcome email asynchronously
+  sendWelcomeEmail(user.email, user.name).catch((error) => {
+    console.error("Failed to send welcome email to", user.email, error);
   });
 
   const token = jwt.sign(

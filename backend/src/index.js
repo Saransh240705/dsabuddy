@@ -9,8 +9,9 @@ import routes from "./routes/index.js";
 import session from "express-session";
 import passport from "passport";
 import authRoutes from "./routes/authRoutes.js";
-import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import emailRoutes from "./routes/emailRoutes.js";
+import jwt from "jsonwebtoken";
+import { sendWelcomeEmail } from "./controller/mailerController.js";
 import userRoutes from "./routes/user.routes.js";
 import companyRoutes from "./routes/company.routes.js";
 import questionRoutes from "./routes/question.routes.js";
@@ -66,8 +67,6 @@ app.use(passport.session());
 passport.serializeUser((user, done) => done(null, user));
 passport.deserializeUser((user, done) => done(null, user));
 
-import jwt from "jsonwebtoken";
-
 passport.use(
   new GoogleStrategy(
     {
@@ -92,6 +91,10 @@ passport.use(
               userName: `user_${profile.id}`,
               avatarUrl: profile.photos?.[0]?.value || null,
             },
+          });
+          // Send welcome email asynchronously
+          sendWelcomeEmail(user.email, user.name).catch((error) => {
+            console.error("Failed to send welcome email to", user.email, error);
           });
         }
 
