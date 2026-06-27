@@ -8,6 +8,7 @@ const LoginPage = lazy(() => import('./pages/LoginPage'))
 const ComponentShowcase = lazy(() => import('./pages/ComponentShowcase'))
 const OnboardingPage = lazy(() => import('./pages/OnboardingPage'))
 const ProfilePage = lazy(() => import('./pages/ProfilePage'))
+const AboutPage = lazy(() => import('./pages/AboutPage'))
 
 function ProtectedRoute({ children }) {
   const params = new URLSearchParams(window.location.search);
