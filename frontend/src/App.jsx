@@ -33,6 +33,7 @@ function App() {
       <Suspense fallback={null}>
         <Routes>
           <Route path={ROUTES.HOME} element={<PublicRoute><LandingPage /></PublicRoute>} />
+          <Route path={ROUTES.ABOUT} element={<AboutPage />} />
           <Route path={ROUTES.DASHBOARD} element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
           <Route path="/dashboard/forum" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
           <Route path="/dashboard/analytics" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />

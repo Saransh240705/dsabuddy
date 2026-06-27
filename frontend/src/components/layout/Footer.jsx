@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export const Footer = () => {
   const year = new Date().getFullYear();
 
@@ -6,7 +8,10 @@ export const Footer = () => {
       <div className="flex justify-between text-gray-300">
         <h3>&copy;{year} DSABuddy</h3>
         <h3>
-          From <span className="text-[#61a5fa]">The Debugging Society</span>
+          From{" "}
+          <Link to="/about" className="text-[#35b9f1] hover:underline transition-all">
+            The Debugging Society
+          </Link>
         </h3>
       </div>
     </div>
