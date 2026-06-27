@@ -21,12 +21,6 @@ export class ErrorBoundary extends Component {
           <div className="text-center p-8 max-w-2xl w-full">
             <h1 className="text-4xl font-bold text-white mb-4">Oops!</h1>
             <p className="text-gray-400 mb-4">Something went wrong. Please refresh the page.</p>
-            {this.state.error && (
-              <pre className="text-left bg-black/50 p-4 rounded overflow-auto max-h-60 text-xs text-red-400 font-mono mb-6 whitespace-pre-wrap">
-                {this.state.error.toString()}
-                {this.state.error.stack ? `\n\n${this.state.error.stack}` : ''}
-              </pre>
-            )}
             <button
               onClick={() => window.location.reload()}
               className="bg-(--primary-color) px-6 py-3 rounded-lg font-bold hover:opacity-90 transition-opacity"
