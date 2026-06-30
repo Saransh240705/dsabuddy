@@ -15,8 +15,8 @@ export const FormField = ({
   return (
     <div className="w-full">
       {label && (
-        <label className="text-white flex gap-2 text-sm sm:text-base mb-1">
-          {LabelIcon && <LabelIcon className={`${iconColor} w-4 h-4 sm:w-5 sm:h-5`} />}
+        <label className="text-neutral-400 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider mb-2">
+          {LabelIcon && <LabelIcon className={`${iconColor} w-4 h-4`} />}
           {label}
         </label>
       )}

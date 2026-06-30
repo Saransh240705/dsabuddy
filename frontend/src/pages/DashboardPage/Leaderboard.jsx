@@ -96,8 +96,7 @@ export function Leaderboard({ user }) {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-[#E5E7EB] text-4xl font-normal italic mb-2 font-Instrument-Serif flex items-center gap-3">
-            <Trophy className="w-10 h-10 text-[#35b9f1]" />
+          <h1 className="text-[#E5E7EB] text-4xl font-normal italic mb-2 font-serif flex items-center gap-3">
             Peer Leaderboard
             <button 
               onClick={() => setShowInfo(prev => !prev)}
@@ -109,9 +108,9 @@ export function Leaderboard({ user }) {
               </svg>
             </button>
           </h1>
-          <p className="text-[#9CA3AF] font-JetBrains-Mono text-sm">Compare coding analytics across colleges, departments, and years</p>
+          <p className="text-[#9CA3AF] font-mono text-sm">Compare coding analytics across colleges, departments, and years</p>
         </div>
-        <div className="bg-[#161B22]/50 border border-[#1F2937]/50 text-gray-400 text-xs font-semibold px-4 py-1.5 rounded-lg select-none font-Spline-Sans tracking-wider uppercase">
+        <div className="bg-[#161B22]/50 border border-[#1F2937]/50 text-gray-400 text-xs font-semibold px-4 py-1.5 rounded-lg select-none tracking-wider uppercase">
           Live Sync Active
         </div>
       </div>
@@ -125,101 +124,128 @@ export function Leaderboard({ user }) {
           >
             ×
           </button>
-          <div className="flex items-start gap-4">
-            <div className="p-2 bg-[#35b9f1]/10 rounded-lg text-[#35b9f1] mt-0.5">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <div className="space-y-2 flex-1 pr-6">
-              <h3 className="text-[#E5E7EB] font-bold font-Spline-Sans">DSABuddy Points System</h3>
-              <p className="text-sm text-[#9CA3AF] leading-relaxed font-JetBrains-Mono">
-                Points are normalized across connected profiles. Overall score is the sum of these platform scores (Max 3000 overall pts):
-              </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-2">
-                <div className="bg-[#0D1117] p-3 rounded-lg border border-[#1F2937]/50 text-center">
-                  <p className="text-[#35b9f1] font-bold text-sm">LeetCode</p>
-                  <p className="text-xs text-[#9CA3AF] mt-1 font-JetBrains-Mono">Max 1000 pts</p>
-                </div>
-                <div className="bg-[#0D1117] p-3 rounded-lg border border-[#1F2937]/50 text-center">
-                  <p className="text-[#35b9f1] font-bold text-sm">Codeforces</p>
-                  <p className="text-xs text-[#9CA3AF] mt-1 font-JetBrains-Mono">Max 1000 pts</p>
-                </div>
-                <div className="bg-[#0D1117] p-3 rounded-lg border border-[#1F2937]/50 text-center">
-                  <p className="text-[#35b9f1] font-bold text-sm">CodeChef</p>
-                  <p className="text-xs text-[#9CA3AF] mt-1 font-JetBrains-Mono">Max 500 pts</p>
-                </div>
-                <div className="bg-[#0D1117] p-3 rounded-lg border border-[#1F2937]/50 text-center">
-                  <p className="text-[#35b9f1] font-bold text-sm">GFG</p>
-                  <p className="text-xs text-[#9CA3AF] mt-1 font-JetBrains-Mono">Max 500 pts</p>
-                </div>
+          <div className="space-y-2 flex-1 pr-6">
+            <h3 className="text-[#E5E7EB] font-bold">DSABuddy Points System</h3>
+            <p className="text-sm text-[#9CA3AF] leading-relaxed font-mono">
+              Points are normalized across connected profiles. Overall score is the sum of these platform scores (Max 3000 overall pts):
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-2">
+              <div className="bg-[#0D1117] p-3 rounded-lg border border-[#1F2937]/50 text-center">
+                <p className="text-[#35b9f1] font-bold text-sm">LeetCode</p>
+                <p className="text-xs text-[#9CA3AF] mt-1 font-mono">Max 1000 pts</p>
+              </div>
+              <div className="bg-[#0D1117] p-3 rounded-lg border border-[#1F2937]/50 text-center">
+                <p className="text-[#35b9f1] font-bold text-sm">Codeforces</p>
+                <p className="text-xs text-[#9CA3AF] mt-1 font-mono">Max 1000 pts</p>
+              </div>
+              <div className="bg-[#0D1117] p-3 rounded-lg border border-[#1F2937]/50 text-center">
+                <p className="text-[#35b9f1] font-bold text-sm">CodeChef</p>
+                <p className="text-xs text-[#9CA3AF] mt-1 font-mono">Max 500 pts</p>
+              </div>
+              <div className="bg-[#0D1117] p-3 rounded-lg border border-[#1F2937]/50 text-center">
+                <p className="text-[#35b9f1] font-bold text-sm">GFG</p>
+                <p className="text-xs text-[#9CA3AF] mt-1 font-mono">Max 500 pts</p>
               </div>
             </div>
           </div>
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Card 1: Your Position */}
-        <div className="bg-[#161B22] border border-[#1F2937] rounded-xl p-5 flex flex-col justify-between min-h-[140px]">
-          <div>
-            <p className="text-[#6B7280] text-xs font-JetBrains-Mono tracking-wider uppercase">YOUR POSITION</p>
-            <p className="text-xs text-gray-500 font-JetBrains-Mono mt-0.5">In Active College Cohort</p>
+      {user ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Card 1: Your Position */}
+          <div className="bg-[#161B22] border border-[#1F2937] rounded-xl p-5 flex flex-col justify-between min-h-[140px]">
+            <div>
+              <p className="text-[#6B7280] text-xs font-mono tracking-wider uppercase">YOUR POSITION</p>
+              <p className="text-xs text-gray-500 font-mono mt-0.5">In Active College Cohort</p>
+            </div>
+            <div className="flex items-baseline justify-between mt-4">
+              <h2 className="text-white text-5xl font-bold">#{currentUserRank}</h2>
+              <div className="flex items-center gap-1 text-[#10B981] text-sm font-mono">
+                <TrendingUp className="w-4 h-4" />
+                <span>Standings</span>
+              </div>
+            </div>
           </div>
-          <div className="flex items-baseline justify-between mt-4">
-            <h2 className="text-white text-5xl font-bold font-Spline-Sans">#{currentUserRank}</h2>
-            <div className="flex items-center gap-1 text-[#10B981] text-sm font-JetBrains-Mono">
-              <TrendingUp className="w-4 h-4" />
-              <span>Standings</span>
+
+          {/* Card 2: Active Metric Value */}
+          <div className="bg-[#161B22] border border-[#1F2937] rounded-xl p-5 flex flex-col justify-between min-h-[140px]">
+            <div>
+              <p className="text-[#6B7280] text-xs font-mono tracking-wider uppercase">ACTIVE METRIC VALUE</p>
+              <p className="text-xs text-gray-500 font-mono mt-0.5 uppercase">{currentUserDisplayLabel}</p>
+            </div>
+            <div className="flex items-baseline gap-1 mt-4">
+              <h3 className="text-[#35b9f1] text-5xl font-bold">
+                {typeof currentUserDisplayValue === 'number' 
+                  ? currentUserDisplayValue.toLocaleString() 
+                  : String(currentUserDisplayValue ?? 0)}
+              </h3>
+              <span className="text-[#35b9f1] text-lg font-medium">pts</span>
             </div>
           </div>
         </div>
-
-        {/* Card 2: Active Metric Value */}
-        <div className="bg-[#161B22] border border-[#1F2937] rounded-xl p-5 flex flex-col justify-between min-h-[140px]">
-          <div>
-            <p className="text-[#6B7280] text-xs font-JetBrains-Mono tracking-wider uppercase">ACTIVE METRIC VALUE</p>
-            <p className="text-xs text-gray-500 font-JetBrains-Mono mt-0.5 uppercase">{currentUserDisplayLabel}</p>
-          </div>
-          <div className="flex items-baseline gap-1 mt-4">
-            <h3 className="text-[#35b9f1] text-5xl font-bold font-Spline-Sans">
-              {typeof currentUserDisplayValue === 'number' 
-                ? currentUserDisplayValue.toLocaleString() 
-                : String(currentUserDisplayValue ?? 0)}
+      ) : (
+        <div className="bg-[#161B22]/60 border border-[#1F2937] rounded-xl p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+          <div className="space-y-1">
+            <h3 className="text-white text-lg font-bold">
+              Join the Leaderboard
             </h3>
-            <span className="text-[#35b9f1] text-lg font-medium font-Spline-Sans">pts</span>
+            <p className="text-sm text-gray-400 font-mono max-w-2xl leading-relaxed">
+              Log in to sync your coding profiles, track daily streaks, and compete with peers in your college cohort.
+            </p>
           </div>
+          <button
+            onClick={() => navigate('/login')}
+            className="shrink-0 px-6 py-2.5 bg-[#35b9f1] text-[#0D1117] font-semibold text-sm rounded-lg hover:opacity-90 transition-opacity cursor-pointer"
+          >
+            Log In / Sign Up
+          </button>
         </div>
-      </div>
+      )}
 
       <div className="bg-[#161B22] rounded-xl p-6 border border-[#1F2937]">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-8 border-b border-[#1F2937]/50 pb-6">
           {/* Main Filters (College, Branch, Year) */}
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <label className="text-[10px] text-[#6B7280] font-JetBrains-Mono uppercase tracking-wider block font-semibold">FILTER COHORT</label>
+              <label className="text-[10px] text-[#6B7280] font-mono uppercase tracking-wider block font-semibold">FILTER COHORT</label>
               {loading && <div className="w-3.5 h-3.5 border-2 border-t-transparent border-[#35b9f1] rounded-full animate-spin" />}
             </div>
             <div className="flex flex-wrap items-center gap-1.5">
-              {LEADERBOARD_FILTERS.map((filter) => (
-                <button
-                  key={filter.id}
-                  onClick={() => setActiveFilter(filter.id)}
-                  className={`px-4 py-1.5 rounded-md text-sm font-semibold transition-all duration-200 cursor-pointer ${
-                    activeFilter === filter.id
-                      ? 'bg-[#35b9f1] text-[#0D1117]'
-                      : 'text-[#9CA3AF] hover:text-[#E5E7EB]'
-                  }`}
-                >
-                  {filter.label}
-                </button>
-              ))}
+              {LEADERBOARD_FILTERS.map((filter) => {
+                const isLocked = !user;
+                return (
+                  <button
+                    key={filter.id}
+                    onClick={() => {
+                      if (isLocked) {
+                        navigate('/login');
+                      } else {
+                        setActiveFilter(filter.id);
+                      }
+                    }}
+                    className={`px-4 py-1.5 rounded-md text-sm font-semibold transition-all duration-200 cursor-pointer flex items-center gap-1.5 ${
+                      !isLocked && activeFilter === filter.id
+                        ? 'bg-[#35b9f1] text-[#0D1117]'
+                        : 'text-[#9CA3AF] hover:text-[#E5E7EB]'
+                    } ${isLocked ? 'opacity-65 hover:opacity-100' : ''}`}
+                    title={isLocked ? "Log in to filter by cohort" : ""}
+                  >
+                    {filter.label}
+                    {isLocked && (
+                      <svg className="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                      </svg>
+                    )}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
           {/* Sub Categories (Overall, LeetCode, Codeforces, CodeChef) */}
           <div className="space-y-2">
-            <label className="text-[10px] text-[#6B7280] font-JetBrains-Mono uppercase tracking-wider block font-semibold">RANK BY METRIC</label>
+            <label className="text-[10px] text-[#6B7280] font-mono uppercase tracking-wider block font-semibold">RANK BY METRIC</label>
             <div className="flex flex-wrap items-center gap-1.5">
               {[
                 { id: 'all', label: 'Overall Points' },
@@ -244,7 +270,7 @@ export function Leaderboard({ user }) {
         </div>
 
         {error && (
-          <div className="bg-red-500/10 border border-red-500 text-red-500 px-4 py-2 rounded mb-4 text-sm font-JetBrains-Mono">
+          <div className="bg-red-500/10 border border-red-500 text-red-500 px-4 py-2 rounded mb-4 text-sm font-mono">
             {error}
           </div>
         )}
@@ -274,7 +300,7 @@ export function Leaderboard({ user }) {
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="text-gray-400 text-sm font-JetBrains-Mono text-center py-8 bg-[#0D1117] rounded-lg border border-[#1F2937]/50"
+                className="text-gray-400 text-sm font-mono text-center py-8 bg-[#0D1117] rounded-lg border border-[#1F2937]/50"
               >
                 No entries in the leaderboard yet.
               </motion.div>
@@ -286,7 +312,7 @@ export function Leaderboard({ user }) {
               <button
                 disabled={loadingMore}
                 onClick={() => setSkip(prev => prev + 10)}
-                className="w-full sm:w-auto px-8 py-3 bg-[#161B22]/30 hover:bg-[#35b9f1]/5 text-[#35b9f1] border border-[#35b9f1]/30 hover:border-[#35b9f1] rounded-xl transition-all duration-300 cursor-pointer flex items-center justify-center gap-2.5 min-w-[160px] shadow-[0_4px_12px_rgba(53,185,241,0.05)] hover:shadow-[0_4px_20px_rgba(53,185,241,0.15)] disabled:opacity-40 disabled:cursor-not-allowed text-xs uppercase tracking-widest font-semibold font-JetBrains-Mono"
+                className="w-full sm:w-auto px-8 py-3 bg-[#161B22]/30 hover:bg-[#35b9f1]/5 text-[#35b9f1] border border-[#35b9f1]/30 hover:border-[#35b9f1] rounded-xl transition-all duration-300 cursor-pointer flex items-center justify-center gap-2.5 min-w-[160px] shadow-[0_4px_12px_rgba(53,185,241,0.05)] hover:shadow-[0_4px_20px_rgba(53,185,241,0.15)] disabled:opacity-40 disabled:cursor-not-allowed text-xs uppercase tracking-widest font-semibold font-mono"
               >
                 {loadingMore ? (
                   <>

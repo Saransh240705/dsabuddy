@@ -65,9 +65,9 @@ const parseMarkdownToHTML = (text) => {
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
 
-  html = html.replace(/^### (.*?)$/gm, '<h3 class="text-white text-lg font-bold mt-4 mb-2 font-Spline-Sans">$1</h3>');
-  html = html.replace(/^## (.*?)$/gm, '<h2 class="text-white text-xl font-bold mt-4 mb-2 font-Spline-Sans">$1</h2>');
-  html = html.replace(/^# (.*?)$/gm, '<h1 class="text-white text-2xl font-bold mt-4 mb-2 font-Spline-Sans">$1</h1>');
+  html = html.replace(/^### (.*?)$/gm, '<h3 class="text-white text-lg font-bold mt-4 mb-2 ">$1</h3>');
+  html = html.replace(/^## (.*?)$/gm, '<h2 class="text-white text-xl font-bold mt-4 mb-2 ">$1</h2>');
+  html = html.replace(/^# (.*?)$/gm, '<h1 class="text-white text-2xl font-bold mt-4 mb-2 ">$1</h1>');
   html = html.replace(/```([\s\S]*?)```/g, '<pre class="bg-[#0D1117] border border-[#1F2937] rounded-xl p-4 font-mono text-xs my-4 overflow-x-auto text-gray-300">$1</pre>');
   html = html.replace(/`([^`\n]+)`/g, '<code class="bg-[#0D1117] border border-[#1F2937] rounded px-1.5 py-0.5 font-mono text-xs text-[#FF453A]">$1</code>');
   html = html.replace(/!\[(.*?)\]\((.*?)\)/g, (match, alt, url) => {
@@ -83,7 +83,7 @@ const parseMarkdownToHTML = (text) => {
   html = html.replace(/\*\*([\s\S]*?)\*\*/g, '<strong>$1</strong>');
   html = html.replace(/\*([\s\S]*?)\*/g, '<em>$1</em>');
   html = html.replace(/_([\s\S]*?)_/g, '<em>$1</em>');
-  html = html.replace(/^\s*[-*+]\s+(.*?)$/gm, '<li class="ml-4 list-disc text-gray-300 font-Spline-Sans">$1</li>');
+  html = html.replace(/^\s*[-*+]\s+(.*?)$/gm, '<li class="ml-4 list-disc text-gray-300 ">$1</li>');
   html = html.replace(/\n/g, '<br />');
   return html;
 };
@@ -167,7 +167,7 @@ function CommentNode({ comment, depth = 0, onAddReply, onDeleteComment, formatDa
           </div>
           <button
             onClick={() => setCollapsed(false)}
-            className="text-[#35b9f1] hover:text-[#6fd3ff] text-xs font-bold font-Spline-Sans transition-colors flex items-center gap-1 cursor-pointer px-2.5 py-1 rounded-lg bg-[#1F2937]/30 hover:bg-[#1F2937]/50"
+            className="text-[#35b9f1] hover:text-[#6fd3ff] text-xs font-bold transition-colors flex items-center gap-1 cursor-pointer px-2.5 py-1 rounded-lg bg-[#1F2937]/30 hover:bg-[#1F2937]/50"
           >
             <ChevronDown className="w-3.5 h-3.5" />
             Expand
@@ -213,7 +213,7 @@ function CommentNode({ comment, depth = 0, onAddReply, onDeleteComment, formatDa
               </div>
             </div>
             
-            <p className="text-[#9CA3AF] text-sm leading-relaxed font-Spline-Sans font-medium pl-11">
+            <p className="text-[#9CA3AF] text-sm leading-relaxed font-medium pl-11">
               {comment.content}
             </p>
 
@@ -221,7 +221,7 @@ function CommentNode({ comment, depth = 0, onAddReply, onDeleteComment, formatDa
             <div className="pl-11 pt-1 flex items-center gap-4">
               <button
                 onClick={() => setReplying(!replying)}
-                className="text-[#35b9f1] hover:text-[#6fd3ff] text-xs font-bold font-Spline-Sans transition-colors flex items-center gap-1.5 cursor-pointer"
+                className="text-[#35b9f1] hover:text-[#6fd3ff] text-xs font-bold transition-colors flex items-center gap-1.5 cursor-pointer"
               >
                 <MessageSquare className="w-3.5 h-3.5" />
                 Reply
@@ -233,7 +233,7 @@ function CommentNode({ comment, depth = 0, onAddReply, onDeleteComment, formatDa
                       onDeleteComment(comment.id);
                     }
                   }}
-                  className="text-red-500 hover:text-red-400 text-xs font-bold font-Spline-Sans transition-colors flex items-center gap-1.5 cursor-pointer"
+                  className="text-red-500 hover:text-red-400 text-xs font-bold transition-colors flex items-center gap-1.5 cursor-pointer"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                   Delete
@@ -536,16 +536,16 @@ function CreateExperienceFullPage({ company, onPublish, onCancel }) {
 
     switch (block.type) {
       case 'text':
-        return <div {...commonTextProps('min-h-[28px] text-[#D7DADC] text-base leading-7 font-SF-Pro', "Start writing, or press '/' to insert a block...")} />;
+        return <div {...commonTextProps('min-h-[28px] text-[#D7DADC] text-base leading-7 ', "Start writing, or press '/' to insert a block...")} />;
 
       case 'heading':
-        return <div {...commonTextProps('min-h-[44px] text-white text-2xl font-extrabold leading-snug font-SF-Pro', 'Heading...')} />;
+        return <div {...commonTextProps('min-h-[44px] text-white text-2xl font-extrabold leading-snug ', 'Heading...')} />;
 
       case 'subheading':
-        return <div {...commonTextProps('min-h-[36px] text-neutral-200 text-xl font-bold leading-snug font-SF-Pro', 'Subheading...')} />;
+        return <div {...commonTextProps('min-h-[36px] text-neutral-200 text-xl font-bold leading-snug ', 'Subheading...')} />;
 
       case 'quote':
-        return <div {...commonTextProps('min-h-[28px] border-l-4 border-[#35b9f1] pl-4 text-neutral-400 italic text-base leading-7 font-SF-Pro', 'Write a notable quote...')} />;
+        return <div {...commonTextProps('min-h-[28px] border-l-4 border-[#35b9f1] pl-4 text-neutral-400 italic text-base leading-7 ', 'Write a notable quote...')} />;
 
       case 'code':
         return (
@@ -568,7 +568,7 @@ function CreateExperienceFullPage({ company, onPublish, onCancel }) {
         return (
           <div className="flex items-start gap-2.5">
             <span className="text-[#35b9f1] text-base mt-[3px] select-none font-bold shrink-0">•</span>
-            <div {...commonTextProps('flex-1 min-h-[28px] text-[#D7DADC] text-base leading-7 font-SF-Pro', 'List item...')} />
+            <div {...commonTextProps('flex-1 min-h-[28px] text-[#D7DADC] text-base leading-7 ', 'List item...')} />
           </div>
         );
 
@@ -588,7 +588,7 @@ function CreateExperienceFullPage({ company, onPublish, onCancel }) {
               placeholder="Add a caption (optional)..."
               value={block.caption}
               onChange={(e) => updateBlock(block.id, { caption: e.target.value })}
-              className="w-full mt-2.5 bg-transparent text-center text-neutral-500 text-sm placeholder-neutral-700 focus:outline-none focus:text-neutral-300 transition-colors font-SF-Pro"
+              className="w-full mt-2.5 bg-transparent text-center text-neutral-500 text-sm placeholder-neutral-700 focus:outline-none focus:text-neutral-300 transition-colors"
             />
           </div>
         ) : (
@@ -607,7 +607,7 @@ function CreateExperienceFullPage({ company, onPublish, onCancel }) {
               <ImageIcon className="w-6 h-6 text-neutral-400 group-hover/upload:text-white transition-all" />
             </div>
             <div className="text-center">
-              <p className="text-neutral-300 text-sm font-semibold font-SF-Pro">Click to upload or drag & drop</p>
+              <p className="text-neutral-300 text-sm font-semibold">Click to upload or drag & drop</p>
               <p className="text-neutral-600 text-xs mt-1 font-mono">PNG • JPG • GIF • WEBP • SVG</p>
             </div>
             <input type="file" accept="image/*" className="hidden" onChange={(e) => { const f = e.target.files[0]; if (f) uploadImage(block.id, f); e.target.value = ''; }} />
@@ -630,7 +630,7 @@ function CreateExperienceFullPage({ company, onPublish, onCancel }) {
         <button
           type="button"
           onClick={onCancel}
-          className="flex items-center gap-2 text-neutral-500 hover:text-white text-sm font-bold transition-all cursor-pointer font-SF-Pro"
+          className="flex items-center gap-2 text-neutral-500 hover:text-white text-sm font-bold transition-all cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4" />
           Back
@@ -649,7 +649,7 @@ function CreateExperienceFullPage({ company, onPublish, onCancel }) {
             type="button"
             onClick={handleSubmit}
             disabled={submitting || !title.trim()}
-            className="px-5 py-1.5 rounded-full bg-[#35b9f1] text-[#0D1117] text-sm font-extrabold hover:bg-[#10a3e0] disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer font-SF-Pro shadow-lg shadow-[#35b9f1]/20"
+            className="px-5 py-1.5 rounded-full bg-[#35b9f1] text-[#0D1117] text-sm font-extrabold hover:bg-[#10a3e0] disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer shadow-lg shadow-[#35b9f1]/20"
           >
             {submitting ? 'Publishing...' : 'Publish Post'}
           </button>
@@ -680,7 +680,7 @@ function CreateExperienceFullPage({ company, onPublish, onCancel }) {
         {error && (
           <div className="mb-5 bg-red-500/10 border border-red-500/20 rounded-xl p-3 flex items-center gap-3">
             <ShieldAlert className="w-4 h-4 text-red-500 shrink-0" />
-            <p className="text-red-400 text-sm font-bold font-SF-Pro">{error}</p>
+            <p className="text-red-400 text-sm font-bold">{error}</p>
           </div>
         )}
 
@@ -720,7 +720,7 @@ function CreateExperienceFullPage({ company, onPublish, onCancel }) {
           value={title}
           onChange={(e) => { setTitle(e.target.value); e.target.style.height = 'auto'; e.target.style.height = e.target.scrollHeight + 'px'; }}
           rows={1}
-          className="w-full bg-transparent border-0 text-white text-4xl font-extrabold placeholder-neutral-800 focus:outline-none resize-none mb-8 font-SF-Pro leading-tight"
+          className="w-full bg-transparent border-0 text-white text-4xl font-extrabold placeholder-neutral-800 focus:outline-none resize-none mb-8 leading-tight"
           style={{ overflow: 'hidden', minHeight: '52px' }}
         />
 
@@ -826,7 +826,7 @@ function CreateExperienceFullPage({ company, onPublish, onCancel }) {
                         >
                           <span className="text-[#35b9f1] text-sm font-bold w-6 text-center shrink-0 font-mono">{bt.emoji}</span>
                           <div>
-                            <p className="text-white text-xs font-bold font-SF-Pro leading-none">{bt.label}</p>
+                            <p className="text-white text-xs font-bold leading-none">{bt.label}</p>
                             <p className="text-neutral-600 text-[10px] mt-0.5">{bt.desc}</p>
                           </div>
                         </button>
@@ -1956,7 +1956,7 @@ export function PYQs({ companies, onSelectQuestion }) {
     return (
       <div className="space-y-8 pb-16">
         <div>
-          <h1 className="text-white text-4xl font-normal italic mb-2 font-Instrument-Serif">
+          <h1 className="text-white text-4xl font-normal italic mb-2 font-serif">
             Company Placement Archives
           </h1>
           <p className="text-[#9CA3AF] text-sm font-medium">
@@ -1975,7 +1975,7 @@ export function PYQs({ companies, onSelectQuestion }) {
                 placeholder="Search companies (e.g., Goldman Sachs, JPMorgan, Apple...)"
                 value={companySearchQuery}
                 onChange={(e) => setCompanySearchQuery(e.target.value)}
-                className="w-full bg-[#161B22] border border-[#1F2937] rounded-xl pl-11 pr-4 py-2.5 text-xs text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-[#35b9f1]/40 focus:ring-1 focus:ring-[#35b9f1]/40 transition-all font-SF-Pro"
+                className="w-full bg-[#161B22] border border-[#1F2937] rounded-xl pl-11 pr-4 py-2.5 text-xs text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-[#35b9f1]/40 focus:ring-1 focus:ring-[#35b9f1]/40 transition-all"
               />
             </div>
             <button
@@ -1999,7 +1999,7 @@ export function PYQs({ companies, onSelectQuestion }) {
             <div className="bg-[#161B22]/50 border border-[#1F2937] rounded-xl p-5 grid grid-cols-1 md:grid-cols-2 gap-5 transition-all duration-200">
               {/* Branch Selector */}
               <div>
-                <label className="block text-[10px] text-neutral-400 font-bold uppercase mb-2 font-JetBrains-Mono tracking-wider">
+                <label className="block text-[10px] text-neutral-400 font-bold uppercase mb-2 font-mono tracking-wider">
                   Eligible Branch
                 </label>
                 <select
@@ -2022,7 +2022,7 @@ export function PYQs({ companies, onSelectQuestion }) {
 
               {/* CGPA Selector */}
               <div>
-                <label className="block text-[10px] text-neutral-400 font-bold uppercase mb-2 font-JetBrains-Mono tracking-wider">
+                <label className="block text-[10px] text-neutral-400 font-bold uppercase mb-2 font-mono tracking-wider">
                   Max CGPA Required (Your CGPA)
                 </label>
                 <select
@@ -2084,7 +2084,7 @@ export function PYQs({ companies, onSelectQuestion }) {
 
             {/* Pagination Controls */}
             {totalCompanyPages > 1 && (
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-neutral-900 pt-6 font-JetBrains-Mono text-xs">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-neutral-900 pt-6 font-mono text-xs">
                 <span className="text-neutral-500">
                   Showing{" "}
                   {Math.min(
@@ -2200,7 +2200,7 @@ export function PYQs({ companies, onSelectQuestion }) {
           </div>
         ) : (
           <div className="text-center py-16 bg-[#161B22]/30 rounded-2xl border border-dashed border-[#1F2937] transition-all">
-            <p className="text-neutral-400 font-JetBrains-Mono text-sm">
+            <p className="text-neutral-400 font-mono text-sm">
               No companies found matching{" "}
               {companySearchQuery
                 ? `"${companySearchQuery}"`
@@ -2272,7 +2272,7 @@ export function PYQs({ companies, onSelectQuestion }) {
   // ── RENDER ──────────────────────────────────────────────────────────────────
   if (loadingCompanyData) {
     return (
-      <div className="min-h-screen bg-[#000000] text-[#E5E7EB] flex flex-col items-center justify-center font-JetBrains-Mono text-xs text-neutral-500">
+      <div className="min-h-screen bg-[#000000] text-[#E5E7EB] flex flex-col items-center justify-center font-mono text-xs text-neutral-500">
         <div className="w-8 h-8 border-2 border-neutral-800 border-t-[#35b9f1] rounded-full animate-spin mb-4" />
         Loading company details...
       </div>
@@ -2280,9 +2280,9 @@ export function PYQs({ companies, onSelectQuestion }) {
   }
 
   return (
-    <div className="min-h-screen bg-[#000000] text-[#E5E7EB] pb-20 font-SF-Pro">
+    <div className="min-h-screen bg-[#000000] text-[#E5E7EB] pb-20">
       {/* ── Breadcrumb ── */}
-      <div className="flex items-center gap-2 text-xs tracking-wider uppercase text-neutral-500 mb-6 font-JetBrains-Mono">
+      <div className="flex items-center gap-2 text-xs tracking-wider uppercase text-neutral-500 mb-6 font-mono">
         <button
           onClick={() => navigate("/dashboard/pyqs")}
           className="hover:text-[#35b9f1] transition-colors cursor-pointer"
@@ -2296,7 +2296,7 @@ export function PYQs({ companies, onSelectQuestion }) {
       </div>
 
       {/* ── Tab Navigation ── */}
-      <div className="flex items-center gap-0 border-b border-neutral-900 mb-8 font-JetBrains-Mono">
+      <div className="flex items-center gap-0 border-b border-neutral-900 mb-8 font-mono">
         {[
           { id: "overview", label: "Overview" },
           { id: "problems", label: `Problems (${questions.length})` },
@@ -2329,7 +2329,7 @@ export function PYQs({ companies, onSelectQuestion }) {
           <div className="flex-1 min-w-0">
             {/* Company header */}
             <div className="flex items-center gap-4 mb-8">
-              <div className="w-24 h-24 bg-white rounded-lg flex items-center justify-center flex-shrink-0 text-black font-extrabold text-base select-none font-SF-Pro shadow-md overflow-hidden">
+              <div className="w-24 h-24 bg-white rounded-lg flex items-center justify-center flex-shrink-0 text-black font-extrabold text-base select-none shadow-md overflow-hidden">
                 {matchedCompany?.logoUrl ? (
                   <LogoImage
                     name={selectedCompany}
@@ -2341,17 +2341,17 @@ export function PYQs({ companies, onSelectQuestion }) {
                 )}
               </div>
               <div className="flex flex-col">
-                <span className="text-[10px] tracking-widest uppercase text-neutral-500 font-JetBrains-Mono">
+                <span className="text-[10px] tracking-widest uppercase text-neutral-500 font-mono">
                   Company Profile
                 </span>
-                <h1 className="text-4xl sm:text-5xl text-white font-normal italic mt-0.5 leading-none font-Instrument-Serif">
+                <h1 className="text-4xl sm:text-5xl text-white font-normal italic mt-0.5 leading-none font-serif">
                   {selectedCompany}
                 </h1>
               </div>
             </div>
 
             {/* Stats grid */}
-            <div className="border border-neutral-900 rounded-xl mb-8 bg-neutral-950/20 font-JetBrains-Mono">
+            <div className="border border-neutral-900 rounded-xl mb-8 bg-neutral-950/20 font-mono">
               <div className="grid grid-cols-2 md:grid-cols-5 divide-x divide-y md:divide-y-0 divide-neutral-900">
                 {[
                   { label: "CGPA MIN *", value: getCgpaDisplay() },
@@ -2378,8 +2378,8 @@ export function PYQs({ companies, onSelectQuestion }) {
 
             {/* Interview Process — only if custom timeline exists */}
             {hasTimeline && (
-              <div className="font-SF-Pro mt-12">
-                <p className="text-xs tracking-widest uppercase text-neutral-500 mb-8 font-bold font-JetBrains-Mono">
+              <div className="mt-12">
+                <p className="text-xs tracking-widest uppercase text-neutral-500 mb-8 font-bold font-mono">
                   Interview Process
                 </p>
                 <div className="relative border-l border-neutral-800 ml-3 pl-8 space-y-8">
@@ -2399,7 +2399,7 @@ export function PYQs({ companies, onSelectQuestion }) {
 
                         {/* Content */}
                         <div>
-                          <p className="text-sm tracking-wide mb-2 text-neutral-200 font-JetBrains-Mono font-semibold">
+                          <p className="text-sm tracking-wide mb-2 text-neutral-200 font-mono font-semibold">
                             <span
                               className={
                                 isFirst ? "text-[#35b9f1]" : "text-neutral-400"
@@ -2420,7 +2420,7 @@ export function PYQs({ companies, onSelectQuestion }) {
                               {step.tags.map((tag) => (
                                 <span
                                   key={tag}
-                                  className="text-[10px] tracking-wider uppercase border border-neutral-800 bg-neutral-900/10 text-neutral-400 px-2 py-0.5 rounded font-JetBrains-Mono"
+                                  className="text-[10px] tracking-wider uppercase border border-neutral-800 bg-neutral-900/10 text-neutral-400 px-2 py-0.5 rounded font-mono"
                                 >
                                   {tag}
                                 </span>
@@ -2437,7 +2437,7 @@ export function PYQs({ companies, onSelectQuestion }) {
           </div>
 
           {/* ── Right Sidebar ── */}
-          <div className="w-full lg:w-64 flex-shrink-0 space-y-4 font-JetBrains-Mono">
+          <div className="w-full lg:w-64 flex-shrink-0 space-y-4 font-mono">
             {/* Eligibility */}
             <div className="border border-neutral-900 bg-neutral-950/10 rounded-xl p-5">
               <p className="text-xs tracking-wider uppercase text-neutral-500 mb-4 font-bold">
@@ -2483,7 +2483,7 @@ export function PYQs({ companies, onSelectQuestion }) {
                     <span className="text-xs text-neutral-400 block mb-1">
                       Max CTC *:
                     </span>
-                    <span className="text-[#35b9f1] font-normal italic text-2xl font-Instrument-Serif">
+                    <span className="text-[#35b9f1] font-normal italic text-2xl font-serif">
                       {placementStats.maxCtc} LPA
                     </span>
                   </div>
@@ -2503,7 +2503,7 @@ export function PYQs({ companies, onSelectQuestion }) {
                     <span className="text-xs text-neutral-400 block mb-1">
                       Target Roles:
                     </span>
-                    <span className="text-neutral-200 text-xs font-SF-Pro">
+                    <span className="text-neutral-200 text-xs">
                       {placementStats.roles.slice(0, 2).join(", ")}
                     </span>
                   </div>
@@ -2532,7 +2532,7 @@ export function PYQs({ companies, onSelectQuestion }) {
 
             {/* Disclaimer Footnote */}
             <div className="border border-neutral-900/60 bg-neutral-950/5 rounded-xl p-5">
-              <p className="text-[10px] text-neutral-500 leading-relaxed font-SF-Pro">
+              <p className="text-[10px] text-neutral-500 leading-relaxed">
                 * Note: CGPA requirements and CTC stats are based on historical
                 NSUT placement history and are subject to change for upcoming
                 recruiting seasons.
@@ -2543,7 +2543,7 @@ export function PYQs({ companies, onSelectQuestion }) {
             {questions.length > 0 && (
               <button
                 onClick={() => setActiveTab("problems")}
-                className="w-full bg-[#35b9f1] hover:bg-[#35b9f1]/90 text-black text-xs tracking-wider uppercase font-extrabold py-3.5 px-4 rounded-xl transition-all duration-200 cursor-pointer flex items-center justify-center gap-2 font-JetBrains-Mono"
+                className="w-full bg-[#35b9f1] hover:bg-[#35b9f1]/90 text-black text-xs tracking-wider uppercase font-extrabold py-3.5 px-4 rounded-xl transition-all duration-200 cursor-pointer flex items-center justify-center gap-2 font-mono"
               >
                 <span>View {questions.length} Tagged Problems</span>
                 <ChevronRight className="w-4 h-4 text-black" />
@@ -2557,23 +2557,23 @@ export function PYQs({ companies, onSelectQuestion }) {
           PROBLEMS TAB
       ══════════════════════════════════════════ */}
       {activeTab === "problems" && (
-        <div className="font-JetBrains-Mono">
+        <div className="font-mono">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8 border-b border-neutral-900 pb-6">
             <div>
               {/* Company hero name on problems tab */}
-              <h1 className="text-4xl sm:text-5xl font-normal italic text-white mb-2 font-Instrument-Serif">
+              <h1 className="text-4xl sm:text-5xl font-normal italic text-white mb-2 font-serif">
                 {selectedCompany}
               </h1>
-              <p className="text-neutral-400 text-sm tracking-wide font-SF-Pro">
+              <p className="text-neutral-400 text-sm tracking-wide">
                 {custom.subTitle || "Software Engineering Opportunities"}
               </p>
             </div>
             {placementStats?.maxCtc && (
-              <div className="text-left md:text-right font-SF-Pro">
-                <span className="text-xs text-neutral-500 block mb-1 font-JetBrains-Mono">
+              <div className="text-left md:text-right">
+                <span className="text-xs text-neutral-500 block mb-1 font-mono">
                   MAX CTC *
                 </span>
-                <span className="text-[#35b9f1] font-normal italic text-3xl font-Instrument-Serif">
+                <span className="text-[#35b9f1] font-normal italic text-3xl font-serif">
                   {placementStats.maxCtc} LPA
                 </span>
               </div>
@@ -2610,7 +2610,7 @@ export function PYQs({ companies, onSelectQuestion }) {
                 placeholder="Search problems..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="bg-neutral-950 border border-neutral-900 rounded-lg pl-9 pr-4 py-2 text-xs text-neutral-300 placeholder-neutral-600 focus:outline-none focus:border-[#35b9f1]/40 transition-all w-48 font-SF-Pro"
+                className="bg-neutral-950 border border-neutral-900 rounded-lg pl-9 pr-4 py-2 text-xs text-neutral-300 placeholder-neutral-600 focus:outline-none focus:border-[#35b9f1]/40 transition-all w-48"
               />
             </div>
           </div>
@@ -2656,13 +2656,13 @@ export function PYQs({ companies, onSelectQuestion }) {
                   >
                     {/* Index */}
                     <div className="px-5 py-5 flex items-center">
-                      <span className="text-neutral-500 text-xs font-bold font-JetBrains-Mono">
+                      <span className="text-neutral-500 text-xs font-bold font-mono">
                         {String(actualIndex).padStart(2, "0")}
                       </span>
                     </div>
                     {/* Problem */}
                     <div className="px-5 py-5">
-                      <p className="text-neutral-200 text-sm font-semibold group-hover:text-[#35b9f1] transition-colors leading-snug mb-2 font-SF-Pro">
+                      <p className="text-neutral-200 text-sm font-semibold group-hover:text-[#35b9f1] transition-colors leading-snug mb-2">
                         {question.title}
                       </p>
                       {question.tags && question.tags.length > 0 && (
@@ -2700,7 +2700,7 @@ export function PYQs({ companies, onSelectQuestion }) {
 
           {/* Pagination Controls */}
           {totalQuestionPages > 1 && (
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-neutral-900 pt-6 mt-6 font-JetBrains-Mono text-xs">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-neutral-900 pt-6 mt-6 font-mono text-xs">
               <span className="text-neutral-500">
                 Showing{" "}
                 {Math.min(
@@ -2838,7 +2838,7 @@ export function PYQs({ companies, onSelectQuestion }) {
                 onClick={() => setSelectedExperience(null)}
                 variant="outline"
                 size="sm"
-                className="rounded-xl border-neutral-900 text-neutral-400 hover:text-white flex items-center gap-2 cursor-pointer font-JetBrains-Mono uppercase tracking-widest text-[10px]"
+                className="rounded-xl border-neutral-900 text-neutral-400 hover:text-white flex items-center gap-2 cursor-pointer font-mono uppercase tracking-widest text-[10px]"
               >
                 <ArrowLeft className="w-4 h-4" />
                 Back to Experiences
@@ -2859,10 +2859,10 @@ export function PYQs({ companies, onSelectQuestion }) {
                       className="w-12 h-12 rounded-xl bg-neutral-950 border border-neutral-900 p-0.5"
                     />
                     <div>
-                      <h4 className="text-white font-extrabold text-base font-Spline-Sans leading-snug">
+                      <h4 className="text-white font-extrabold text-base leading-snug">
                         {selectedExperience.author?.name || 'Anonymous'}
                       </h4>
-                      <p className="text-neutral-500 text-xs font-semibold mt-1 font-Spline-Sans">
+                      <p className="text-neutral-500 text-xs font-semibold mt-1">
                         {selectedExperience.author?.college || 'NSUT'} • {selectedExperience.author?.branch || 'N/A'}
                       </p>
                     </div>
@@ -2891,7 +2891,7 @@ export function PYQs({ companies, onSelectQuestion }) {
 
                 {/* Title & Tags */}
                 <div>
-                  <h1 className="text-2xl md:text-3xl font-extrabold text-white leading-tight font-Spline-Sans">
+                  <h1 className="text-2xl md:text-3xl font-extrabold text-white leading-tight">
                     {selectedExperience.title}
                   </h1>
                   <div className="flex flex-wrap gap-2 mt-4">
@@ -2908,7 +2908,7 @@ export function PYQs({ companies, onSelectQuestion }) {
 
                 {/* Post Content */}
                 <div 
-                  className="wysiwyg-content text-[#E5E7EB] text-base leading-relaxed font-medium font-Spline-Sans border-b border-neutral-900 pb-6"
+                  className="wysiwyg-content text-[#E5E7EB] text-base leading-relaxed font-medium border-b border-neutral-900 pb-6"
                   dangerouslySetInnerHTML={{ __html: renderPostContent(selectedExperience.content) }}
                 />
 
@@ -2958,7 +2958,7 @@ export function PYQs({ companies, onSelectQuestion }) {
 
                 {/* Comments Area */}
                 <div className="space-y-6 pt-6 border-t border-neutral-900">
-                  <h3 className="text-lg font-extrabold text-white font-Spline-Sans">Comments</h3>
+                  <h3 className="text-lg font-extrabold text-white">Comments</h3>
                   
                   {/* Comment submission form */}
                   <form onSubmit={handleAddTopComment} className="flex gap-4">
@@ -2966,7 +2966,7 @@ export function PYQs({ companies, onSelectQuestion }) {
                       placeholder="Share your thoughts or ask a question..."
                       value={commentContent}
                       onChange={(e) => setCommentContent(e.target.value)}
-                      className="flex-1 min-h-[48px] max-h-[160px] bg-neutral-950 border border-neutral-900 rounded-xl px-4 py-3 text-sm text-[#E5E7EB] placeholder-neutral-600 focus:outline-none focus:border-[#35b9f1]/30 transition-all font-Spline-Sans"
+                      className="flex-1 min-h-[48px] max-h-[160px] bg-neutral-950 border border-neutral-900 rounded-xl px-4 py-3 text-sm text-[#E5E7EB] placeholder-neutral-600 focus:outline-none focus:border-[#35b9f1]/30 transition-all"
                       rows={2}
                     />
                     <Button
@@ -3015,7 +3015,7 @@ export function PYQs({ companies, onSelectQuestion }) {
                 
                 <Button
                   onClick={() => setCreatingExperience(true)}
-                  className="bg-[#35b9f1] hover:bg-[#10a3e0] text-[#0D1117] font-extrabold rounded-xl px-5 py-3 flex items-center justify-center gap-2 cursor-pointer transition-all font-Spline-Sans shrink-0"
+                  className="bg-[#35b9f1] hover:bg-[#10a3e0] text-[#0D1117] font-extrabold rounded-xl px-5 py-3 flex items-center justify-center gap-2 cursor-pointer transition-all shrink-0"
                 >
                   <Plus className="w-5 h-5" />
                   Share Experience
@@ -3023,7 +3023,7 @@ export function PYQs({ companies, onSelectQuestion }) {
               </div>
 
               {loadingExperiences ? (
-                <div className="text-center py-20 font-JetBrains-Mono text-neutral-500 uppercase tracking-widest text-xs">
+                <div className="text-center py-20 font-mono text-neutral-500 uppercase tracking-widest text-xs">
                   Loading Experiences...
                 </div>
               ) : filteredExperiences.length > 0 ? (
@@ -3066,10 +3066,10 @@ export function PYQs({ companies, onSelectQuestion }) {
                         </div>
 
                         <div className="space-y-2">
-                          <h3 className="text-white font-bold text-base leading-snug hover:text-[#35b9f1] transition-all font-Spline-Sans">
+                          <h3 className="text-white font-bold text-base leading-snug hover:text-[#35b9f1] transition-all">
                             {post.title}
                           </h3>
-                          <p className="text-neutral-400 text-xs leading-relaxed line-clamp-3 font-Spline-Sans font-medium">
+                          <p className="text-neutral-400 text-xs leading-relaxed line-clamp-3 font-medium">
                             {post.content?.replace(/<[^>]*>/g, '').replace(/[#*`_[\]()]/g, '').slice(0, 200)}
                           </p>
                         </div>
@@ -3099,14 +3099,14 @@ export function PYQs({ companies, onSelectQuestion }) {
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-24 border border-dashed border-neutral-900 rounded-2xl bg-neutral-950/5 font-JetBrains-Mono">
+                <div className="text-center py-24 border border-dashed border-neutral-900 rounded-2xl bg-neutral-950/5 font-mono">
                   <div className="w-16 h-16 border border-neutral-900 rounded-xl flex items-center justify-center mx-auto mb-6 bg-neutral-950/10">
                     <MessageSquare className="w-6 h-6 text-neutral-600" />
                   </div>
                   <p className="text-neutral-500 text-xs tracking-widest uppercase mb-2">
                     No Experiences
                   </p>
-                  <p className="text-neutral-600 text-sm font-SF-Pro mb-6">
+                  <p className="text-neutral-600 text-sm mb-6">
                     Interview experiences for {selectedCompany} will appear here.
                   </p>
                   <Button

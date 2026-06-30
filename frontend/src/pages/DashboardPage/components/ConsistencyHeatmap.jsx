@@ -297,7 +297,7 @@ export function ConsistencyHeatmap({ data: initialData = [], platform, isAnalyti
 
   if (isAnalytics) {
     return (
-      <div className="space-y-2 font-JetBrains-Mono select-none relative heatmap-wrapper">
+      <div className="space-y-2 font-mono select-none relative heatmap-wrapper">
         {/* Header section with X problems solved and Legend */}
         <div className="flex justify-between items-baseline">
           <span className="text-xs font-bold text-[#E5E7EB]">
@@ -407,7 +407,7 @@ export function ConsistencyHeatmap({ data: initialData = [], platform, isAnalyti
             <div className="font-bold border-b border-[#1F2937] pb-1.5 mb-1.5 text-xs text-white">
               {formatTooltipDate(hoveredDay.date)}
             </div>
-            <div className="space-y-1.5 font-JetBrains-Mono text-[10px]">
+            <div className="space-y-1.5 font-mono text-[10px]">
               <div className="flex justify-between items-center">
                 <span className="text-[#9CA3AF]">
                   {selectedPlatform === 'all' ? 'Submissions' : selectedPlatform === 'leetcode' ? 'LeetCode' : selectedPlatform === 'codeforces' ? 'Codeforces' : selectedPlatform === 'codechef' ? 'CodeChef' : 'GFG'}:
@@ -429,11 +429,11 @@ export function ConsistencyHeatmap({ data: initialData = [], platform, isAnalyti
       {/* ── Top bar: title / pills / year ── */}
       <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
         <div className="flex items-center gap-3">
-          <h3 className="text-[#E6EDF3] font-black text-lg font-Spline-Sans tracking-tight">
+          <h3 className="text-[#E6EDF3] font-black text-lg tracking-tight">
             Consistency Visualizer
           </h3>
           {loading && (
-            <span className={`text-[10px] font-bold font-JetBrains-Mono border px-2.5 py-1 rounded-md animate-pulse ${theme.badge}`}>
+            <span className={`text-[10px] font-bold font-mono border px-2.5 py-1 rounded-md animate-pulse ${theme.badge}`}>
               syncing…
             </span>
           )}
@@ -451,7 +451,7 @@ export function ConsistencyHeatmap({ data: initialData = [], platform, isAnalyti
               <button
                 key={id}
                 onClick={() => setSelectedPlatform(id)}
-                className={`px-3.5 py-1.5 rounded-lg text-xs font-bold font-JetBrains-Mono border
+                className={`px-3.5 py-1.5 rounded-lg text-xs font-bold font-mono border
                             transition-all duration-150 cursor-pointer
                             ${selectedPlatform === id ? t.pillActive : `bg-[#0D1117] ${t.pillIdle}`}`}
               >
@@ -459,35 +459,6 @@ export function ConsistencyHeatmap({ data: initialData = [], platform, isAnalyti
               </button>
             );
           })}
-
-          {/* Year dropdown */}
-          <div className="relative">
-            <button
-              onClick={() => setYearDropdown(v => !v)}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs
-                          font-bold font-JetBrains-Mono border transition-all duration-150 cursor-pointer
-                          ${theme.yearActive}`}
-            >
-              {selectedYear}
-              <ChevronDown className={`w-3.5 h-3.5 transition-transform ${yearDropdown ? 'rotate-180' : ''}`} />
-            </button>
-            {yearDropdown && (
-              <div className="absolute right-0 top-full mt-1.5 z-30 bg-[#161B22] border border-[#30363D]
-                              rounded-lg shadow-2xl py-1 min-w-[100px] overflow-hidden">
-                {availableYears.map(yr => (
-                  <button
-                    key={yr}
-                    onClick={() => { setSelectedYear(yr); setYearDropdown(false); }}
-                    className={`w-full text-left px-3.5 py-2 text-xs font-bold font-JetBrains-Mono
-                                hover:bg-[#21262D] transition-colors
-                                ${yr === selectedYear ? 'text-[#E6EDF3] font-extrabold' : 'text-[#8B949E]'}`}
-                  >
-                    {yr}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
         </div>
       </div>
 
@@ -498,14 +469,14 @@ export function ConsistencyHeatmap({ data: initialData = [], platform, isAnalyti
           return (
             <div key={i} className="bg-[#0D1117]/60 border border-[#21262D] rounded-xl p-4 flex items-center justify-between hover:border-gray-700/80 transition-all duration-300">
               <div className="space-y-1">
-                <span className="text-[11px] font-bold font-JetBrains-Mono text-[#8B949E] uppercase tracking-wider block">
+                <span className="text-[11px] font-bold font-mono text-[#8B949E] uppercase tracking-wider block">
                   {card.label}
                 </span>
                 <div className="flex items-baseline gap-1.5">
-                  <span className="text-2xl font-black font-Spline-Sans tracking-tight" style={{ color: card.color }}>
+                  <span className="text-2xl font-black tracking-tight" style={{ color: card.color }}>
                     {card.value}
                   </span>
-                  <span className="text-[10px] font-medium font-JetBrains-Mono text-[#484F58]">
+                  <span className="text-[10px] font-medium font-mono text-[#484F58]">
                     {card.sublabel}
                   </span>
                 </div>
@@ -529,7 +500,7 @@ export function ConsistencyHeatmap({ data: initialData = [], platform, isAnalyti
               {monthLabels.map(({ index, label, left }) => (
                 <span
                   key={index}
-                  className="absolute top-0 text-[11px] text-[#8B949E] select-none tracking-normal font-JetBrains-Mono"
+                  className="absolute top-0 text-[11px] text-[#8B949E] select-none tracking-normal font-mono"
                   style={{ left: `${left}px`, transform: 'translateX(-50%)' }}
                 >
                   {label}
@@ -542,7 +513,7 @@ export function ConsistencyHeatmap({ data: initialData = [], platform, isAnalyti
           <div className="flex gap-0 items-start">
             
             {/* Weekday labels perfectly aligned */}
-            <div className="flex flex-col shrink-0 select-none text-[10px] text-[#8B949E] font-JetBrains-Mono text-right pr-2 w-8 gap-[3px]">
+            <div className="flex flex-col shrink-0 select-none text-[10px] text-[#8B949E] font-mono text-right pr-2 w-8 gap-[3px]">
               <div className="h-[12px] flex items-center justify-end text-transparent select-none pointer-events-none">Sun</div>
               <div className="h-[12px] flex items-center justify-end font-semibold text-[#8B949E]">Mon</div>
               <div className="h-[12px] flex items-center justify-end text-transparent select-none pointer-events-none">Tue</div>
@@ -597,7 +568,7 @@ export function ConsistencyHeatmap({ data: initialData = [], platform, isAnalyti
           </div>
 
           {/* ── Legend directly below grid (inside scroll parent to align to grid width) ── */}
-          <div className="flex items-center justify-end mt-[8px] gap-4 font-JetBrains-Mono text-[10px] text-[#8B949E]">
+          <div className="flex items-center justify-end mt-[8px] gap-4 font-mono text-[10px] text-[#8B949E]">
             {[
               { label: '0', count: 0, inYear: true },
               { label: '1–2', count: 1, inYear: true },
@@ -634,7 +605,7 @@ export function ConsistencyHeatmap({ data: initialData = [], platform, isAnalyti
           <div className="font-bold border-b border-[#30363D] pb-1.5 mb-1.5 text-xs text-white">
             {formatTooltipDate(hoveredDay.date)}
           </div>
-          <div className="space-y-1.5 font-JetBrains-Mono text-[11px]">
+          <div className="space-y-1.5 font-mono text-[11px]">
             <div className="flex justify-between items-center">
               <span className="text-[#8B949E]">
                 {selectedPlatform === 'all' ? 'Submissions' : selectedPlatform === 'leetcode' ? 'LeetCode' : 'Codeforces'}:

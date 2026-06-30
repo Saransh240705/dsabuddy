@@ -27,7 +27,7 @@ export function Modal({ isOpen, onClose, title, children }) {
       <div className="relative bg-[#161B22] border border-[#1F2937] rounded-xl shadow-2xl w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-[#1F2937]">
-          <h2 className="text-[#E5E7EB] text-2xl font-bold font-Spline-Sans">{title}</h2>
+          <h2 className="text-[#E5E7EB] text-2xl font-bold">{title}</h2>
           <button
             onClick={onClose}
             className="p-2 hover:bg-[#1F2937] rounded-lg transition-colors"

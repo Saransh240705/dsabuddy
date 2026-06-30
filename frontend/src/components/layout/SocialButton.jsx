@@ -10,7 +10,7 @@ export const SocialButton = ({
       className={`bg-[#0D1117] cursor-pointer flex justify-center gap-2 sm:gap-3 p-2 sm:p-3 w-full rounded-lg border border-gray-600 hover:border-[#35b9f1] items-center transition-colors ${className}`}
     >
       <img className="size-4 sm:size-5" src={icon} alt="Social login" />
-      <p className="text-white font-bold font-JetBrains-Mono text-xs sm:text-sm md:text-base">
+      <p className="text-white font-bold text-xs sm:text-sm md:text-base">
         {text}
       </p>
     </button>

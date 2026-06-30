@@ -245,13 +245,13 @@ export default function OnboardingPage() {
   };
 
   return (
-    <div className="bg-[#000000] min-h-screen text-white font-SF-Pro flex flex-col selection:bg-[#35b9f1] selection:text-black">
+    <div className="bg-[#000000] min-h-screen text-white flex flex-col selection:bg-[#35b9f1] selection:text-black">
       
       {/* ── Navbar ── */}
       <header className="w-full max-w-7xl mx-auto px-6 py-5 flex items-center justify-between border-b border-gray-800 shrink-0">
         <div className="flex items-center gap-3">
           <img src={LogoImg} alt="DSABuddy Logo" className="w-8 h-8 object-contain" />
-          <span className="font-bold text-lg font-Spline-Sans text-white tracking-tight">
+          <span className="font-bold text-lg text-white tracking-tight">
             DSABuddy
           </span>
         </div>
@@ -261,7 +261,7 @@ export default function OnboardingPage() {
       <main className="max-w-2xl w-full mx-auto px-6 pt-10 pb-20 flex flex-col">
         
         {/* Progress Tracker */}
-        <div className="flex items-center justify-between font-JetBrains-Mono text-[11px] mb-2.5 tracking-wider">
+        <div className="flex items-center justify-between font-mono text-[11px] mb-2.5 tracking-wider">
           <span className="text-gray-400 font-bold">SETUP PROGRESS</span>
           <span className="text-[#35b9f1] font-extrabold">Step {step} of 2</span>
         </div>
@@ -289,7 +289,7 @@ export default function OnboardingPage() {
           <form onSubmit={handleNextStep} className="animate-fadeIn">
             
             <div className="space-y-3 mb-8">
-              <h1 className="text-3xl sm:text-4xl font-normal italic font-Instrument-Serif text-white tracking-tight">
+              <h1 className="text-3xl sm:text-4xl font-normal italic font-serif text-white tracking-tight">
                 Initialize Profile
               </h1>
               <p className="text-sm sm:text-base text-gray-400">
@@ -348,7 +348,7 @@ export default function OnboardingPage() {
                   labelClassName="text-xs font-bold text-gray-400 tracking-wider uppercase mb-1.5 normal-case"
                   inputClassName="py-4 border-gray-600 rounded-xl focus:border-[#35b9f1]"
                 />
-                <p className="text-[10px] font-JetBrains-Mono text-gray-400 absolute bottom-0 left-0">
+                <p className="text-[10px] font-mono text-gray-400 absolute bottom-0 left-0">
                   This will be visible on the leaderboards.
                 </p>
               </div>
@@ -361,7 +361,7 @@ export default function OnboardingPage() {
             <div>
               <div className="flex items-center gap-2 mb-3">
                 <LinkIcon className="w-5 h-5 text-[#35b9f1]" />
-                <h3 className="text-lg font-bold font-Spline-Sans text-white tracking-tight">
+                <h3 className="text-lg font-bold text-white tracking-tight">
                   Sync Platforms
                 </h3>
               </div>
@@ -456,7 +456,7 @@ export default function OnboardingPage() {
                 >
                   <ArrowLeft className="w-5 h-5" />
                 </button>
-                <h1 className="text-3xl sm:text-4xl font-normal italic font-Instrument-Serif text-white tracking-tight">
+                <h1 className="text-3xl sm:text-4xl font-normal italic font-serif text-white tracking-tight">
                   Academic Details
                 </h1>
               </div>
@@ -503,7 +503,7 @@ export default function OnboardingPage() {
                     onChange={handleInputChange}
                     placeholder="e.g. 2028"
                     required
-                    className="bg-transparent border-none outline-none text-white text-sm w-full ml-3 placeholder-gray-500 focus:ring-0 font-medium font-JetBrains-Mono"
+                    className="bg-transparent border-none outline-none text-white text-sm w-full ml-3 placeholder-gray-500 focus:ring-0 font-medium font-mono"
                   />
                 </label>
               </div>
@@ -532,7 +532,7 @@ export default function OnboardingPage() {
                 )}
               </Button>
               
-              <p className="text-[10px] text-center text-gray-400 mt-6 font-JetBrains-Mono tracking-normal">
+              <p className="text-[10px] text-center text-gray-400 mt-6 font-mono tracking-normal">
                 By clicking "Finish Setup", you agree to our <a href="#" className="underline hover:text-[#35b9f1] transition-colors">Terms of Service</a> and <a href="#" className="underline hover:text-[#35b9f1] transition-colors">Privacy Policy</a>.
               </p>
             </div>

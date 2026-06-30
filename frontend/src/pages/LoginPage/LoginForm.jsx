@@ -70,25 +70,23 @@ export const LoginForm = () => {
   }
 
   return (
-    <div className="border rounded-lg border-[#1F2937] border-t-(--primary-color) border-t-2 bg-[#0D1117] max-w-90 xl:max-w-130 2xl:max-w-130 md:max-w-130 p-12 mx-auto">
+    <div className="mt-6 sm:mt-10 w-full max-w-md border-t-(--primary-color) border-t-2 p-6 sm:p-10 rounded-2xl bg-[#0D1117] border border-[#1F2937] mx-auto">
       <div>
-        <div className="w-full text-center mx-auto">
-          <h1 className="font-normal italic text-white font-Instrument-Serif text-3xl">
+        <div className="w-full text-center mx-auto mb-6">
+          <h2 className="font-normal italic text-white font-serif text-3xl">
             Welcome Back
-          </h1>
-          <p className="content-color">Ready to crush some more problems?</p>
+          </h2>
+          <p className="content-color text-sm mt-1">Ready to crush some more problems?</p>
         </div>
 
         {error && (
-          <div className="mt-4 mb-2 text-sm text-red-500 font-semibold bg-red-950/40 p-3 rounded-lg border border-red-500/30">
+          <div className="mt-4 mb-4 text-sm text-red-500 font-semibold bg-red-950/40 p-3 rounded-lg border border-red-500/30">
             {error}
           </div>
         )}
 
-        <Divider text="OR" className="mt-6 mb-5" />
-
         <div>
-          <form onSubmit={handleSubmit} className="font-JetBrains-Mono">
+          <form onSubmit={handleSubmit} className="mx-auto w-full flex flex-col justify-center items-center">
             <FormField
               label="EMAIL ADDRESS OR USERNAME"
               icon={UserRound}
@@ -110,24 +108,23 @@ export const LoginForm = () => {
               onChange={handleChange}
               required
             />
-        <Button type="submit" variant="accent" className="mt-8 w-full flex gap-3" disabled={loading}>
-          {loading ? (
-            <div className="flex items-center gap-2">
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-              <span>Signing in...</span>
-            </div>
-          ) : (
-            <>
-              <LogIn />
-              <h3>Log In</h3>
-            </>
-          )}
-        </Button>
+            <Button type="submit" variant="accent" className="mt-4 w-full flex gap-3 text-sm sm:text-base justify-center" disabled={loading}>
+              {loading ? (
+                <div className="flex items-center gap-2">
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                  <span>Signing in...</span>
+                </div>
+              ) : (
+                <>
+                  <LogIn className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span>Log In</span>
+                </>
+              )}
+            </Button>
           </form>
         </div>
 
-
-        <Divider text="OR" className="mt-5 mb-5" />
+        <Divider text="OR" className="mt-6 mb-6" />
 
         <SocialButton icon={GoogleLogo} text="Continue with Google" onClick={handleGoogleLogin} />
       </div>

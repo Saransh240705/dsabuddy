@@ -10,6 +10,8 @@ const ComponentShowcase = lazy(() => import('./pages/ComponentShowcase'))
 const OnboardingPage = lazy(() => import('./pages/OnboardingPage'))
 const ProfilePage = lazy(() => import('./pages/ProfilePage'))
 const AboutPage = lazy(() => import('./pages/AboutPage'))
+const LeaderboardPage = lazy(() => import('./pages/LeaderboardPage'))
+const ContactPage = lazy(() => import('./pages/ContactPage'))
 
 function ProtectedRoute({ children }) {
   const user = useUserStore((state) => state.user);
@@ -49,7 +51,8 @@ function App() {
           <Route path="/dashboard/analytics" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
           <Route path="/dashboard/pyqs" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
           <Route path="/dashboard/pyqs/:companyName" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
-          <Route path="/dashboard/leaderboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
+          <Route path="/leaderboard" element={<LeaderboardPage />} />
+          <Route path="/contact" element={<ContactPage />} />
           <Route path="/dashboard/settings" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
           <Route path="/profile/:username" element={<ProfilePage />} />
           <Route path="/register" element={<PublicRoute><LoginPage /></PublicRoute>} />

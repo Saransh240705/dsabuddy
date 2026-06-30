@@ -4,7 +4,6 @@ import { Sidebar, DashboardSkeleton } from "./components";
 import { Dashboard } from "./Dashboard";
 import { Analytics } from "./Analytics";
 import { PYQs } from "./PYQs";
-import { Leaderboard } from "./Leaderboard";
 import { Settings } from "./Settings";
 import { InterviewForum } from "./InterviewForum";
 import { QuestionView } from "./QuestionView";
@@ -19,7 +18,6 @@ export function DashboardPage() {
     if (path.startsWith("/dashboard/forum")) return "forum";
     if (path.startsWith("/dashboard/analytics")) return "analytics";
     if (path.startsWith("/dashboard/pyqs")) return "pyqs";
-    if (path.startsWith("/dashboard/leaderboard")) return "leaderboard";
     if (path.startsWith("/dashboard/settings")) return "settings";
     return "dashboard";
   });
@@ -52,8 +50,6 @@ export function DashboardPage() {
       setActiveSection("analytics");
     } else if (path.startsWith("/dashboard/pyqs")) {
       setActiveSection("pyqs");
-    } else if (path.startsWith("/dashboard/leaderboard")) {
-      setActiveSection("leaderboard");
     } else if (path.startsWith("/dashboard/settings")) {
       setActiveSection("settings");
     } else {
@@ -62,23 +58,6 @@ export function DashboardPage() {
   }, [location.pathname]);
 
   const fetchData = useCallback(async () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      setError(null);
-      setUser(null);
-      setPlatforms([]);
-      setAnalytics(null);
-      try {
-        const compRes = await apiClient.get('/companies');
-        const companiesArray = Array.isArray(compRes) ? compRes : compRes.companies || [];
-        setCompanies(companiesArray);
-      } catch (e) {
-        console.error("Failed to fetch companies", e);
-      }
-      setFirstLoad(false);
-      return;
-    }
-
     try {
       setError(null);
 
@@ -173,8 +152,6 @@ export function DashboardPage() {
         return (
           <PYQs companies={companies} onSelectQuestion={handleSelectQuestion} />
         );
-      case "leaderboard":
-        return <Leaderboard user={storeUser} />;
       case "settings":
         return <Settings platforms={platforms} onUpdate={fetchData} />;
       case "forum":

@@ -395,7 +395,7 @@ export function Analytics({ analytics: initialAnalytics }) {
     const maxVal = Math.max(...topicsWithData.map((t) => t.count), 1);
     return (
       <div className={`${spanClass} space-y-4`}>
-        <h2 className="text-2xl font-normal italic font-Instrument-Serif text-[#E5E7EB]">
+        <h2 className="text-2xl font-normal italic font-serif text-[#E5E7EB]">
           Topic Distribution
         </h2>
         <div className="border border-[#1F2937] bg-[#161B22] p-4 rounded-xl h-[320px] overflow-y-auto space-y-3.5 custom-scrollbar">
@@ -403,7 +403,7 @@ export function Analytics({ analytics: initialAnalytics }) {
             const pct = (topic.count / maxVal) * 100;
             return (
               <div key={topic.name} className="space-y-1">
-                <div className="flex justify-between items-baseline text-[10px] font-JetBrains-Mono font-bold leading-none">
+                <div className="flex justify-between items-baseline text-[10px] font-mono font-bold leading-none">
                   <span className="text-[#E5E7EB]">{topic.name}</span>
                   <span className="text-[#35b9f1]">{topic.count}</span>
                 </div>
@@ -427,16 +427,16 @@ export function Analytics({ analytics: initialAnalytics }) {
     const topicsWithData = topics.filter((t) => t.count > 0);
     return (
       <div className={`${spanClass} space-y-4`}>
-        <h2 className="text-2xl font-normal italic font-Instrument-Serif text-[#E5E7EB]">
+        <h2 className="text-2xl font-normal italic font-serif text-[#E5E7EB]">
           Skill Profile
         </h2>
         <div className="border border-[#1F2937] bg-[#161B22] p-5 rounded-xl flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex-1 space-y-2 text-center md:text-left max-w-sm">
-            <h4 className="text-lg font-bold font-Spline-Sans text-[#E5E7EB]">DSA Mastery Index</h4>
-            <p className="text-xs text-[#9CA3AF] leading-relaxed font-JetBrains-Mono">
+            <h4 className="text-lg font-bold text-[#E5E7EB]">DSA Mastery Index</h4>
+            <p className="text-xs text-[#9CA3AF] leading-relaxed font-mono">
               Heptagonal representation of topic competence based on difficulty-weighted solve count.
             </p>
-            <div className="pt-2 text-left space-y-1 text-xs font-JetBrains-Mono">
+            <div className="pt-2 text-left space-y-1 text-xs font-mono">
               <div className="flex justify-between border-b border-[#1F2937]/50 pb-1">
                 <span className="text-[#9CA3AF]">Primary Strength</span>
                 <span className="text-[#35b9f1] font-bold">{topicsWithData[0]?.name || "N/A"}</span>
@@ -449,7 +449,7 @@ export function Analytics({ analytics: initialAnalytics }) {
           </div>
 
           <div className="w-[220px] h-[220px] shrink-0">
-            <svg viewBox="0 0 220 220" className="w-full h-full font-JetBrains-Mono overflow-visible">
+            <svg viewBox="0 0 220 220" className="w-full h-full font-mono overflow-visible">
               {radarGridRings.map((ring, rIdx) => (
                 <polygon
                   key={rIdx}
@@ -476,7 +476,7 @@ export function Analytics({ analytics: initialAnalytics }) {
               {radarLabels.map((l, i) => (
                 <text key={i} x={l.x} y={l.y + 3} fill="#9CA3AF" fontSize="11"
                   textAnchor={l.anchor}
-                  className="font-JetBrains-Mono uppercase tracking-tighter font-semibold"
+                  className="font-mono uppercase tracking-tighter font-semibold"
                 >{l.label}</text>
               ))}
             </svg>
@@ -488,7 +488,7 @@ export function Analytics({ analytics: initialAnalytics }) {
 
   if (loading && !analytics) {
     return (
-      <div className="max-w-[960px] mx-auto p-[28px_32px] text-[#E5E7EB] h-96 flex items-center justify-center font-JetBrains-Mono text-sm">
+      <div className="max-w-[960px] mx-auto p-[28px_32px] text-[#E5E7EB] h-96 flex items-center justify-center font-mono text-sm">
         <div className="flex items-center gap-2 text-[#9CA3AF]">
           <svg className="w-5 h-5 animate-spin text-[#35b9f1]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
@@ -504,7 +504,7 @@ export function Analytics({ analytics: initialAnalytics }) {
     <div className="space-y-6">
       {/* Page Header */}
       <div>
-        <h1 className="text-[#E5E7EB] text-4xl font-normal italic mb-2 font-Instrument-Serif flex items-center gap-3">
+        <h1 className="text-[#E5E7EB] text-4xl font-normal italic mb-2 font-serif flex items-center gap-3">
           {/* Tabler ti-chart-bar representation */}
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -524,7 +524,7 @@ export function Analytics({ analytics: initialAnalytics }) {
           </svg>
           Analytics
         </h1>
-        <p className="text-[#9CA3AF] font-JetBrains-Mono text-xs">View your coding performance across connected platforms</p>
+        <p className="text-[#9CA3AF] font-mono text-xs">View your coding performance across connected platforms</p>
       </div>
 
       {/* Platform switcher tabs */}
@@ -543,7 +543,7 @@ export function Analytics({ analytics: initialAnalytics }) {
                 setActivePlatform(tab.id);
                 setComparePlatforms(false);
               }}
-              className={`px-4 py-1.5 border font-JetBrains-Mono text-xs uppercase font-semibold transition-all rounded-lg cursor-pointer ${
+              className={`px-4 py-1.5 border font-mono text-xs uppercase font-semibold transition-all rounded-lg cursor-pointer ${
                 isActive
                   ? "bg-[#35b9f1] text-[#0D1117] border-[#35b9f1] shadow-[0_0_12px_rgba(53,185,241,0.3)]"
                   : "border-[#1F2937] text-[#9CA3AF] hover:border-gray-500"
@@ -598,7 +598,7 @@ export function Analytics({ analytics: initialAnalytics }) {
                 {/* Rating Progression Line Chart */}
                 <div className={`${hasTopics ? "md:col-span-3" : ""} space-y-4`}>
                   <div className="flex justify-between items-center">
-                    <h2 className="text-2xl font-normal italic font-Instrument-Serif text-[#E5E7EB]">
+                    <h2 className="text-2xl font-normal italic font-serif text-[#E5E7EB]">
                       Rating Progression
                     </h2>
                     <div className="flex items-center gap-3">
@@ -613,7 +613,7 @@ export function Analytics({ analytics: initialAnalytics }) {
                           <button
                             key={opt.id}
                             onClick={() => setTimeFilter(opt.id)}
-                            className={`px-2 py-0.5 text-[9px] font-JetBrains-Mono rounded-md transition-all cursor-pointer ${
+                            className={`px-2 py-0.5 text-[9px] font-mono rounded-md transition-all cursor-pointer ${
                               timeFilter === opt.id
                                 ? "bg-[#35b9f1] text-[#0D1117] font-bold"
                                 : "text-[#9CA3AF] hover:text-white"
@@ -628,7 +628,7 @@ export function Analytics({ analytics: initialAnalytics }) {
                         /* Toggle Compare Platforms */
                         <button
                           onClick={() => setComparePlatforms(!comparePlatforms)}
-                          className="text-[10px] font-JetBrains-Mono text-[#9CA3AF] hover:text-[#35b9f1] transition-colors uppercase cursor-pointer tracking-wider border-l border-[#1F2937] pl-3"
+                          className="text-[10px] font-mono text-[#9CA3AF] hover:text-[#35b9f1] transition-colors uppercase cursor-pointer tracking-wider border-l border-[#1F2937] pl-3"
                         >
                           {comparePlatforms ? "Show Active Only" : "Compare Platforms"}
                         </button>
@@ -643,7 +643,7 @@ export function Analytics({ analytics: initialAnalytics }) {
                     {/* SVG Line Chart */}
                     <svg
                       viewBox="0 0 600 300"
-                      className="w-full h-full font-JetBrains-Mono overflow-visible"
+                      className="w-full h-full font-mono overflow-visible"
                       onMouseMove={(e) => {
                         const svg = e.currentTarget;
                         const point = svg.createSVGPoint();
@@ -886,7 +886,7 @@ export function Analytics({ analytics: initialAnalytics }) {
                           className="pointer-events-none overflow-visible"
                         >
                           <div className="w-full h-full flex flex-col justify-end items-center pb-2">
-                            <div className="bg-[#161B22] border border-[#1F2937] px-3 py-2 rounded-xl text-xs font-JetBrains-Mono text-[#E5E7EB] shadow-xl pointer-events-none">
+                            <div className="bg-[#161B22] border border-[#1F2937] px-3 py-2 rounded-xl text-xs font-mono text-[#E5E7EB] shadow-xl pointer-events-none">
                               <div className="font-bold text-[#E5E7EB] mb-1">{hoveredChartPoint.label}</div>
                               {hoveredChartPoint.platforms ? (
                                 <div className="space-y-1">
@@ -916,7 +916,7 @@ export function Analytics({ analytics: initialAnalytics }) {
 
                   {/* Color Legend (Compare Mode only) */}
                   {comparePlatforms && connection && connection.rating && (
-                    <div className="flex gap-4 text-[10px] font-JetBrains-Mono justify-center mt-4">
+                    <div className="flex gap-4 text-[10px] font-mono justify-center mt-4">
                       <div className="flex items-center gap-1.5">
                         <div className="w-2.5 h-1 bg-[#35b9f1]" />
                         <span className="text-[#E5E7EB]">LeetCode</span>
@@ -974,10 +974,10 @@ export function Analytics({ analytics: initialAnalytics }) {
               <line x1="2" y1="20" x2="22" y2="20" />
             </svg>
           </div>
-          <h3 className="text-[#E5E7EB] text-lg font-bold mb-2 font-Instrument-Serif italic">
+          <h3 className="text-[#E5E7EB] text-lg font-bold mb-2 font-serif italic">
             Account Not Connected
           </h3>
-          <p className="text-[#9CA3AF] font-JetBrains-Mono text-xs leading-relaxed">
+          <p className="text-[#9CA3AF] font-mono text-xs leading-relaxed">
             Please connect your {activePlatform === "leetcode" ? "LeetCode" : activePlatform === "codeforces" ? "Codeforces" : activePlatform === "codechef" ? "CodeChef" : "GFG"} profile in Settings to view rating progression, topic distribution, contest history, and skill profile.
           </p>
         </div>

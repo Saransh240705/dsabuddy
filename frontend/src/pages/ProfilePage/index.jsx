@@ -342,12 +342,13 @@ export default function ProfilePage() {
   const isLoggedIn = !!loggedInUser;
 
   return (
-    <div className="flex min-h-screen bg-[#000000] text-[#E5E7EB] font-Spline-Sans selection:bg-[#35b9f1]/30 selection:text-white">
+    <div className="flex min-h-screen bg-[#000000] text-[#E5E7EB] selection:bg-[#35b9f1]/30 selection:text-white">
       {/* Sidebar Navigation */}
       <Sidebar
         activeSection="profile"
         onSectionChange={(section) => {
           if (section === 'dashboard') navigate('/dashboard');
+          else if (section === 'leaderboard') navigate('/leaderboard');
           else navigate(`/dashboard/${section}`);
         }}
         user={loggedInUser}
@@ -361,7 +362,7 @@ export default function ProfilePage() {
         <header className="border-b border-neutral-900/60 bg-black/45 backdrop-blur-md sticky top-0 z-40 shrink-0">
           <div className="max-w-7xl mx-auto px-4 md:px-8 h-16 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="text-white font-bold text-sm tracking-wide font-Spline-Sans">Student Profile</span>
+              <span className="text-white font-bold text-sm tracking-wide">Student Profile</span>
             </div>
 
              <div className="flex items-center gap-3">
@@ -369,7 +370,7 @@ export default function ProfilePage() {
                 variant="outline"
                 size="sm"
                 onClick={handleShare}
-                className="font-JetBrains-Mono text-[#9CA3AF] hover:text-white rounded-lg px-3 py-1.5"
+                className="font-mono text-[#9CA3AF] hover:text-white rounded-lg px-3 py-1.5"
               >
                 {copied ? (
                   <>
@@ -386,7 +387,7 @@ export default function ProfilePage() {
               
               {isLoggedIn ? (
                 <Button
-                  onClick={() => navigate('/dashboard/leaderboard')}
+                  onClick={() => navigate('/leaderboard')}
                   variant="accent"
                   size="sm"
                   className="rounded-lg px-3 py-1.5"
@@ -414,13 +415,13 @@ export default function ProfilePage() {
             {loading ? (
               <div className="flex flex-col items-center justify-center py-32 space-y-4">
                 <div className="w-10 h-10 border-2 border-[#35b9f1] border-t-transparent rounded-full animate-spin" />
-                <p className="text-[#9CA3AF] font-JetBrains-Mono text-xs">Resolving profile parameters...</p>
+                <p className="text-[#9CA3AF] font-mono text-xs">Resolving profile parameters...</p>
               </div>
             ) : error ? (
               <div className="flex flex-col items-center justify-center py-20 text-center max-w-md mx-auto">
                 <AlertCircle className="w-12 h-12 text-red-500/80 mb-4" />
                 <h2 className="text-xl font-semibold mb-2">Profile Unavailable</h2>
-                <p className="text-[#9CA3AF] text-sm font-JetBrains-Mono mb-6">{error}</p>
+                <p className="text-[#9CA3AF] text-sm font-mono mb-6">{error}</p>
                 <button
                   onClick={() => navigate(-1)}
                   className="flex items-center gap-2 text-xs font-semibold text-[#35b9f1] hover:underline"
@@ -443,7 +444,7 @@ export default function ProfilePage() {
                   <div className="relative flex-shrink-0">
                     {showInitials ? (
                       <div 
-                        className="w-24 h-24 rounded-full flex items-center justify-center bg-neutral-900 border-2 font-bold text-3xl font-Spline-Sans select-none shadow-inner"
+                        className="w-24 h-24 rounded-full flex items-center justify-center bg-neutral-900 border-2 font-bold text-3xl select-none shadow-inner"
                         style={{ borderColor: rankColor, color: rankColor }}
                       >
                         {getInitials(profile.name)}
@@ -463,10 +464,10 @@ export default function ProfilePage() {
                   <div className="space-y-4 flex-1">
                     <div>
                       <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
-                        <h1 className="text-white text-3xl font-bold tracking-tight font-Spline-Sans">{profile.name}</h1>
+                        <h1 className="text-white text-3xl font-bold tracking-tight">{profile.name}</h1>
                         {profile.overallRank && (
                           <span 
-                            className="px-2.5 py-0.5 rounded text-[10px] font-bold font-JetBrains-Mono border uppercase tracking-wider select-none"
+                            className="px-2.5 py-0.5 rounded text-[10px] font-bold font-mono border uppercase tracking-wider select-none"
                             style={{
                               color: rankColor,
                               backgroundColor: `${rankColor}10`,
@@ -477,10 +478,10 @@ export default function ProfilePage() {
                           </span>
                         )}
                       </div>
-                      <p className="text-[#9CA3AF] text-sm font-JetBrains-Mono mt-1">@{profile.userName}</p>
+                      <p className="text-[#9CA3AF] text-sm font-mono mt-1">@{profile.userName}</p>
                     </div>
 
-                    <div className="flex flex-wrap items-center justify-center md:justify-start gap-x-5 gap-y-2 text-xs text-[#9CA3AF] font-JetBrains-Mono">
+                    <div className="flex flex-wrap items-center justify-center md:justify-start gap-x-5 gap-y-2 text-xs text-[#9CA3AF] font-mono">
                       <span className="flex items-center gap-1.5">
                         <School className="w-4 h-4 text-neutral-500" />
                         {profile.college || 'Netaji Subhas University of Technology'}
@@ -537,7 +538,7 @@ export default function ProfilePage() {
                   
                   {/* Left Column: Platform Selector & Stats */}
                   <div className="space-y-4 lg:col-span-1">
-                    <h3 className="text-white font-bold font-Spline-Sans text-lg flex items-center gap-2">
+                    <h3 className="text-white font-bold text-lg flex items-center gap-2">
                       <Sparkles className="w-4 h-4 text-[#35b9f1]" />
                       Connected Platforms
                     </h3>
@@ -574,9 +575,9 @@ export default function ProfilePage() {
                                 />
                               </div>
                               <div>
-                                <h4 className="text-white font-bold font-Spline-Sans text-sm leading-tight">{conn.name}</h4>
+                                <h4 className="text-white font-bold text-sm leading-tight">{conn.name}</h4>
                                 {conn.connected && conn.rating && (
-                                  <p className="text-neutral-400 text-xs font-JetBrains-Mono mt-0.5">
+                                  <p className="text-neutral-400 text-xs font-mono mt-0.5">
                                     Rating: {conn.rating}
                                   </p>
                                 )}
@@ -585,7 +586,7 @@ export default function ProfilePage() {
 
                             {conn.connected && (
                               <div className="text-right">
-                                <p className="text-[#35b9f1] text-xs font-bold font-JetBrains-Mono">
+                                <p className="text-[#35b9f1] text-xs font-bold font-mono">
                                   {conn.id === 'codechef' ? (conn.stars ? `${conn.stars}★` : '') : `${conn.problemsSolved || 0} Solved`}
                                 </p>
                               </div>
@@ -599,7 +600,7 @@ export default function ProfilePage() {
                   {/* Right Column: Interactive Rating chart */}
                   <div className="lg:col-span-2 space-y-4">
                     <div className="flex justify-between items-center">
-                      <h3 className="text-white font-bold font-Spline-Sans text-lg flex items-center gap-2">
+                      <h3 className="text-white font-bold text-lg flex items-center gap-2">
                         <Activity className="w-4 h-4 text-[#35b9f1]" />
                         Rating Progression
                       </h3>
@@ -614,7 +615,7 @@ export default function ProfilePage() {
                             <button
                               key={opt.id}
                               onClick={() => setTimeFilter(opt.id)}
-                              className={`px-2 py-0.5 text-[9px] font-JetBrains-Mono rounded-md transition-all cursor-pointer ${
+                              className={`px-2 py-0.5 text-[9px] font-mono rounded-md transition-all cursor-pointer ${
                                 timeFilter === opt.id
                                   ? "bg-[#35b9f1] text-[#000000] font-bold"
                                   : "text-[#9CA3AF] hover:text-white"
@@ -628,7 +629,7 @@ export default function ProfilePage() {
                         {activeConnection?.rating && (
                           <button
                             onClick={() => setComparePlatforms(!comparePlatforms)}
-                            className="text-[10px] font-JetBrains-Mono text-[#9CA3AF] hover:text-[#35b9f1] transition-colors uppercase cursor-pointer tracking-wider border-l border-neutral-900 pl-3"
+                            className="text-[10px] font-mono text-[#9CA3AF] hover:text-[#35b9f1] transition-colors uppercase cursor-pointer tracking-wider border-l border-neutral-900 pl-3"
                           >
                             {comparePlatforms ? "Active Only" : "Compare"}
                           </button>
@@ -643,7 +644,7 @@ export default function ProfilePage() {
                       {/* SVG Chart */}
                       <svg
                         viewBox="0 0 600 300"
-                        className="w-full h-full font-JetBrains-Mono overflow-visible"
+                        className="w-full h-full font-mono overflow-visible"
                         onMouseMove={(e) => {
                           const svg = e.currentTarget;
                           const point = svg.createSVGPoint();
@@ -804,7 +805,7 @@ export default function ProfilePage() {
                       {/* Tooltip Overlay */}
                       {hoveredChartPoint && (
                         <div
-                          className="absolute z-10 bg-neutral-950 border border-neutral-800 rounded-lg p-2.5 shadow-xl text-[10px] font-JetBrains-Mono space-y-1"
+                          className="absolute z-10 bg-neutral-950 border border-neutral-800 rounded-lg p-2.5 shadow-xl text-[10px] font-mono space-y-1"
                           style={{
                             left: `${Math.min(460, Math.max(45, hoveredChartPoint.x - 65))}px`,
                             top: `${Math.min(190, Math.max(10, hoveredChartPoint.y - 85))}px`
@@ -834,7 +835,7 @@ export default function ProfilePage() {
 
                 {/* Submission consistency heatmap */}
                 <div className="space-y-4">
-                  <h3 className="text-white font-bold font-Spline-Sans text-lg flex items-center gap-2">
+                  <h3 className="text-white font-bold text-lg flex items-center gap-2">
                     <Calendar className="w-4 h-4 text-[#35b9f1]" />
                     Coding Consistency
                   </h3>

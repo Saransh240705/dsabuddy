@@ -1,4 +1,4 @@
-export { Header } from './Header';
+export { Navbar } from './Navbar';
 export { Footer } from './Footer';
 export { FeatureCard } from './FeatureCard';
 export { SocialButton } from './SocialButton';

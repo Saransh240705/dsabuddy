@@ -1,4 +1,7 @@
+import { useNavigate } from 'react-router-dom';
+
 export function PlatformCard({ platform }) {
+  const navigate = useNavigate();
   const platformColors = {
     leetcode: '#FFA116',
     codechef: '#5B4638',
@@ -8,62 +11,75 @@ export function PlatformCard({ platform }) {
 
   const color = platformColors[platform?.id] || '#35b9f1';
   const isSynced = platform?.synced !== false;
+  const isConnected = platform?.username && platform?.username !== 'Not Connected';
 
   return (
-    <div className="bg-[#161B22] rounded-xl p-6 border border-[#1F2937] hover:border-[#35b9f1]/20 transition-all">
-      <div className="flex items-start justify-between mb-4">
-        <div className="flex items-center gap-3">
-          <div 
-            className="w-12 h-12 rounded-lg flex items-center justify-center"
-            style={{ backgroundColor: `${color}20` }}
-          >
-            {platform?.logo ? (
-              <img 
-                src={platform.logo} 
-                alt={platform.name} 
-                className={`w-7 h-7 object-contain ${platform?.username && platform?.username !== 'Not Connected' ? '' : 'grayscale opacity-40'}`} 
-              />
-            ) : (
-              <span className="text-xl font-bold" style={{ color }}>{platform?.name?.[0] || 'L'}</span>
-            )}
+    <div className="bg-[#161B22] rounded-xl p-6 border border-[#1F2937] hover:border-[#35b9f1]/20 transition-all flex flex-col justify-between">
+      <div>
+        <div className="flex items-start justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <div 
+              className="w-12 h-12 rounded-lg flex items-center justify-center"
+              style={{ backgroundColor: `${color}20` }}
+            >
+              {platform?.logo ? (
+                <img 
+                  src={platform.logo} 
+                  alt={platform.name} 
+                  className={`w-7 h-7 object-contain ${isConnected ? '' : 'grayscale opacity-40'}`} 
+                />
+              ) : (
+                <span className="text-xl font-bold" style={{ color }}>{platform?.name?.[0] || 'L'}</span>
+              )}
+            </div>
+            <div>
+              <h4 className="text-[#E5E7EB] font-bold">{platform?.name || 'LeetCode'}</h4>
+              <p className="text-[#6B7280] text-xs font-mono">@{platform?.username || 'Not Connected'}</p>
+            </div>
           </div>
-          <div>
-            <h4 className="text-[#E5E7EB] font-bold font-Spline-Sans">{platform?.name || 'LeetCode'}</h4>
-            <p className="text-[#6B7280] text-xs font-JetBrains-Mono">@{platform?.username || 'alexcode'}</p>
+          
+          <div className="flex items-center gap-1">
+            <div className={`w-2 h-2 rounded-full ${isSynced && isConnected ? 'bg-[#10B981]' : 'bg-[#6B7280]'}`} />
+            <span className="text-[#6B7280] text-xs font-mono">{isSynced && isConnected ? 'Synced' : 'Offline'}</span>
           </div>
         </div>
-        
-        <div className="flex items-center gap-1">
-          <div className={`w-2 h-2 rounded-full ${isSynced ? 'bg-[#10B981]' : 'bg-[#6B7280]'}`} />
-          <span className="text-[#6B7280] text-xs font-JetBrains-Mono">{isSynced ? 'Synced' : 'Offline'}</span>
+
+        <div className="grid grid-cols-2 gap-3">
+          <div className="bg-[#0D1117] rounded-lg p-3">
+            <p className="text-[#6B7280] text-xs mb-1 font-mono">RATING</p>
+            <p className="text-[#E5E7EB] text-xl font-bold">
+              {platform?.rating !== undefined && platform?.rating !== null ? platform.rating.toLocaleString() : '-'}
+            </p>
+          </div>
+          <div className="bg-[#0D1117] rounded-lg p-3">
+            <p className="text-[#6B7280] text-xs mb-1 font-mono">
+              {platform?.id === 'codechef' ? 'STARS' : 'SOLVED'}
+            </p>
+            <p className="text-[#E5E7EB] text-xl font-bold">
+              {platform?.id === 'codechef' 
+                ? (platform?.stars !== undefined && platform?.stars !== null ? `${platform.stars}★` : '-') 
+                : (platform?.problemsSolved !== undefined && platform?.problemsSolved !== null ? platform.problemsSolved : '-')}
+            </p>
+          </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
-        <div className="bg-[#0D1117] rounded-lg p-3">
-          <p className="text-[#6B7280] text-xs mb-1 font-JetBrains-Mono">RATING</p>
-          <p className="text-[#E5E7EB] text-xl font-bold font-Spline-Sans">
-            {platform?.rating !== undefined && platform?.rating !== null ? platform.rating.toLocaleString() : '-'}
-          </p>
-        </div>
-        <div className="bg-[#0D1117] rounded-lg p-3">
-          <p className="text-[#6B7280] text-xs mb-1 font-JetBrains-Mono">
-            {platform?.id === 'codechef' ? 'STARS' : 'SOLVED'}
-          </p>
-          <p className="text-[#E5E7EB] text-xl font-bold font-Spline-Sans">
-            {platform?.id === 'codechef' 
-              ? (platform?.stars !== undefined && platform?.stars !== null ? `${platform.stars}★` : '-') 
-              : (platform?.problemsSolved !== undefined && platform?.problemsSolved !== null ? platform.problemsSolved : '-')}
-          </p>
-        </div>
-      </div>
-
-      {platform?.rank && (
-        <div className="mt-3 pt-3 border-t border-[#1F2937]">
-          <p className="text-[#6B7280] text-xs font-JetBrains-Mono">
-            RANK: <span className="text-[#E5E7EB]">{platform.rank}</span>
-          </p>
-        </div>
+      {!isConnected ? (
+        <button
+          onClick={() => navigate('/dashboard/settings')}
+          className="mt-4 w-full py-2 bg-[#35b9f1]/10 hover:bg-[#35b9f1]/20 text-[#35b9f1] border border-[#35b9f1]/20 hover:border-[#35b9f1]/40 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer flex items-center justify-center gap-1"
+        >
+          <span>Connect {platform?.name}</span>
+          <span>&rarr;</span>
+        </button>
+      ) : (
+        platform?.rank && (
+          <div className="mt-3 pt-3 border-t border-[#1F2937]">
+            <p className="text-[#6B7280] text-xs font-mono">
+              RANK: <span className="text-[#E5E7EB]">{platform.rank}</span>
+            </p>
+          </div>
+        )
       )}
     </div>
   );

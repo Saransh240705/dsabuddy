@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Header, Footer } from "@/components/layout";
+import { Navbar, Footer } from "@/components/layout";
 import { useEffect, useRef } from "react";
 import Lenis from "lenis";
 import teamImg from "@/assets/team.png";
@@ -88,11 +88,11 @@ const FullCard = ({ member, type, index = 0 }) => {
 
 
       <div className="absolute bottom-0 left-0 w-full p-6 sm:p-8 z-20 flex flex-col justify-end translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-        <h3 className="font-bold tracking-tight text-white font-SF-Pro text-2xl sm:text-3xl lg:text-4xl leading-tight">
+        <h3 className="font-bold tracking-tight text-white text-2xl sm:text-3xl lg:text-4xl leading-tight">
           {member.name}
         </h3>
         {member.batch && (
-          <span className="text-[#35b9f1] font-JetBrains-Mono text-xs mt-1 block">
+          <span className="text-[#35b9f1] font-mono text-xs mt-1 block">
             Batch of {member.batch}
           </span>
         )}
@@ -155,12 +155,12 @@ export function AboutPage() {
   };
 
   return (
-    <div className="bg-black text-white font-SF-Pro relative w-full">
+    <div className="bg-black text-white relative w-full">
       <BackgroundGrid />
 
       <div className="fixed top-0 w-full z-[100] pointer-events-none">
         <div className="pointer-events-auto">
-          <Header />
+          <Navbar />
         </div>
       </div>
 
@@ -173,14 +173,14 @@ export function AboutPage() {
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
             <motion.span
-              className="text-[#35b9f1] font-JetBrains-Mono tracking-[0.3em] text-xs sm:text-sm uppercase block mb-6"
+              className="text-[#35b9f1] font-mono tracking-[0.3em] text-xs sm:text-sm uppercase block mb-6"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
             >
               About DSABuddy
             </motion.span>
-            <h1 className="font-Instrument-Serif font-normal italic text-6xl sm:text-8xl md:text-[10rem] bg-linear-to-b from-white to-gray-400 bg-clip-text text-transparent leading-[1.1] tracking-tight">
+            <h1 className="font-serif font-normal italic text-6xl sm:text-8xl md:text-[10rem] bg-linear-to-b from-white to-gray-400 bg-clip-text text-transparent leading-[1.1] tracking-tight">
               Meet the <br className="hidden sm:block" />
               <span className="bg-linear-to-r from-[#35b9f1] to-cyan-200 bg-clip-text text-transparent">Team behind</span>
             </h1>
@@ -193,15 +193,15 @@ export function AboutPage() {
             transition={{ delay: 1, duration: 1 }}
             onClick={handleScrollDown}
           >
-            <span className="font-JetBrains-Mono text-[10px] uppercase tracking-widest text-gray-500 mb-2 group-hover:text-white transition-colors">Scroll Down</span>
+            <span className="font-mono text-[10px] uppercase tracking-widest text-gray-500 mb-2 group-hover:text-white transition-colors">Scroll Down</span>
             <div className="w-px h-12 bg-gradient-to-b from-gray-500 group-hover:from-white to-transparent transition-colors" />
           </motion.div>
         </section>
 
         <section className="sticky top-0 h-screen w-full flex flex-col xl:flex-row items-center bg-[#070707] border-t border-white/5 shadow-[0_-20px_50px_rgba(0,0,0,0.5)] z-20 px-4 sm:px-8 xl:px-16">
           <div className="w-full xl:w-1/4 shrink-0 flex flex-col justify-center py-8 xl:py-0 xl:pr-12">
-            <span className="text-[#35b9f1] font-JetBrains-Mono text-[10px] uppercase tracking-[0.2em] mb-4 block">01 // Academic advisors</span>
-            <h2 className="font-Instrument-Serif italic text-5xl sm:text-6xl lg:text-7xl text-white">Mentors</h2>
+            <span className="text-[#35b9f1] font-mono text-[10px] uppercase tracking-[0.2em] mb-4 block">01 // Academic advisors</span>
+            <h2 className="font-serif italic text-5xl sm:text-6xl lg:text-7xl text-white">Mentors</h2>
           </div>
           <div className="w-full xl:w-3/4 h-[50vh] xl:h-[65vh] pb-8 xl:pb-0">
             <DynamicGrid items={mentors} type="Advisor" />
@@ -210,8 +210,8 @@ export function AboutPage() {
 
         <section className="sticky top-0 h-screen w-full flex flex-col xl:flex-row-reverse items-center bg-[#090909] border-t border-white/5 shadow-[0_-20px_50px_rgba(0,0,0,0.5)] z-30 px-4 sm:px-8 xl:px-16">
           <div className="w-full xl:w-1/4 shrink-0 flex flex-col justify-center py-8 xl:py-0 xl:pl-12">
-            <span className="text-[#35b9f1] font-JetBrains-Mono text-[10px] uppercase tracking-[0.2em] mb-4 block">02 // Core Engineers</span>
-            <h2 className="font-Instrument-Serif italic text-5xl sm:text-6xl lg:text-7xl text-white">Development<br className="hidden xl:block" />Team</h2>
+            <span className="text-[#35b9f1] font-mono text-[10px] uppercase tracking-[0.2em] mb-4 block">02 // Core Engineers</span>
+            <h2 className="font-serif italic text-5xl sm:text-6xl lg:text-7xl text-white">Development<br className="hidden xl:block" />Team</h2>
           </div>
           <div className="w-full xl:w-3/4 h-[50vh] xl:h-[65vh] pb-8 xl:pb-0">
             <DynamicGrid items={developers} type="Developer" />
@@ -220,8 +220,8 @@ export function AboutPage() {
 
         <section className="sticky top-0 h-screen w-full flex flex-col xl:flex-row items-center bg-[#0b0b0b] border-t border-white/5 shadow-[0_-20px_50px_rgba(0,0,0,0.5)] z-40 px-4 sm:px-8 xl:px-16">
           <div className="w-full xl:w-1/4 shrink-0 flex flex-col justify-center py-8 xl:py-0 xl:pr-12">
-            <span className="text-[#35b9f1] font-JetBrains-Mono text-[10px] uppercase tracking-[0.2em] mb-4 block">03 // Public Relations</span>
-            <h2 className="font-Instrument-Serif italic text-5xl sm:text-6xl lg:text-7xl text-white">Outreach &<br className="hidden xl:block" />PR Team</h2>
+            <span className="text-[#35b9f1] font-mono text-[10px] uppercase tracking-[0.2em] mb-4 block">03 // Public Relations</span>
+            <h2 className="font-serif italic text-5xl sm:text-6xl lg:text-7xl text-white">Outreach &<br className="hidden xl:block" />PR Team</h2>
           </div>
           <div className="w-full xl:w-3/4 h-[50vh] xl:h-[65vh] pb-8 xl:pb-0">
             <DynamicGrid items={prTeam} type="PR & Events" />
@@ -230,8 +230,8 @@ export function AboutPage() {
 
         <section className="sticky top-0 h-screen w-full flex flex-col xl:flex-row items-center bg-[#0c0c0c] border-t border-white/5 shadow-[0_-20px_50px_rgba(0,0,0,0.5)] z-[45] px-4 sm:px-8 xl:px-16">
           <div className="w-full xl:w-1/4 shrink-0 flex flex-col justify-center py-8 xl:py-0 xl:pr-12">
-            <span className="text-[#35b9f1] font-JetBrains-Mono text-[10px] uppercase tracking-[0.2em] mb-4 block">04 // Team Photo</span>
-            <h2 className="font-Instrument-Serif italic text-5xl sm:text-6xl lg:text-7xl text-white">TDS Family</h2>
+            <span className="text-[#35b9f1] font-mono text-[10px] uppercase tracking-[0.2em] mb-4 block">04 // Team Photo</span>
+            <h2 className="font-serif italic text-5xl sm:text-6xl lg:text-7xl text-white">TDS Family</h2>
           </div>
           <div className="w-full xl:w-3/4 h-[50vh] xl:h-[65vh] pb-8 xl:pb-0 flex items-center justify-center">
             <div className="relative w-full h-full rounded-[2rem] overflow-hidden border border-white/10 group">
@@ -260,16 +260,16 @@ export function AboutPage() {
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(99,102,241,0.15),transparent_60%)]" />
 
               <div className="relative px-6 py-20 sm:py-32 lg:px-32 text-center flex flex-col items-center justify-center z-10">
-                <span className="text-[#35b9f1] font-JetBrains-Mono tracking-widest text-xs uppercase block mb-6">
+                <span className="text-[#35b9f1] font-mono tracking-widest text-xs uppercase block mb-6">
                   Brought to you by
                 </span>
-                <h2 className="font-Instrument-Serif font-normal italic text-5xl sm:text-7xl lg:text-[7rem] bg-linear-to-r from-white via-white to-[#35b9f1] bg-clip-text text-transparent leading-[1.1] mb-12">
+                <h2 className="font-serif font-normal italic text-5xl sm:text-7xl lg:text-[7rem] bg-linear-to-r from-white via-white to-[#35b9f1] bg-clip-text text-transparent leading-[1.1] mb-12">
                   The Debugging Society
                 </h2>
 
                 <motion.a
                   href="/"
-                  className="inline-flex items-center gap-3 bg-white text-black hover:bg-[#35b9f1] hover:text-white font-JetBrains-Mono text-sm tracking-widest uppercase px-8 py-4 rounded-full transition-colors duration-300 shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(53,185,241,0.4)]"
+                  className="inline-flex items-center gap-3 bg-white text-black hover:bg-[#35b9f1] hover:text-white font-mono text-sm tracking-widest uppercase px-8 py-4 rounded-full transition-colors duration-300 shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(53,185,241,0.4)]"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >

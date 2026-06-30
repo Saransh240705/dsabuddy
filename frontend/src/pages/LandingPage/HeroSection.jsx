@@ -1,12 +1,14 @@
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import { Button, Divider } from "@/components/common";
 import { StatItem } from "@/components/layout";
 import DashboardImg from "@/assets/dashboard.png";
 
 export const HeroSection = ({ onStartTracking = () => {} }) => {
+  const navigate = useNavigate();
   return (
     <motion.div 
-      className="mt-40 m-auto xl:max-w-270 2xl:max-w-270 md:max-w-190 sm:max-w-150 max-w-90"
+      className="mt-32 md:mt-40 mb-24 md:mb-36 m-auto xl:max-w-270 2xl:max-w-270 md:max-w-190 sm:max-w-150 max-w-90 px-4"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
@@ -18,31 +20,23 @@ export const HeroSection = ({ onStartTracking = () => {} }) => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.2 }}
       >
-        <h1 className="font-Instrument-Serif font-normal italic xl:text-8xl 2xl:text-8xl md:text-7xl text-5xl">
+        <h1 className="font-serif font-normal italic xl:text-8xl 2xl:text-8xl md:text-7xl text-5xl leading-tight">
           Master Algorithms.<br/> Crush{" "} 
           <span className="bg-linear-to-r from-white to-[#35b9f1] bg-clip-text text-transparent">
             Interviews.
           </span>
         </h1>
-        <motion.div 
-          className="xl:ml-10 2xl:ml-10 md:ml-32 ml-5 xl:max-w-146 2xl:max-w-146 md:max-w-125 max-w-80 h-1 bg-(--primary-color)"
-          initial={{ width: 0 }}
-          animate={{ width: "auto" }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-        />
       </motion.div>
 
       {/* Hero Description */}
       <motion.div 
-        className="mt-10 w-full m-auto text-center"
+        className="mt-8 w-full m-auto text-center"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.4 }}
       >
-        <p className="content-color font-JetBrains-Mono">
-          The ultimate competitive programming platform. Visualize complex
-          structures, debug in real-time, and climb the global university
-          leaderboard.
+        <p className="content-color text-lg sm:text-xl max-w-2xl mx-auto leading-relaxed">
+          Sync your profiles from LeetCode, Codeforces, and CodeChef. Track daily streaks and climb your college leaderboard.
         </p>
       </motion.div>
 
@@ -56,7 +50,7 @@ export const HeroSection = ({ onStartTracking = () => {} }) => {
         <Button variant="primary" onClick={onStartTracking}>
           Start Tracking DSA
         </Button>
-        <Button variant="secondary">
+        <Button variant="secondary" onClick={() => navigate('/leaderboard')}>
           View Leaderboard
         </Button>
       </motion.div>
@@ -78,7 +72,7 @@ export const HeroSection = ({ onStartTracking = () => {} }) => {
 
       {/* Stats Section */}
       <motion.div 
-        className="mt-16 pt-8 pb-8 flex flex-row border-t border-b border-t-[#1F2937] border-b-[#1F2937] justify-evenly items-center md:gap-4 xl:gap-4 2xl:gap-4 gap-2 text-center font-SF-Pro bg-[#0a0a0a]"
+        className="mt-16 pt-8 pb-8 flex flex-row border-t border-b border-t-[#1F2937] border-b-[#1F2937] justify-evenly items-center md:gap-4 xl:gap-4 2xl:gap-4 gap-2 text-center bg-[#0a0a0a]"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}

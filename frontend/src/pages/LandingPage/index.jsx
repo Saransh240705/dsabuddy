@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useNavigation } from "@/hooks";
-import { Header, Footer } from "@/components/layout";
+import { Navbar, Footer } from "@/components/layout";
 import { HeroSection } from "./HeroSection";
 import { FeaturesSection } from "./FeaturesSection";
 import { ComparisonSection } from "./ComparisonSection";
@@ -11,7 +11,7 @@ export function LandingPage() {
 
   return (
     <div>
-      <Header />
+      <Navbar />
       <HeroSection onStartTracking={goToRegister} />
       <FeaturesSection />
       <ComparisonSection />

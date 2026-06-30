@@ -8,13 +8,13 @@ import {
   IconBox,
   Spinner,
 } from '@/components/common';
-import { 
-  Header, 
-  Footer, 
-  FeatureCard, 
-  SocialButton, 
-  FormField, 
-  StatItem 
+import {
+  Navbar,
+  Footer,
+  FeatureCard,
+  SocialButton,
+  FormField,
+  StatItem
 } from '@/components/layout';
 import { 
   User, 
@@ -39,10 +39,10 @@ export default function ComponentShowcase() {
 
   return (
     <div className="min-h-screen bg-[#0D1117]">
-      <Header />
+      <Navbar />
       
       <div className="max-w-7xl mx-auto px-8 py-20">
-        <h1 className="text-5xl font-normal italic text-white mb-4 font-Instrument-Serif">Component Showcase</h1>
+        <h1 className="text-5xl font-normal italic text-white mb-4 font-serif">Component Showcase</h1>
         <p className="text-gray-400 mb-12">
           Visual reference for all available components
         </p>

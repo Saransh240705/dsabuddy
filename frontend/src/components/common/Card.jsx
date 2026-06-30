@@ -6,13 +6,21 @@ export const Card = ({
   className = "",
   animated = true,
   delay = 0,
+  hoverable = true,
   ...props 
 }) => {
-  const variants = {
-    default: "bg-[#161B22] text-white border border-[#1F2937] hover:border-[var(--primary-color)] hover:drop-shadow-lg",
+  const baseVariants = {
+    default: "bg-[#161B22] text-white border border-[#1F2937]",
     dark: "bg-[#161B22] border border-[#1F2937] text-white",
-    accent: "bg-[#0D1117] text-white border border-[#1F2937] hover:border-[var(--primary-color)]",
-    highlight: "bg-black text-white border border-[#1F2937] hover:border-[var(--primary-color)]",
+    accent: "bg-[#0D1117] text-white border border-[#1F2937]",
+    highlight: "bg-black text-white border border-[#1F2937]",
+  };
+
+  const hoverVariants = {
+    default: "hover:border-[var(--primary-color)] hover:drop-shadow-lg",
+    dark: "",
+    accent: "hover:border-[var(--primary-color)]",
+    highlight: "hover:border-[var(--primary-color)]",
   };
 
   const Component = animated ? motion.div : "div";
@@ -21,12 +29,14 @@ export const Card = ({
     whileInView: { opacity: 1, y: 0 },
     viewport: { once: true, margin: "-50px" },
     transition: { duration: 0.5, delay },
-    whileHover: { y: -5 },
+    ...(hoverable ? { whileHover: { y: -5 } } : {}),
   } : {};
+
+  const variantClass = `${baseVariants[variant]} ${hoverable ? hoverVariants[variant] : ""}`;
 
   return (
     <Component
-      className={`w-full h-full p-6 rounded-4xl group transition-all duration-300 ${variants[variant]} ${className}`}
+      className={`w-full h-full p-6 rounded-4xl group transition-all duration-300 ${variantClass} ${className}`}
       {...animationProps}
       {...props}
     >

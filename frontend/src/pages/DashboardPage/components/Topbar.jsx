@@ -32,7 +32,7 @@ export function Topbar({ user, onSectionChange, onLogout }) {
       <div className="flex items-center gap-3">
         <button 
           onClick={() => navigate(ROUTES.HOME)}
-          className="text-[#E5E7EB] font-bold text-xl font-Spline-Sans hover:text-[#35b9f1] transition-colors cursor-pointer"
+          className="text-[#E5E7EB] font-bold text-xl hover:text-[#35b9f1] transition-colors cursor-pointer"
         >
           DSABuddy
         </button>
@@ -64,11 +64,11 @@ export function Topbar({ user, onSectionChange, onLogout }) {
           {user ? (
             <>
               <div className="text-right">
-                <p className="text-[#E5E7EB] text-sm font-medium font-Spline-Sans">{user.name}</p>
-                <p className="text-[#525252] text-xs font-JetBrains-Mono">{getDerivedRole(user)}</p>
+                <p className="text-[#E5E7EB] text-sm font-medium">{user.name}</p>
+                <p className="text-[#525252] text-xs font-mono">{getDerivedRole(user)}</p>
               </div>
               {showInitials ? (
-                <div className="w-10 h-10 rounded-full border-2 border-[#35b9f1] flex items-center justify-center bg-gradient-to-br from-[#35b9f1]/20 to-[#35b9f1]/5 text-[#35b9f1] font-bold text-sm font-Spline-Sans select-none">
+                <div className="w-10 h-10 rounded-full border-2 border-[#35b9f1] flex items-center justify-center bg-gradient-to-br from-[#35b9f1]/20 to-[#35b9f1]/5 text-[#35b9f1] font-bold text-sm select-none">
                   {getInitials(user.name)}
                 </div>
               ) : (

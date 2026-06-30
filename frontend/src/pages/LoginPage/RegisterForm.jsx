@@ -1,10 +1,3 @@
-import {
-  AtSign,
-  IdCard,
-  IdCardLanyard,
-  KeyRound,
-  RotateCcwKey,
-} from "lucide-react";
 import { Button, Divider } from "@/components/common";
 import { FormField, SocialButton } from "@/components/layout";
 import GoogleLogo from "@/assets/google.png";
@@ -73,18 +66,24 @@ export const RegisterForm = () => {
   };
   return (
     <div className="flex justify-center items-center w-full">
-      <div className="mt-6 sm:mt-10 w-full border-t-(--primary-color) border-t-2 max-w-120 p-4 sm:p-6 md:p-10 max-h-fit rounded-xl bg-[#0D1117] border border-gray-700 mx-auto">
+      <div className="mt-6 sm:mt-10 w-full max-w-md border-t-(--primary-color) border-t-2 p-6 sm:p-10 rounded-2xl bg-[#0D1117] border border-[#1F2937] mx-auto">
+        <div className="w-full text-center mx-auto mb-6">
+          <h2 className="font-normal italic text-white font-serif text-3xl">
+            Create Account
+          </h2>
+          <p className="content-color text-sm mt-1">Initialize your profile to join the competition</p>
+        </div>
+
         {error && (
-          <div className="mb-4 text text-red-500 font-semibold bg-red-950/40 p-3 rounded-lg border border-red-500/3">
+          <div className="mb-4 text-sm text-red-500 font-semibold bg-red-950/40 p-3 rounded-lg border border-red-500/30">
             {error}
           </div>
         )}
         <form onSubmit={handleSubmit} className="mx-auto w-full flex flex-col justify-center items-center">
-          <FormField label="Name" labelIcon={IdCard} placeholder="enter_name" name="name" value={formData.name} onChange={handleChange} required />
+          <FormField label="Name" placeholder="enter_name" name="name" value={formData.name} onChange={handleChange} required />
 
           <FormField
             label="Username"
-            labelIcon={IdCardLanyard}
             placeholder="enter_username"
             name="userName"
             value={formData.userName}
@@ -94,7 +93,6 @@ export const RegisterForm = () => {
 
           <FormField
             label="Email Address"
-            labelIcon={AtSign}
             type="email"
             placeholder="enter_email"
             name="email"
@@ -106,7 +104,6 @@ export const RegisterForm = () => {
           <div className="w-full flex flex-col sm:flex-row gap-4">
             <FormField
               label="Password"
-              labelIcon={KeyRound}
               type="password"
               placeholder="******"
               name="password"
@@ -117,7 +114,6 @@ export const RegisterForm = () => {
 
             <FormField
               label="Confirm Password"
-              labelIcon={RotateCcwKey}
               type="password"
               placeholder="******"
               name="confirmPassword"
@@ -126,12 +122,12 @@ export const RegisterForm = () => {
               required
             />
           </div>
-          <Button type="submit" variant="accent" className="w-full text-sm sm:text-base" disabled={loading}>
-            {loading ? "[ Initializing... ]" : "[ Initialize Account ]"}
+          <Button type="submit" variant="accent" className="w-full text-sm sm:text-base mt-4 justify-center" disabled={loading}>
+            {loading ? "Initializing..." : "Initialize Account"}
           </Button>
         </form>
 
-        <Divider text="OR" className="mt-5 mb-5" />
+        <Divider text="OR" className="mt-6 mb-6" />
 
         <SocialButton icon={GoogleLogo} text="Continue with Google" onClick={handleGoogleLogin} />
       </div>

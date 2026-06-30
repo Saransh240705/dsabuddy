@@ -200,11 +200,11 @@ export function Settings({ user: propUser, platforms, onUpdate }) {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-[#E5E7EB] text-4xl font-normal italic mb-2 font-Instrument-Serif flex items-center gap-3">
+        <h1 className="text-[#E5E7EB] text-4xl font-normal italic mb-2 font-serif flex items-center gap-3">
           <SettingsIcon className="w-10 h-10 text-[#35b9f1]" />
           Settings
         </h1>
-        <p className="text-[#9CA3AF] font-JetBrains-Mono">Manage your account and preferences</p>
+        <p className="text-[#9CA3AF] font-mono">Manage your account and preferences</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
@@ -215,8 +215,8 @@ export function Settings({ user: propUser, platforms, onUpdate }) {
               <User className="w-5 h-5 text-[#35b9f1]" />
             </div>
             <div>
-              <h3 className="text-[#E5E7EB] font-bold text-lg font-Spline-Sans">Profile Settings</h3>
-              <p className="text-[#6B7280] text-xs font-JetBrains-Mono">Update your personal information</p>
+              <h3 className="text-[#E5E7EB] font-bold text-lg">Profile Settings</h3>
+              <p className="text-[#6B7280] text-xs font-mono">Update your personal information</p>
             </div>
           </div>
 
@@ -225,7 +225,7 @@ export function Settings({ user: propUser, platforms, onUpdate }) {
               label="Name"
               value={profileData.name}
               onChange={(e) => handleProfileChange('name', e.target.value)}
-              labelClassName="font-medium text-[#E5E7EB] font-Spline-Sans normal-case text-sm mb-2 block"
+              labelClassName="font-medium text-[#E5E7EB] normal-case text-sm mb-2 block"
               inputClassName="py-2.5 border-[#1F2937]"
             />
 
@@ -234,18 +234,18 @@ export function Settings({ user: propUser, platforms, onUpdate }) {
               type="email"
               value={profileData.email}
               disabled={true}
-              labelClassName="font-medium text-[#E5E7EB] font-Spline-Sans normal-case text-sm mb-2 block"
+              labelClassName="font-medium text-[#E5E7EB] normal-case text-sm mb-2 block"
               inputClassName="py-2.5 border-[#1F2937] opacity-60 cursor-not-allowed"
             />
 
             <div>
-              <label className="block text-[#E5E7EB] text-sm font-medium mb-2 font-Spline-Sans">Avatar</label>
+              <label className="block text-[#E5E7EB] text-sm font-medium mb-2">Avatar</label>
               <div className="flex items-center gap-4 bg-[#0D1117] border border-[#1F2937] rounded-lg p-3">
                 <div className="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center bg-[#161B22] border border-[#1F2937] shrink-0">
                   {profileData.avatar ? (
                     <img src={profileData.avatar} alt="Avatar" className="w-full h-full object-cover" />
                   ) : (
-                    <span className="font-bold text-lg text-[#35b9f1] font-Spline-Sans">
+                    <span className="font-bold text-lg text-[#35b9f1]">
                       {getInitials(profileData.name || user?.name)}
                     </span>
                   )}
@@ -262,7 +262,7 @@ export function Settings({ user: propUser, platforms, onUpdate }) {
                 
                 <label 
                   htmlFor="settings-avatar-input"
-                  className={`px-4 py-2 bg-[#161B22] hover:bg-[#1F2937] text-white border border-[#1F2937] text-xs font-semibold rounded-lg cursor-pointer transition-colors font-JetBrains-Mono ${uploadingAvatar ? 'opacity-50 pointer-events-none' : ''}`}
+                  className={`px-4 py-2 bg-[#161B22] hover:bg-[#1F2937] text-white border border-[#1F2937] text-xs font-semibold rounded-lg cursor-pointer transition-colors font-mono ${uploadingAvatar ? 'opacity-50 pointer-events-none' : ''}`}
                 >
                   {uploadingAvatar ? 'Uploading...' : 'Choose File'}
                 </label>
@@ -271,12 +271,12 @@ export function Settings({ user: propUser, platforms, onUpdate }) {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-[#E5E7EB] text-sm font-medium mb-2 font-Spline-Sans">Branch</label>
+                <label className="block text-[#E5E7EB] text-sm font-medium mb-2">Branch</label>
                 <select
                   value={profileData.branch}
                   onChange={(e) => handleProfileChange('branch', e.target.value)}
                   disabled={user?.branchChangesCount >= 1}
-                  className={`w-full bg-[#0D1117] border border-[#1F2937] rounded-lg px-4 py-2.5 text-[#E5E7EB] focus:outline-none focus:border-[#35b9f1] transition-colors font-JetBrains-Mono cursor-pointer ${
+                  className={`w-full bg-[#0D1117] border border-[#1F2937] rounded-lg px-4 py-2.5 text-[#E5E7EB] focus:outline-none focus:border-[#35b9f1] transition-colors font-mono cursor-pointer ${
                     user?.branchChangesCount >= 1 ? 'opacity-60 cursor-not-allowed border-dashed' : ''
                   }`}
                 >
@@ -288,7 +288,7 @@ export function Settings({ user: propUser, platforms, onUpdate }) {
                   ))}
                 </select>
                 {user?.branchChangesCount >= 1 && (
-                  <p className="text-[#6B7280] text-[10px] mt-1 font-JetBrains-Mono">
+                  <p className="text-[#6B7280] text-[10px] mt-1 font-mono">
                     Branch can only be changed once after onboarding.
                   </p>
                 )}
@@ -298,13 +298,13 @@ export function Settings({ user: propUser, platforms, onUpdate }) {
                 label="Year"
                 value={profileData.year}
                 onChange={(e) => handleProfileChange('year', e.target.value)}
-                labelClassName="font-medium text-[#E5E7EB] font-Spline-Sans normal-case text-sm mb-2 block"
+                labelClassName="font-medium text-[#E5E7EB] normal-case text-sm mb-2 block"
                 inputClassName="py-2.5 border-[#1F2937]"
               />
             </div>
 
-            {profileError && <p className="text-red-500 text-sm mt-2 font-JetBrains-Mono">{profileError}</p>}
-            {profileSuccess && <p className="text-green-500 text-sm mt-2 font-JetBrains-Mono">{profileSuccess}</p>}
+            {profileError && <p className="text-red-500 text-sm mt-2 font-mono">{profileError}</p>}
+            {profileSuccess && <p className="text-green-500 text-sm mt-2 font-mono">{profileSuccess}</p>}
 
             <div className="pt-4 flex justify-end">
               <Button
@@ -312,7 +312,7 @@ export function Settings({ user: propUser, platforms, onUpdate }) {
                 disabled={profileSaving}
                 variant="accent"
                 size="sm"
-                className="w-full md:w-auto font-JetBrains-Mono text-sm rounded-lg px-6 py-2.5"
+                className="w-full md:w-auto font-mono text-sm rounded-lg px-6 py-2.5"
               >
                 {profileSaving ? 'Saving...' : 'Save Profile'}
               </Button>
@@ -327,8 +327,8 @@ export function Settings({ user: propUser, platforms, onUpdate }) {
               <Link2 className="w-5 h-5 text-[#35b9f1]" />
             </div>
             <div>
-              <h3 className="text-[#E5E7EB] font-bold text-lg font-Spline-Sans">Connected Platforms</h3>
-              <p className="text-[#6B7280] text-xs font-JetBrains-Mono">Manage your coding platform connections</p>
+              <h3 className="text-[#E5E7EB] font-bold text-lg">Connected Platforms</h3>
+              <p className="text-[#6B7280] text-xs font-mono">Manage your coding platform connections</p>
             </div>
           </div>
 
@@ -344,8 +344,8 @@ export function Settings({ user: propUser, platforms, onUpdate }) {
                     />
                   </div>
                   <div className="flex-1">
-                    <h4 className="text-[#E5E7EB] font-semibold font-Spline-Sans">{platform.name}</h4>
-                    <p className={`text-xs font-JetBrains-Mono ${
+                    <h4 className="text-[#E5E7EB] font-semibold">{platform.name}</h4>
+                    <p className={`text-xs font-mono ${
                       platform.synced ? 'text-[#10B981]' : 'text-[#6B7280]'
                     }`}>
                       {platform.synced ? 'Connected' : 'Not Connected'}
@@ -358,12 +358,12 @@ export function Settings({ user: propUser, platforms, onUpdate }) {
                     label="Username"
                     value={platform.username}
                     onChange={(e) => handlePlatformChange(platform.id, 'username', e.target.value)}
-                    labelClassName="font-medium text-[#9CA3AF] font-Spline-Sans normal-case text-xs mb-1.5 block"
+                    labelClassName="font-medium text-[#9CA3AF] normal-case text-xs mb-1.5 block"
                     inputClassName="py-2 px-3 border-[#1F2937] text-sm bg-[#161B22]"
                   />
 
                   <div className="flex items-center justify-between">
-                    <span className="text-[#9CA3AF] text-xs font-Spline-Sans">Sync Status</span>
+                    <span className="text-[#9CA3AF] text-xs">Sync Status</span>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input
                         type="checkbox"
@@ -378,8 +378,8 @@ export function Settings({ user: propUser, platforms, onUpdate }) {
               </div>
             ))}
 
-            {platformsError && <p className="text-red-500 text-sm mt-2 font-JetBrains-Mono">{platformsError}</p>}
-            {platformsSuccess && <p className="text-green-500 text-sm mt-2 font-JetBrains-Mono">{platformsSuccess}</p>}
+            {platformsError && <p className="text-red-500 text-sm mt-2 font-mono">{platformsError}</p>}
+            {platformsSuccess && <p className="text-green-500 text-sm mt-2 font-mono">{platformsSuccess}</p>}
 
             <div className="pt-4 flex justify-end">
               <Button
@@ -387,7 +387,7 @@ export function Settings({ user: propUser, platforms, onUpdate }) {
                 disabled={platformsSaving}
                 variant="accent"
                 size="sm"
-                className="w-full md:w-auto font-JetBrains-Mono text-sm rounded-lg px-6 py-2.5"
+                className="w-full md:w-auto font-mono text-sm rounded-lg px-6 py-2.5"
               >
                 {platformsSaving ? 'Saving...' : 'Save Connections'}
               </Button>

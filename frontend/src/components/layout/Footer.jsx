@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 
 export const Footer = () => {
   const year = new Date().getFullYear();
@@ -43,9 +42,14 @@ export const Footer = () => {
 
         <h3>
           From{" "}
-          <Link to="/about" className="text-[#35b9f1] hover:underline transition-all">
+          <a 
+            href="https://tdsnsut.vercel.app" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="text-[#35b9f1] hover:underline transition-all"
+          >
             The Debugging Society
-          </Link>
+          </a>
         </h3>
       </div>
     </div>

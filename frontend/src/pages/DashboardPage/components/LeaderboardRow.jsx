@@ -39,7 +39,7 @@ export function LeaderboardRow({ user, rank, isCurrentUser, onClick }) {
       );
     }
     return (
-      <div className="w-12 h-10 rounded-lg flex items-center justify-center bg-[#161B22] border border-[#1F2937]/50 text-[#9CA3AF] font-bold text-sm font-Spline-Sans">
+      <div className="w-12 h-10 rounded-lg flex items-center justify-center bg-[#161B22] border border-[#1F2937]/50 text-[#9CA3AF] font-bold text-sm">
         #{rank}
       </div>
     );
@@ -60,7 +60,7 @@ export function LeaderboardRow({ user, rank, isCurrentUser, onClick }) {
         {renderRankBadge()}
 
         {showInitials ? (
-          <div className="w-10 h-10 rounded-full flex items-center justify-center bg-[#161B22] border border-[#1F2937] text-[#9CA3AF] font-bold text-sm font-Spline-Sans select-none">
+          <div className="w-10 h-10 rounded-full flex items-center justify-center bg-[#161B22] border border-[#1F2937] text-[#9CA3AF] font-bold text-sm select-none">
             {getInitials(user?.name)}
           </div>
         ) : (
@@ -72,18 +72,18 @@ export function LeaderboardRow({ user, rank, isCurrentUser, onClick }) {
           />
         )}
         <div>
-          <p className="text-[#E5E7EB] font-semibold font-Spline-Sans">
+          <p className="text-[#E5E7EB] font-semibold">
             {user?.name}
-            {isCurrentUser && <span className="ml-2 text-[#35b9f1] text-xs font-JetBrains-Mono">(You)</span>}
+            {isCurrentUser && <span className="ml-2 text-[#35b9f1] text-xs font-mono">(You)</span>}
           </p>
           {user?.branch && (
-            <p className="text-[#6B7280] text-xs font-JetBrains-Mono mt-0.5">{user.branch}</p>
+            <p className="text-[#6B7280] text-xs font-mono mt-0.5">{user.branch}</p>
           )}
         </div>
       </div>
 
       <div className="text-right">
-        <p className="text-[#35b9f1] text-xl font-bold font-Spline-Sans">
+        <p className="text-[#35b9f1] text-xl font-bold">
           {(() => {
             if (user?.displayLabel && user.displayLabel !== 'points') {
               if (user.displayValue === undefined || user.displayValue === null) {
@@ -95,7 +95,7 @@ export function LeaderboardRow({ user, rank, isCurrentUser, onClick }) {
             return typeof val === 'number' ? val.toLocaleString() : String(val);
           })()}
         </p>
-        <p className="text-[#6B7280] text-[10px] tracking-wider uppercase font-JetBrains-Mono mt-0.5">
+        <p className="text-[#6B7280] text-[10px] tracking-wider uppercase font-mono mt-0.5">
           {user?.displayLabel || 'points'}
         </p>
       </div>

@@ -106,13 +106,13 @@ export function UserProfileModal({ isOpen, onClose, userName }) {
       {loading ? (
         <div className="flex flex-col items-center justify-center py-20 space-y-4">
           <div className="w-12 h-12 border-4 border-[#35b9f1] border-t-transparent rounded-full animate-spin" />
-          <p className="text-[#9CA3AF] font-JetBrains-Mono text-sm">Fetching student profile...</p>
+          <p className="text-[#9CA3AF] font-mono text-sm">Fetching student profile...</p>
         </div>
       ) : error ? (
         <div className="flex flex-col items-center justify-center py-12 text-center px-4">
           <AlertCircle className="w-12 h-12 text-red-500 mb-4" />
-          <p className="text-red-500 font-bold mb-2 font-Spline-Sans">Error Loading Profile</p>
-          <p className="text-[#9CA3AF] text-sm font-JetBrains-Mono max-w-md">{error}</p>
+          <p className="text-red-500 font-bold mb-2">Error Loading Profile</p>
+          <p className="text-[#9CA3AF] text-sm font-mono max-w-md">{error}</p>
         </div>
       ) : profile ? (
         <div className="space-y-6">
@@ -122,7 +122,7 @@ export function UserProfileModal({ isOpen, onClose, userName }) {
             <div className="relative">
               {showInitials ? (
                 <div 
-                  className="w-20 h-20 rounded-full flex items-center justify-center bg-[#161B22] border-2 font-bold text-2xl font-Spline-Sans select-none"
+                  className="w-20 h-20 rounded-full flex items-center justify-center bg-[#161B22] border-2 font-bold text-2xl select-none"
                   style={{ borderColor: rankColor, color: rankColor }}
                 >
                   {getInitials(profile.name)}
@@ -141,11 +141,11 @@ export function UserProfileModal({ isOpen, onClose, userName }) {
             {/* Profile Meta Column */}
             <div className="text-center sm:text-left space-y-2 flex-1">
               <div>
-                <h3 className="text-[#E5E7EB] text-2xl font-bold font-Spline-Sans flex flex-wrap items-center justify-center sm:justify-start gap-2">
+                <h3 className="text-[#E5E7EB] text-2xl font-bold flex flex-wrap items-center justify-center sm:justify-start gap-2">
                   {profile.name}
                   {profile.overallRank && (
                     <span 
-                      className="px-2 py-0.5 rounded text-xs font-bold font-JetBrains-Mono border"
+                      className="px-2 py-0.5 rounded text-xs font-bold font-mono border"
                       style={{
                         color: rankColor,
                         backgroundColor: `${rankColor}15`,
@@ -157,11 +157,11 @@ export function UserProfileModal({ isOpen, onClose, userName }) {
                   )}
                 </h3>
                 {(!/^user_\d+$/.test(profile.userName) || isSelf) && (
-                  <p className="text-[#9CA3AF] text-sm font-JetBrains-Mono mt-0.5">@{profile.userName}</p>
+                  <p className="text-[#9CA3AF] text-sm font-mono mt-0.5">@{profile.userName}</p>
                 )}
               </div>
 
-              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-1 text-xs text-[#6B7280] font-JetBrains-Mono">
+              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-1 text-xs text-[#6B7280] font-mono">
                 <span className="flex items-center gap-1">
                   <School className="w-3.5 h-3.5" />
                   {profile.college || 'Netaji Subhas University of Technology'}
@@ -183,41 +183,41 @@ export function UserProfileModal({ isOpen, onClose, userName }) {
           {/* Ranks & Points Stats Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             <div className="bg-[#161B22] border border-[#1F2937] rounded-xl p-4 text-center">
-              <p className="text-[#6B7280] text-[10px] font-JetBrains-Mono tracking-wider uppercase mb-1 flex items-center justify-center gap-1">
+              <p className="text-[#6B7280] text-[10px] font-mono tracking-wider uppercase mb-1 flex items-center justify-center gap-1">
                 <Trophy className="w-3.5 h-3.5 text-[#35b9f1]" />
                 Overall Rank
               </p>
-              <p className="text-[#E5E7EB] text-xl font-bold font-Spline-Sans">
+              <p className="text-[#E5E7EB] text-xl font-bold">
                 {profile.overallRank ? `#${profile.overallRank}` : '-'}
               </p>
             </div>
             
             <div className="bg-[#161B22] border border-[#1F2937] rounded-xl p-4 text-center">
-              <p className="text-[#6B7280] text-[10px] font-JetBrains-Mono tracking-wider uppercase mb-1 flex items-center justify-center gap-1">
+              <p className="text-[#6B7280] text-[10px] font-mono tracking-wider uppercase mb-1 flex items-center justify-center gap-1">
                 <Activity className="w-3.5 h-3.5 text-[#10B981]" />
                 DSA Points
               </p>
-              <p className="text-[#35b9f1] text-xl font-bold font-Spline-Sans">
+              <p className="text-[#35b9f1] text-xl font-bold">
                 {typeof profile.points === 'number' ? profile.points.toLocaleString() : String(profile.points ?? 0)}
               </p>
             </div>
 
             <div className="bg-[#161B22] border border-[#1F2937] rounded-xl p-4 text-center">
-              <p className="text-[#6B7280] text-[10px] font-JetBrains-Mono tracking-wider uppercase mb-1 flex items-center justify-center gap-1">
+              <p className="text-[#6B7280] text-[10px] font-mono tracking-wider uppercase mb-1 flex items-center justify-center gap-1">
                 <Award className="w-3.5 h-3.5 text-blue-400" />
                 Branch Rank
               </p>
-              <p className="text-[#E5E7EB] text-xl font-bold font-Spline-Sans">
+              <p className="text-[#E5E7EB] text-xl font-bold">
                 {profile.branchRank ? `#${profile.branchRank}` : '-'}
               </p>
             </div>
 
             <div className="bg-[#161B22] border border-[#1F2937] rounded-xl p-4 text-center">
-              <p className="text-[#6B7280] text-[10px] font-JetBrains-Mono tracking-wider uppercase mb-1 flex items-center justify-center gap-1">
+              <p className="text-[#6B7280] text-[10px] font-mono tracking-wider uppercase mb-1 flex items-center justify-center gap-1">
                 <Award className="w-3.5 h-3.5 text-purple-400" />
                 Year Rank
               </p>
-              <p className="text-[#E5E7EB] text-xl font-bold font-Spline-Sans">
+              <p className="text-[#E5E7EB] text-xl font-bold">
                 {profile.yearRank ? `#${profile.yearRank}` : '-'}
               </p>
             </div>
@@ -225,7 +225,7 @@ export function UserProfileModal({ isOpen, onClose, userName }) {
 
           {/* Connected Platforms List */}
           <div className="space-y-3">
-            <h4 className="text-[#E5E7EB] font-bold font-Spline-Sans text-lg flex items-center gap-2 border-b border-[#1F2937]/50 pb-2">
+            <h4 className="text-[#E5E7EB] font-bold text-lg flex items-center gap-2 border-b border-[#1F2937]/50 pb-2">
               <Link2 className="w-5 h-5 text-[#35b9f1]" />
               Platform Connections
             </h4>
@@ -255,15 +255,15 @@ export function UserProfileModal({ isOpen, onClose, userName }) {
                           />
                         </div>
                         <div>
-                          <h5 className="text-[#E5E7EB] font-bold font-Spline-Sans text-sm">{conn.name}</h5>
+                          <h5 className="text-[#E5E7EB] font-bold text-sm">{conn.name}</h5>
                           {conn.connected ? (
                             isSelf ? (
-                              <p className="text-[#6B7280] text-xs font-JetBrains-Mono">
+                              <p className="text-[#6B7280] text-xs font-mono">
                                 @{conn.username}
                               </p>
                             ) : null
                           ) : (
-                            <p className="text-[#6B7280] text-xs font-JetBrains-Mono">
+                            <p className="text-[#6B7280] text-xs font-mono">
                               Not Linked
                             </p>
                           )}
@@ -272,7 +272,7 @@ export function UserProfileModal({ isOpen, onClose, userName }) {
                       
                       <div className="flex items-center gap-1.5 bg-[#0D1117] px-2 py-0.5 rounded border border-[#1F2937]/50">
                         <div className={`w-1.5 h-1.5 rounded-full ${conn.connected && conn.synced ? 'bg-[#10B981]' : 'bg-[#6B7280]'}`} />
-                        <span className="text-[#6B7280] text-[10px] font-JetBrains-Mono uppercase">
+                        <span className="text-[#6B7280] text-[10px] font-mono uppercase">
                           {conn.connected ? (conn.synced ? 'Synced' : 'Offline') : 'Inactive'}
                         </span>
                       </div>
@@ -280,17 +280,17 @@ export function UserProfileModal({ isOpen, onClose, userName }) {
 
                     <div className="grid grid-cols-2 gap-3 pt-1">
                       <div className="bg-[#0D1117] rounded-lg p-2.5">
-                        <p className="text-[#6B7280] text-[10px] font-JetBrains-Mono uppercase mb-0.5">RATING</p>
-                        <p className="text-[#E5E7EB] text-base font-bold font-Spline-Sans">
+                        <p className="text-[#6B7280] text-[10px] font-mono uppercase mb-0.5">RATING</p>
+                        <p className="text-[#E5E7EB] text-base font-bold">
                           {conn.connected && typeof conn.rating === 'number' ? conn.rating.toLocaleString() : (conn.rating ?? '-')}
                         </p>
                       </div>
                       
                       <div className="bg-[#0D1117] rounded-lg p-2.5">
-                        <p className="text-[#6B7280] text-[10px] font-JetBrains-Mono uppercase mb-0.5">
+                        <p className="text-[#6B7280] text-[10px] font-mono uppercase mb-0.5">
                           {conn.id === 'codechef' ? 'STARS' : 'SOLVED'}
                         </p>
-                        <p className="text-[#E5E7EB] text-base font-bold font-Spline-Sans">
+                        <p className="text-[#E5E7EB] text-base font-bold">
                           {conn.connected
                             ? (conn.id === 'codechef' 
                               ? (conn.stars !== undefined && conn.stars !== null ? `${conn.stars}★` : '-') 
@@ -302,7 +302,7 @@ export function UserProfileModal({ isOpen, onClose, userName }) {
                     </div>
 
                     {conn.connected && conn.rankLabel && (
-                      <div className="text-xs text-[#6B7280] font-JetBrains-Mono pt-2 border-t border-[#1F2937]/50">
+                      <div className="text-xs text-[#6B7280] font-mono pt-2 border-t border-[#1F2937]/50">
                         RANK: <span className="text-[#E5E7EB] font-medium">{conn.rankLabel}</span>
                       </div>
                     )}

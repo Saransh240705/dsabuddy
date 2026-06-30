@@ -31,6 +31,8 @@ export function Sidebar({ activeSection, onSectionChange, onLogout, user }) {
   const handleMenuClick = (itemId) => {
     if (itemId === 'dashboard') {
       navigate('/dashboard');
+    } else if (itemId === 'leaderboard') {
+      navigate('/leaderboard');
     } else {
       navigate(`/dashboard/${itemId}`);
     }
@@ -56,10 +58,10 @@ export function Sidebar({ activeSection, onSectionChange, onLogout, user }) {
       <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-[#000000] border-b border-neutral-900 flex items-center justify-between px-4 z-40">
         <div 
           className="flex items-center gap-2 cursor-pointer"
-          onClick={() => navigate('/dashboard')}
+          onClick={() => navigate('/')}
         >
           <img src={dsaLogo} alt="DSABuddy Logo" className="w-8 h-8 object-contain" />
-          <span className="text-white font-semibold font-Spline-Sans tracking-wide text-sm">DSABuddy</span>
+          <span className="text-white font-semibold tracking-wide text-sm">DSABuddy</span>
         </div>
         <motion.button 
           whileTap={{ scale: 0.9 }}
@@ -93,7 +95,7 @@ export function Sidebar({ activeSection, onSectionChange, onLogout, user }) {
                 <div className="flex items-center justify-between mb-8 pb-4 border-b border-neutral-900">
                   <div className="flex items-center gap-2">
                     <img src={dsaLogo} alt="DSABuddy Logo" className="w-8 h-8 object-contain" />
-                    <span className="text-white font-semibold font-Spline-Sans text-sm">DSABuddy</span>
+                    <span className="text-white font-semibold text-sm">DSABuddy</span>
                   </div>
                   <motion.button 
                     whileTap={{ scale: 0.9 }}
@@ -126,7 +128,7 @@ export function Sidebar({ activeSection, onSectionChange, onLogout, user }) {
                         `}
                       >
                         <Icon className="w-5 h-5" />
-                        <span className="font-JetBrains-Mono text-sm">{item.label}</span>
+                        <span className="font-mono text-sm">{item.label}</span>
                       </button>
                     );
                   })}
@@ -138,7 +140,7 @@ export function Sidebar({ activeSection, onSectionChange, onLogout, user }) {
                 {user ? (
                   <>
                     <div className="mb-4 px-2">
-                      <p className="text-sm font-semibold text-white truncate font-Spline-Sans">{user.name}</p>
+                      <p className="text-sm font-semibold text-white truncate">{user.name}</p>
                       <p className="text-xs text-neutral-500 truncate font-mono mt-0.5">{user.email}</p>
                     </div>
                     
@@ -151,7 +153,7 @@ export function Sidebar({ activeSection, onSectionChange, onLogout, user }) {
                       className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-neutral-400 hover:text-white hover:bg-neutral-900 transition-colors text-left cursor-pointer"
                     >
                       <Settings className="w-4 h-4" />
-                      <span className="font-Spline-Sans">Settings</span>
+                      <span className="">Settings</span>
                     </button>
 
                     <button
@@ -162,7 +164,7 @@ export function Sidebar({ activeSection, onSectionChange, onLogout, user }) {
                       className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-neutral-400 hover:text-red-500 hover:bg-red-500/5 transition-colors text-left cursor-pointer"
                     >
                       <LogOut className="w-4 h-4" />
-                      <span className="font-Spline-Sans">Logout</span>
+                      <span className="">Logout</span>
                     </button>
                   </>
                 ) : (
@@ -174,7 +176,7 @@ export function Sidebar({ activeSection, onSectionChange, onLogout, user }) {
                     className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-neutral-400 hover:text-white hover:bg-neutral-900 transition-colors text-left cursor-pointer"
                   >
                     <LogIn className="w-4 h-4" />
-                    <span className="font-Spline-Sans">Login</span>
+                    <span className="">Login</span>
                   </button>
                 )}
               </div>
@@ -191,7 +193,7 @@ export function Sidebar({ activeSection, onSectionChange, onLogout, user }) {
           {/* Top Logo */}
           <div 
             className="w-12 h-12 flex items-center justify-center select-none mb-6 cursor-pointer"
-            onClick={() => navigate('/dashboard')}
+            onClick={() => navigate('/')}
           >
             <img src={dsaLogo} alt="DSABuddy Logo" className="w-10 h-10 object-contain" />
           </div>
@@ -222,7 +224,7 @@ export function Sidebar({ activeSection, onSectionChange, onLogout, user }) {
                   
                   <Icon className="w-5 h-5" />
                   
-                  <span className="absolute left-full ml-4 px-3 py-2 bg-neutral-900 border border-neutral-800 text-[#E5E7EB] text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50 font-JetBrains-Mono">
+                  <span className="absolute left-full ml-4 px-3 py-2 bg-neutral-900 border border-neutral-800 text-[#E5E7EB] text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50 font-mono">
                     {item.label}
                   </span>
                 </button>
@@ -266,7 +268,7 @@ export function Sidebar({ activeSection, onSectionChange, onLogout, user }) {
           {menuOpen && user && (
             <div className="absolute bottom-16 left-2 w-56 bg-neutral-950 border border-neutral-800 rounded-xl shadow-2xl z-50 p-2 py-3">
               <div className="px-3 py-2 border-b border-neutral-950 mb-2">
-                <p className="text-sm font-semibold text-white font-Spline-Sans truncate">{user.name}</p>
+                <p className="text-sm font-semibold text-white truncate">{user.name}</p>
                 <p className="text-[10px] text-neutral-500 font-mono truncate mt-0.5">{user.email}</p>
               </div>
               

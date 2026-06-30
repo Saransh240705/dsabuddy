@@ -73,7 +73,7 @@ function CommentNode({ comment, depth = 0, onAddReply, onDeleteComment, formatDa
           </div>
           <button
             onClick={() => setCollapsed(false)}
-            className="text-[#35b9f1] hover:text-[#6fd3ff] text-xs font-bold font-Spline-Sans transition-colors flex items-center gap-1 cursor-pointer px-2.5 py-1 rounded-lg bg-[#1F2937]/30 hover:bg-[#1F2937]/50"
+            className="text-[#35b9f1] hover:text-[#6fd3ff] text-xs font-bold transition-colors flex items-center gap-1 cursor-pointer px-2.5 py-1 rounded-lg bg-[#1F2937]/30 hover:bg-[#1F2937]/50"
           >
             <ChevronDown className="w-3.5 h-3.5" />
             Expand
@@ -119,7 +119,7 @@ function CommentNode({ comment, depth = 0, onAddReply, onDeleteComment, formatDa
               </div>
             </div>
             
-            <p className="text-[#9CA3AF] text-sm leading-relaxed font-Spline-Sans font-medium pl-11">
+            <p className="text-[#9CA3AF] text-sm leading-relaxed font-medium pl-11">
               {comment.content}
             </p>
 
@@ -127,7 +127,7 @@ function CommentNode({ comment, depth = 0, onAddReply, onDeleteComment, formatDa
             <div className="pl-11 pt-1 flex items-center gap-4">
               <button
                 onClick={() => setReplying(!replying)}
-                className="text-[#35b9f1] hover:text-[#6fd3ff] text-xs font-bold font-Spline-Sans transition-colors flex items-center gap-1.5 cursor-pointer"
+                className="text-[#35b9f1] hover:text-[#6fd3ff] text-xs font-bold transition-colors flex items-center gap-1.5 cursor-pointer"
               >
                 <MessageSquare className="w-3.5 h-3.5" />
                 Reply
@@ -139,7 +139,7 @@ function CommentNode({ comment, depth = 0, onAddReply, onDeleteComment, formatDa
                       onDeleteComment(comment.id);
                     }
                   }}
-                  className="text-red-500 hover:text-red-400 text-xs font-bold font-Spline-Sans transition-colors flex items-center gap-1.5 cursor-pointer"
+                  className="text-red-500 hover:text-red-400 text-xs font-bold transition-colors flex items-center gap-1.5 cursor-pointer"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                   Delete
@@ -235,9 +235,9 @@ const parseMarkdownToHTML = (text) => {
     .replace(/'/g, '&#039;');
 
   // 2. Parse Headers
-  html = html.replace(/^### (.*?)$/gm, '<h3 class="text-white text-lg font-bold mt-4 mb-2 font-Spline-Sans">$1</h3>');
-  html = html.replace(/^## (.*?)$/gm, '<h2 class="text-white text-xl font-bold mt-4 mb-2 font-Spline-Sans">$1</h2>');
-  html = html.replace(/^# (.*?)$/gm, '<h1 class="text-white text-2xl font-bold mt-4 mb-2 font-Spline-Sans">$1</h1>');
+  html = html.replace(/^### (.*?)$/gm, '<h3 class="text-white text-lg font-bold mt-4 mb-2 ">$1</h3>');
+  html = html.replace(/^## (.*?)$/gm, '<h2 class="text-white text-xl font-bold mt-4 mb-2 ">$1</h2>');
+  html = html.replace(/^# (.*?)$/gm, '<h1 class="text-white text-2xl font-bold mt-4 mb-2 ">$1</h1>');
 
   // 3. Parse Code blocks: ```code```
   html = html.replace(/```([\s\S]*?)```/g, '<pre class="bg-[#0D1117] border border-[#1F2937] rounded-xl p-4 font-mono text-xs my-4 overflow-x-auto text-gray-300">$1</pre>');
@@ -267,7 +267,7 @@ const parseMarkdownToHTML = (text) => {
   html = html.replace(/_([\s\S]*?)_/g, '<em>$1</em>');
 
   // 9. Bullet lists
-  html = html.replace(/^\s*[-*+]\s+(.*?)$/gm, '<li class="ml-4 list-disc text-gray-300 font-Spline-Sans">$1</li>');
+  html = html.replace(/^\s*[-*+]\s+(.*?)$/gm, '<li class="ml-4 list-disc text-gray-300 ">$1</li>');
 
   // 10. Convert newlines to breaks
   html = html.replace(/\n/g, '<br />');
@@ -680,10 +680,10 @@ export function InterviewForum() {
                   className="w-12 h-12 rounded-xl bg-[#0D1117] border border-[#1F2937] p-0.5"
                 />
                 <div>
-                  <h4 className="text-white font-extrabold text-base font-Spline-Sans leading-snug">
+                  <h4 className="text-white font-extrabold text-base leading-snug">
                     {selectedPost.author?.name || 'Anonymous'}
                   </h4>
-                  <p className="text-[#6B7280] text-xs font-semibold mt-0.5 font-Spline-Sans">
+                  <p className="text-[#6B7280] text-xs font-semibold mt-0.5">
                     {selectedPost.author?.college || 'NSUT'} • {selectedPost.author?.branch || 'N/A'}
                   </p>
                 </div>
@@ -712,7 +712,7 @@ export function InterviewForum() {
 
             {/* Title & Tags */}
             <div>
-              <h1 className="text-2xl md:text-3xl font-extrabold text-white leading-tight font-Spline-Sans">
+              <h1 className="text-2xl md:text-3xl font-extrabold text-white leading-tight">
                 {selectedPost.title}
               </h1>
               <div className="flex flex-wrap gap-2 mt-4">
@@ -730,7 +730,7 @@ export function InterviewForum() {
 
             {/* Post Content */}
             <div 
-              className="text-[#E5E7EB] text-base leading-relaxed space-y-4 font-medium font-Spline-Sans"
+              className="text-[#E5E7EB] text-base leading-relaxed space-y-4 font-medium"
               dangerouslySetInnerHTML={{ __html: parseMarkdownToHTML(selectedPost.content) }}
             />
 
@@ -780,7 +780,7 @@ export function InterviewForum() {
 
             {/* Comments Area */}
             <div className="space-y-6 pt-2">
-              <h3 className="text-lg font-extrabold text-white font-Spline-Sans">Comments</h3>
+              <h3 className="text-lg font-extrabold text-white">Comments</h3>
               
               {/* Comment submission form */}
               <form onSubmit={handleAddComment} className="flex gap-4">
@@ -788,7 +788,7 @@ export function InterviewForum() {
                   placeholder="Share your thoughts or ask a question..."
                   value={commentContent}
                   onChange={(e) => setCommentContent(e.target.value)}
-                  className="flex-1 min-h-[48px] max-h-[160px] bg-[#0D1117] border border-[#1F2937] rounded-xl px-4 py-3 text-sm text-[#E5E7EB] placeholder-[#6B7280] focus:outline-none focus:border-[#35b9f1]/30 transition-all font-Spline-Sans"
+                  className="flex-1 min-h-[48px] max-h-[160px] bg-[#0D1117] border border-[#1F2937] rounded-xl px-4 py-3 text-sm text-[#E5E7EB] placeholder-[#6B7280] focus:outline-none focus:border-[#35b9f1]/30 transition-all"
                   rows={2}
                 />
                 <Button
@@ -834,7 +834,7 @@ export function InterviewForum() {
             
             <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
               <div className="space-y-2">
-                <h1 className="text-white text-4xl font-normal italic mb-2 font-Instrument-Serif">
+                <h1 className="text-white text-4xl font-normal italic mb-2 font-serif">
                   Interview Experiences Forum
                 </h1>
                 <p className="text-[#9CA3AF] text-sm font-medium">
@@ -843,7 +843,7 @@ export function InterviewForum() {
               </div>
               <Button
                 onClick={() => setShowCreateModal(true)}
-                className="bg-[#35b9f1] hover:bg-[#10a3e0] text-[#0D1117] font-extrabold rounded-xl px-5 py-3 flex items-center justify-center gap-2 cursor-pointer shadow-lg hover:shadow-[#35b9f1]/10 transition-all font-Spline-Sans"
+                className="bg-[#35b9f1] hover:bg-[#10a3e0] text-[#0D1117] font-extrabold rounded-xl px-5 py-3 flex items-center justify-center gap-2 cursor-pointer shadow-lg hover:shadow-[#35b9f1]/10 transition-all"
               >
                 <Plus className="w-5 h-5" />
                 Share Experience
@@ -953,7 +953,7 @@ export function InterviewForum() {
                     <h3 className="text-white font-bold text-lg leading-snug group-hover:text-[#35b9f1] transition-colors line-clamp-2">
                       {post.title}
                     </h3>
-                    <p className="text-[#9CA3AF] text-sm leading-relaxed line-clamp-3 font-Spline-Sans font-medium">
+                    <p className="text-[#9CA3AF] text-sm leading-relaxed line-clamp-3 font-medium">
                       {getPostPreviewText(post.content)}
                     </p>
                   </div>
@@ -1014,7 +1014,7 @@ export function InterviewForum() {
                       </div>
                     </div>
 
-                    <span className="text-[#35b9f1] text-xs font-extrabold group-hover:underline flex items-center gap-1 font-Spline-Sans">
+                    <span className="text-[#35b9f1] text-xs font-extrabold group-hover:underline flex items-center gap-1">
                       Read Experience
                     </span>
                   </div>
@@ -1051,7 +1051,7 @@ export function InterviewForum() {
             
             <div className="flex items-center justify-between border-b border-[#1F2937] px-6 py-4">
               <div className="flex items-center gap-4">
-                <h3 className="text-white font-extrabold text-lg font-Spline-Sans">Share Interview Experience</h3>
+                <h3 className="text-white font-extrabold text-lg">Share Interview Experience</h3>
                 
                 {/* Write vs Preview Tabs */}
                 <div className="flex bg-[#0D1117] border border-[#1F2937] rounded-lg p-0.5 ml-2">
@@ -1222,7 +1222,7 @@ export function InterviewForum() {
                         {isDragging && (
                           <div className="absolute inset-0 bg-[#0D1117]/85 backdrop-blur-sm z-10 flex flex-col items-center justify-center gap-2.5 border-2 border-dashed border-[#35b9f1] rounded-b-xl pointer-events-none animate-fadeIn">
                             <ImageIcon className="w-8 h-8 text-[#35b9f1] animate-bounce" />
-                            <p className="text-xs font-bold text-[#35b9f1] font-Spline-Sans uppercase tracking-wider">Drop image to upload</p>
+                            <p className="text-xs font-bold text-[#35b9f1] uppercase tracking-wider">Drop image to upload</p>
                           </div>
                         )}
                         <textarea
@@ -1231,7 +1231,7 @@ export function InterviewForum() {
                           value={postContent}
                           onChange={(e) => setPostContent(e.target.value)}
                           onKeyDown={handleKeyDown}
-                          className="w-full flex-1 bg-transparent border-none outline-none focus:outline-none focus:ring-0 px-4 py-3 text-sm text-white font-Spline-Sans resize-none overflow-y-auto"
+                          className="w-full flex-1 bg-transparent border-none outline-none focus:outline-none focus:ring-0 px-4 py-3 text-sm text-white resize-none overflow-y-auto"
                           required
                         />
                       </div>
@@ -1261,7 +1261,7 @@ export function InterviewForum() {
                     <div className="flex-1 bg-[#0D1117] border border-[#1F2937] rounded-xl p-5 overflow-y-auto min-h-0">
                       {postContent.trim() ? (
                         <div 
-                          className="text-[#E5E7EB] text-sm leading-relaxed space-y-4 font-medium font-Spline-Sans"
+                          className="text-[#E5E7EB] text-sm leading-relaxed space-y-4 font-medium"
                           dangerouslySetInnerHTML={{ __html: parseMarkdownToHTML(postContent) }}
                         />
                       ) : (
