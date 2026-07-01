@@ -1,3 +1,4 @@
+import { authLimiter, apiLimiter } from "./middlewares/rateLimiter.js";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -51,6 +52,7 @@ app.use(
 );
 app.use(cookieParser());
 app.use(express.json({ limit: "50mb" }));
+app.use(apiLimiter);
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 app.use(
@@ -121,8 +123,8 @@ passport.use(
   )
 );
 
-app.use("/api/auth", routes);
-app.use("/api/oauth", authRoutes);
+app.use("/api/auth", authLimiter, routes);
+app.use("/api/oauth", authLimiter, authRoutes);
 app.use('/api/email', emailRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/companies", companyRoutes);
@@ -136,7 +138,11 @@ app.use("/api/forum", forumRoutes);
 app.use("/api/leetcode", leetcodeRoutes);
 app.use("/api/upload", uploadRoutes);
 
+
 app.get("/", (req, res) => res.send("Server running"));
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
+
 
