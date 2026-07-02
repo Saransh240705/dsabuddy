@@ -22,17 +22,18 @@ export const listSheets = async (req, res) => {
 
   let solvedBySheet = {};
   if (userId && sheets.length > 0) {
-    const grouped = await prisma.userSheetProblem.groupBy({
-      by: ["sheetProblemId"],
+    const solvedProblems = await prisma.userSheetProblem.findMany({
       where: {
         userId,
         status: "SOLVED",
         sheetProblem: { sheetId: { in: sheets.map((s) => s.id) } },
       },
-      _count: false,
+      select: {
+        sheetProblemId: true,
+      },
     });
     // Map solved problems back to their sheet
-    const solvedProblemIds = grouped.map((g) => g.sheetProblemId);
+    const solvedProblemIds = solvedProblems.map((g) => g.sheetProblemId);
     if (solvedProblemIds.length > 0) {
       const probs = await prisma.sheetProblem.findMany({
         where: { id: { in: solvedProblemIds } },
