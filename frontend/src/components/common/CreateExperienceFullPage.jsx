@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, X, ShieldAlert, Image as ImageIcon } from 'lucide-react';
 import apiClient from '@/api/client';
 import { getErrorMessage } from '@/utils';
@@ -92,7 +91,7 @@ const htmlToBlocks = (html) => {
     const type = node.tagName.toLowerCase();
     switch (type) {
       case 'p':
-      case 'div':
+      case 'div': {
         const innerImg = node.querySelector('img');
         if (innerImg) {
           blocks.push({
@@ -106,6 +105,7 @@ const htmlToBlocks = (html) => {
           blocks.push({ id: _buid(), type: 'text', html: node.innerHTML, url: '', caption: '' });
         }
         break;
+      }
       case 'h2':
         blocks.push({ id: _buid(), type: 'heading', html: node.innerHTML, url: '', caption: '' });
         break;
@@ -116,7 +116,7 @@ const htmlToBlocks = (html) => {
       case 'blockquote':
         blocks.push({ id: _buid(), type: 'quote', html: node.innerHTML, url: '', caption: '' });
         break;
-      case 'pre':
+      case 'pre': {
         const codeNode = node.querySelector('code');
         blocks.push({
           id: _buid(),
@@ -126,6 +126,7 @@ const htmlToBlocks = (html) => {
           caption: '',
         });
         break;
+      }
       case 'ul':
         Array.from(node.childNodes).forEach((li) => {
           if (li.nodeType === 1 && li.tagName.toLowerCase() === 'li') {
@@ -139,7 +140,7 @@ const htmlToBlocks = (html) => {
       case 'hr':
         blocks.push({ id: _buid(), type: 'divider', html: '', url: '', caption: '' });
         break;
-      case 'figure':
+      case 'figure': {
         const img = node.querySelector('img');
         const figcaption = node.querySelector('figcaption');
         if (img) {
@@ -152,6 +153,7 @@ const htmlToBlocks = (html) => {
           });
         }
         break;
+      }
       case 'img':
         blocks.push({
           id: _buid(),
@@ -201,7 +203,6 @@ export function CreateExperienceFullPage({
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [blockMenuId, setBlockMenuId] = useState(null);
-  const [hoveredId, setHoveredId] = useState(null);
   const [selFmt, setSelFmt] = useState(null);
 
   const blockRefs = useRef({});
@@ -226,7 +227,9 @@ export function CreateExperienceFullPage({
       range.collapse(false);
       sel.removeAllRanges();
       sel.addRange(range);
-    } catch (_) {}
+    } catch {
+      // Ignore errors
+    }
   };
 
   const isElEmpty = (el) =>
@@ -305,7 +308,7 @@ export function CreateExperienceFullPage({
     await uploadImage(activeId || blocks[blocks.length - 1].id, file);
   };
 
-  const handleKeyDown = (e, block, idx) => {
+  const handleKeyDown = (e, block) => {
     if (e.key === 'Enter' && !e.shiftKey && block.type !== 'code') {
       e.preventDefault();
       addBlock(block.id, 'text');
@@ -380,9 +383,8 @@ export function CreateExperienceFullPage({
     const htmlContent = blocksToHTML();
     const hasText = htmlContent.replace(/<[^>]*>/g, '').trim().length > 0;
     const hasImage = htmlContent.includes('<img');
-    const hasDivider = htmlContent.includes('<hr');
 
-    if (!hasText && !hasImage && !hasDivider) {
+    if (!hasText && !hasImage) {
       setError('Body content is empty. Please add some text or an image before publishing.');
       return;
     }
@@ -404,8 +406,9 @@ export function CreateExperienceFullPage({
       suppressContentEditableWarning: true,
       'data-placeholder': placeholder,
       onInput: (e) => updateBlock(block.id, { html: e.currentTarget.innerHTML }),
-      onKeyDown: (e) => handleKeyDown(e, block, idx),
+      onKeyDown: (e) => handleKeyDown(e, block),
       className: `${cls} outline-none empty:before:content-[attr(data-placeholder)] empty:before:text-neutral-700 empty:before:pointer-events-none`,
+      dangerouslySetInnerHTML: { __html: block.html || '' },
     });
 
     switch (block.type) {
@@ -428,6 +431,7 @@ export function CreateExperienceFullPage({
             contentEditable
             suppressContentEditableWarning
             data-placeholder="// Paste your code here..."
+            dangerouslySetInnerHTML={{ __html: block.html || '' }}
             onInput={(e) => updateBlock(block.id, { html: e.currentTarget.innerHTML })}
             onKeyDown={(e) => {
               if (e.key === 'Backspace' && isElEmpty(blockRefs.current[block.id]) && blocks.length > 1) {
@@ -605,7 +609,16 @@ export function CreateExperienceFullPage({
               <button
                 key={cmd}
                 title={title}
-                onMouseDown={() => { document.execCommand(cmd); }}
+                onMouseDown={() => {
+                  document.execCommand(cmd);
+                  setTimeout(() => {
+                    const activeEl = document.activeElement;
+                    const activeId = Object.keys(blockRefs.current).find(id => blockRefs.current[id] === activeEl);
+                    if (activeId && blockRefs.current[activeId]) {
+                      updateBlock(activeId, { html: blockRefs.current[activeId].innerHTML });
+                    }
+                  }, 10);
+                }}
                 className={`w-7 h-7 rounded-lg text-sm text-neutral-300 hover:text-white hover:bg-neutral-700 transition-all cursor-pointer ${cls}`}
               >
                 {label}
@@ -616,7 +629,16 @@ export function CreateExperienceFullPage({
               title="Link"
               onMouseDown={() => {
                 const url = prompt('URL:');
-                if (url) document.execCommand('createLink', false, url);
+                if (url) {
+                  document.execCommand('createLink', false, url);
+                  setTimeout(() => {
+                    const activeEl = document.activeElement;
+                    const activeId = Object.keys(blockRefs.current).find(id => blockRefs.current[id] === activeEl);
+                    if (activeId && blockRefs.current[activeId]) {
+                      updateBlock(activeId, { html: blockRefs.current[activeId].innerHTML });
+                    }
+                  }, 10);
+                }
               }}
               className="px-2 h-7 rounded-lg text-xs text-neutral-300 hover:text-[#35b9f1] hover:bg-neutral-700 transition-all cursor-pointer font-mono"
             >
@@ -632,6 +654,13 @@ export function CreateExperienceFullPage({
                   code.textContent = range.toString();
                   range.deleteContents();
                   range.insertNode(code);
+                  setTimeout(() => {
+                    const activeEl = document.activeElement;
+                    const activeId = Object.keys(blockRefs.current).find(id => blockRefs.current[id] === activeEl);
+                    if (activeId && blockRefs.current[activeId]) {
+                      updateBlock(activeId, { html: blockRefs.current[activeId].innerHTML });
+                    }
+                  }, 10);
                 }
               }}
               className="px-2 h-7 rounded-lg text-xs text-neutral-300 hover:text-green-400 hover:bg-neutral-700 transition-all cursor-pointer font-mono"
@@ -646,8 +675,7 @@ export function CreateExperienceFullPage({
             <div
               key={block.id}
               className="relative flex items-start gap-2 group/row"
-              onMouseEnter={() => setHoveredId(block.id)}
-              onMouseLeave={() => { setHoveredId(null); setBlockMenuId(null); }}
+              onMouseLeave={() => { setBlockMenuId(null); }}
             >
               <div className="shrink-0 w-8 flex flex-col items-center pt-1 gap-0.5">
                 <button

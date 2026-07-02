@@ -630,7 +630,7 @@ export function InterviewForum() {
                   tags
                 });
                 setPosts(prev => prev.map(p => (p.id === editingPostId ? data.post : p)));
-                setSelectedPost(data.post);
+                setSelectedPost(prev => ({ ...prev, ...data.post }));
               } else {
                 const data = await forumService.createPost({
                   title,
