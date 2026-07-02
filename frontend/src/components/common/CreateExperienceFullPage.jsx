@@ -92,7 +92,7 @@ const htmlToBlocks = (html) => {
     const type = node.tagName.toLowerCase();
     switch (type) {
       case 'p':
-      case 'div':
+      case 'div': {
         const innerImg = node.querySelector('img');
         if (innerImg) {
           blocks.push({
@@ -106,6 +106,7 @@ const htmlToBlocks = (html) => {
           blocks.push({ id: _buid(), type: 'text', html: node.innerHTML, url: '', caption: '' });
         }
         break;
+      }
       case 'h2':
         blocks.push({ id: _buid(), type: 'heading', html: node.innerHTML, url: '', caption: '' });
         break;
@@ -116,7 +117,7 @@ const htmlToBlocks = (html) => {
       case 'blockquote':
         blocks.push({ id: _buid(), type: 'quote', html: node.innerHTML, url: '', caption: '' });
         break;
-      case 'pre':
+      case 'pre': {
         const codeNode = node.querySelector('code');
         blocks.push({
           id: _buid(),
@@ -126,6 +127,7 @@ const htmlToBlocks = (html) => {
           caption: '',
         });
         break;
+      }
       case 'ul':
         Array.from(node.childNodes).forEach((li) => {
           if (li.nodeType === 1 && li.tagName.toLowerCase() === 'li') {
@@ -139,7 +141,7 @@ const htmlToBlocks = (html) => {
       case 'hr':
         blocks.push({ id: _buid(), type: 'divider', html: '', url: '', caption: '' });
         break;
-      case 'figure':
+      case 'figure': {
         const img = node.querySelector('img');
         const figcaption = node.querySelector('figcaption');
         if (img) {
@@ -152,6 +154,7 @@ const htmlToBlocks = (html) => {
           });
         }
         break;
+      }
       case 'img':
         blocks.push({
           id: _buid(),
@@ -380,9 +383,8 @@ export function CreateExperienceFullPage({
     const htmlContent = blocksToHTML();
     const hasText = htmlContent.replace(/<[^>]*>/g, '').trim().length > 0;
     const hasImage = htmlContent.includes('<img');
-    const hasDivider = htmlContent.includes('<hr');
 
-    if (!hasText && !hasImage && !hasDivider) {
+    if (!hasText && !hasImage) {
       setError('Body content is empty. Please add some text or an image before publishing.');
       return;
     }
@@ -399,7 +401,14 @@ export function CreateExperienceFullPage({
 
   const renderBlockContent = (block, idx) => {
     const commonTextProps = (cls, placeholder) => ({
-      ref: (el) => { blockRefs.current[block.id] = el; },
+      ref: (el) => {
+        if (el && blockRefs.current[block.id] !== el) {
+          blockRefs.current[block.id] = el;
+          if (block.html && el.innerHTML !== block.html) {
+            el.innerHTML = block.html;
+          }
+        }
+      },
       contentEditable: true,
       suppressContentEditableWarning: true,
       'data-placeholder': placeholder,
@@ -424,7 +433,14 @@ export function CreateExperienceFullPage({
       case 'code':
         return (
           <div
-            ref={(el) => { blockRefs.current[block.id] = el; }}
+            ref={(el) => {
+              if (el && blockRefs.current[block.id] !== el) {
+                blockRefs.current[block.id] = el;
+                if (block.html && el.innerHTML !== block.html) {
+                  el.innerHTML = block.html;
+                }
+              }
+            }}
             contentEditable
             suppressContentEditableWarning
             data-placeholder="// Paste your code here..."
@@ -605,7 +621,14 @@ export function CreateExperienceFullPage({
               <button
                 key={cmd}
                 title={title}
-                onMouseDown={() => { document.execCommand(cmd); }}
+                onMouseDown={() => {
+                  document.execCommand(cmd);
+                  const activeEl = document.activeElement;
+                  const activeId = Object.keys(blockRefs.current).find(id => blockRefs.current[id] === activeEl);
+                  if (activeId && activeEl) {
+                    updateBlock(activeId, { html: activeEl.innerHTML });
+                  }
+                }}
                 className={`w-7 h-7 rounded-lg text-sm text-neutral-300 hover:text-white hover:bg-neutral-700 transition-all cursor-pointer ${cls}`}
               >
                 {label}
@@ -616,7 +639,14 @@ export function CreateExperienceFullPage({
               title="Link"
               onMouseDown={() => {
                 const url = prompt('URL:');
-                if (url) document.execCommand('createLink', false, url);
+                if (url) {
+                  document.execCommand('createLink', false, url);
+                  const activeEl = document.activeElement;
+                  const activeId = Object.keys(blockRefs.current).find(id => blockRefs.current[id] === activeEl);
+                  if (activeId && activeEl) {
+                    updateBlock(activeId, { html: activeEl.innerHTML });
+                  }
+                }
               }}
               className="px-2 h-7 rounded-lg text-xs text-neutral-300 hover:text-[#35b9f1] hover:bg-neutral-700 transition-all cursor-pointer font-mono"
             >
@@ -632,6 +662,11 @@ export function CreateExperienceFullPage({
                   code.textContent = range.toString();
                   range.deleteContents();
                   range.insertNode(code);
+                  const activeEl = document.activeElement;
+                  const activeId = Object.keys(blockRefs.current).find(id => blockRefs.current[id] === activeEl);
+                  if (activeId && activeEl) {
+                    updateBlock(activeId, { html: activeEl.innerHTML });
+                  }
                 }
               }}
               className="px-2 h-7 rounded-lg text-xs text-neutral-300 hover:text-green-400 hover:bg-neutral-700 transition-all cursor-pointer font-mono"
