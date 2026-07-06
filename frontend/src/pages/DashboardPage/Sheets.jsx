@@ -177,23 +177,39 @@ function ProblemRow({ problem, onUpdate }) {
         </button>
 
         {/* Problem title (+ practice link) */}
-        <div className="min-w-0">
+        <div className="min-w-0 flex items-center gap-2">
           {problem.practiceUrl ? (
             <a
               href={problem.practiceUrl}
               target="_blank"
               rel="noreferrer"
-              className={`text-sm hover:text-[#35b9f1] transition-colors inline-flex items-center gap-1.5 ${
+              className={`hover:text-[#35b9f1] transition-colors inline-flex items-center gap-2 min-w-0 ${
                 solved ? "text-neutral-500 line-through" : "text-neutral-200"
               }`}
             >
-              <span className="truncate">{problem.title}</span>
+              <span className="truncate text-sm">{problem.title}</span>
               <ExternalLink className="w-3 h-3 shrink-0 opacity-60" />
+              
+              {/* Needs Review Badge */}
+              {problem.needsReview && (
+                <span className="text-[9px] font-mono font-medium px-1.5 py-0.5 rounded bg-yellow-500/10 text-yellow-500 border border-yellow-500/20 shrink-0 select-none">
+                  ⚠ verify
+                </span>
+              )}
             </a>
           ) : (
-            <span className={`text-sm ${solved ? "text-neutral-500 line-through" : "text-neutral-200"}`}>
-              {problem.title}
-            </span>
+            <div className="inline-flex items-center gap-2 min-w-0">
+              <span className={`text-sm truncate ${solved ? "text-neutral-500 line-through" : "text-neutral-200"}`}>
+                {problem.title}
+              </span>
+              
+              {/* Needs Review Badge */}
+              {problem.needsReview && (
+                <span className="text-[9px] font-mono font-medium px-1.5 py-0.5 rounded bg-yellow-500/10 text-yellow-500 border border-yellow-500/20 shrink-0 select-none">
+                  ⚠ verify
+                </span>
+              )}
+            </div>
           )}
         </div>
 

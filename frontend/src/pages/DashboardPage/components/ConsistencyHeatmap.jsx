@@ -361,11 +361,10 @@ export function ConsistencyHeatmap({ data: initialData = [], platform, isAnalyti
                           onMouseEnter={(e) => {
                             if (!isCellInYear) return;
                             const rect = e.currentTarget.getBoundingClientRect();
-                            const parentRect = e.currentTarget.closest('.heatmap-wrapper').getBoundingClientRect();
                             setHoveredDay(day);
                             setTooltipPos({
-                              x: rect.left - parentRect.left + (rect.width / 2),
-                              y: rect.top - parentRect.top - 6
+                              x: rect.left + (rect.width / 2),
+                              y: rect.top - 6
                             });
                           }}
                           onMouseLeave={() => setHoveredDay(null)}
@@ -391,7 +390,7 @@ export function ConsistencyHeatmap({ data: initialData = [], platform, isAnalyti
         {/* Interactive Floating Tooltip */}
         {hoveredDay && (
           <div
-            className="absolute z-50 bg-[#161B22] border border-[#1F2937] rounded-xl p-3.5 shadow-[0_12px_24px_rgba(0,0,0,0.5)] text-xs w-48 text-[#E5E7EB] pointer-events-none transition-all duration-75"
+            className="fixed z-50 bg-[#161B22] border border-[#1F2937] rounded-xl p-3.5 shadow-[0_12px_24px_rgba(0,0,0,0.5)] text-xs w-48 text-[#E5E7EB] pointer-events-none transition-all duration-75"
             style={{
               left: `${tooltipPos.x}px`,
               top: `${tooltipPos.y}px`,
@@ -537,11 +536,10 @@ export function ConsistencyHeatmap({ data: initialData = [], platform, isAnalyti
                         onMouseEnter={(e) => {
                           if (!isCellInYear) return;
                           const rect = e.currentTarget.getBoundingClientRect();
-                          const parentRect = e.currentTarget.closest('.heatmap-wrapper').getBoundingClientRect();
                           setHoveredDay(day);
                           setTooltipPos({
-                            x: rect.left - parentRect.left + (rect.width / 2),
-                            y: rect.top - parentRect.top - 6
+                            x: rect.left + (rect.width / 2),
+                            y: rect.top - 6
                           });
                         }}
                         onMouseLeave={() => setHoveredDay(null)}
@@ -589,7 +587,7 @@ export function ConsistencyHeatmap({ data: initialData = [], platform, isAnalyti
       {/* ── Interactive Floating Tooltip ── */}
       {hoveredDay && (
         <div
-          className="absolute z-50 bg-[#0D1117] border border-[#30363D] rounded-xl p-3.5 shadow-[0_12px_24px_rgba(0,0,0,0.5)] text-xs w-52 text-[#E6EDF3] pointer-events-none transition-all duration-75"
+          className="fixed z-50 bg-[#0D1117] border border-[#30363D] rounded-xl p-3.5 shadow-[0_12px_24px_rgba(0,0,0,0.5)] text-xs w-52 text-[#E6EDF3] pointer-events-none transition-all duration-75"
           style={{
             left: `${tooltipPos.x}px`,
             top: `${tooltipPos.y}px`,

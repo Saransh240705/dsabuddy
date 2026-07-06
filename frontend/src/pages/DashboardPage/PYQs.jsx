@@ -759,7 +759,7 @@ export function PYQs({ companies }) {
 
         {searchedCompanies.length > 0 ? (
           <div className="space-y-8">
-            <div className="grid grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
+            <div className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
               {paginatedCompanies.map((company) => (
                 <CompanyCard
                   key={company.name}
