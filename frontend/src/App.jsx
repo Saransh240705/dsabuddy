@@ -13,6 +13,8 @@ const AboutPage = lazy(() => import('./pages/AboutPage'))
 const LeaderboardPage = lazy(() => import('./pages/LeaderboardPage'))
 const ContactPage = lazy(() => import('./pages/ContactPage'))
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'))
+const QuestionsPage = lazy(() => import('./pages/QuestionsPage').then(m => ({ default: m.QuestionsPage })))
+const QuestionDetailPage = lazy(() => import('./pages/QuestionsPage').then(m => ({ default: m.QuestionDetailPage })))
 
 function ProtectedRoute({ children }) {
   const user = useUserStore((state) => state.user);
@@ -56,6 +58,8 @@ function App() {
           <Route path="/dashboard/sheets/:slug" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
           <Route path="/dashboard/revision" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
           <Route path="/leaderboard" element={<LeaderboardPage />} />
+          <Route path="/questions" element={<QuestionsPage />} />
+          <Route path="/questions/:id" element={<QuestionDetailPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/dashboard/settings" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
           <Route path="/dashboard/profile" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />

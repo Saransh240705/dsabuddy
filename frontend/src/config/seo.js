@@ -6,11 +6,10 @@ export const SITE = {
   name: 'DSABuddy',
   url: 'https://dsabuddy.xyz',
   // <title> shown when a page provides no title of its own
-  defaultTitle:
-    'DSABuddy — Track Your DSA Practice Across LeetCode, Codeforces, CodeChef & GFG',
+  defaultTitle: 'DSABuddy — Track DSA Practice: LeetCode, Codeforces & More',
   description:
-    'DSABuddy is one place to track all your DSA practice. Connect LeetCode, Codeforces, CodeChef, and GeeksforGeeks to see unified stats, streaks, and leaderboards while you prepare for coding interviews.',
-  defaultImage: 'https://dsabuddy.xyz/logo.png',
+    'Track all your DSA practice in one place. Connect LeetCode, Codeforces, CodeChef & GFG to see unified stats, streaks, and leaderboards for interview prep.',
+  defaultImage: 'https://dsabuddy.xyz/og.png',
   locale: 'en_US',
   twitter: '@dsabuddy',
   themeColor: '#000000',
