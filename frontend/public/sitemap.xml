@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://dsabuddy.com/</loc>
+    <loc>https://dsabuddy.xyz/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://dsabuddy.com/about</loc>
+    <loc>https://dsabuddy.xyz/about</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://dsabuddy.com/leaderboard</loc>
+    <loc>https://dsabuddy.xyz/leaderboard</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://dsabuddy.com/contact</loc>
+    <loc>https://dsabuddy.xyz/contact</loc>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>

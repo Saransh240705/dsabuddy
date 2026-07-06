@@ -8,4 +8,4 @@ Disallow: /login
 Disallow: /register
 Disallow: /showcase
 
-Sitemap: https://dsabuddy.com/sitemap.xml
+Sitemap: https://dsabuddy.xyz/sitemap.xml

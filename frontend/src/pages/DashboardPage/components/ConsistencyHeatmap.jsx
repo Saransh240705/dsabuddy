@@ -368,9 +368,8 @@ export function ConsistencyHeatmap({ data: initialData = [], platform, isAnalyti
                             });
                           }}
                           onMouseLeave={() => setHoveredDay(null)}
-                          className={`w-3 h-3 rounded-[4px] cursor-pointer transition-all duration-100 
-                                      hover:scale-125 hover:ring-2 hover:ring-offset-1 hover:ring-offset-[#000000] ${theme.ring}
-                                      ${!isCellInYear ? 'opacity-0 pointer-events-none' : ''}`}
+                          className={`w-3 h-3 rounded-[4px] cursor-pointer transition-[box-shadow] duration-100
+                                      ${!isCellInYear ? 'opacity-0 pointer-events-none' : 'hover:brightness-125'}`}
                           style={{
                             backgroundColor: bgCol,
                             boxSizing: 'border-box'
@@ -390,7 +389,7 @@ export function ConsistencyHeatmap({ data: initialData = [], platform, isAnalyti
         {/* Interactive Floating Tooltip */}
         {hoveredDay && (
           <div
-            className="fixed z-50 bg-[#161B22] border border-[#1F2937] rounded-xl p-3.5 shadow-[0_12px_24px_rgba(0,0,0,0.5)] text-xs w-48 text-[#E5E7EB] pointer-events-none transition-all duration-75"
+            className="fixed z-50 bg-[#161B22] border border-[#1F2937] rounded-xl p-3.5 shadow-[0_12px_24px_rgba(0,0,0,0.5)] text-xs w-48 text-[#E5E7EB] pointer-events-none"
             style={{
               left: `${tooltipPos.x}px`,
               top: `${tooltipPos.y}px`,
@@ -543,9 +542,8 @@ export function ConsistencyHeatmap({ data: initialData = [], platform, isAnalyti
                           });
                         }}
                         onMouseLeave={() => setHoveredDay(null)}
-                        className={`w-3 h-3 rounded-[4px] cursor-pointer transition-all duration-100 
-                                    hover:scale-125 hover:ring-2 hover:ring-offset-1 hover:ring-offset-[#161B22] ${theme.ring}
-                                    ${!isCellInYear ? 'opacity-0 pointer-events-none' : ''}
+                        className={`w-3 h-3 rounded-[4px] cursor-pointer transition-[box-shadow] duration-100
+                                    ${!isCellInYear ? 'opacity-0 pointer-events-none' : 'hover:brightness-125'}
                                     ${hasBorder ? 'border border-[#21262D]' : 'border border-transparent'}`}
                         style={{
                           backgroundColor: bgCol,
@@ -587,7 +585,7 @@ export function ConsistencyHeatmap({ data: initialData = [], platform, isAnalyti
       {/* ── Interactive Floating Tooltip ── */}
       {hoveredDay && (
         <div
-          className="fixed z-50 bg-[#0D1117] border border-[#30363D] rounded-xl p-3.5 shadow-[0_12px_24px_rgba(0,0,0,0.5)] text-xs w-52 text-[#E6EDF3] pointer-events-none transition-all duration-75"
+          className="fixed z-50 bg-[#0D1117] border border-[#30363D] rounded-xl p-3.5 shadow-[0_12px_24px_rgba(0,0,0,0.5)] text-xs w-52 text-[#E6EDF3] pointer-events-none"
           style={{
             left: `${tooltipPos.x}px`,
             top: `${tooltipPos.y}px`,
