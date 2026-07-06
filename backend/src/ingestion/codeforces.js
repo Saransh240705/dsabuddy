@@ -57,6 +57,8 @@ export async function syncCodeforcesProblemsByTags({
       continue;
     }
 
+    const cleanTags = problemTags.filter(Boolean);
+
     const question = await prisma.question.upsert({
       where: {
         sourcePlatform_sourceId: {
@@ -74,6 +76,7 @@ export async function syncCodeforcesProblemsByTags({
         sourceUrl: url,
         sourceRating: p.rating ?? null,
         paidOnly: false,
+        tags: cleanTags,
       },
       update: {
         title,
@@ -81,37 +84,13 @@ export async function syncCodeforcesProblemsByTags({
         difficulty,
         sourceUrl: url,
         sourceRating: p.rating ?? null,
+        tags: cleanTags,
       },
       select: { id: true },
     });
 
     upserted += 1;
-
-    const tagIds = [];
-    for (const tagName of problemTags) {
-      if (!tagName) continue;
-      const tag = await prisma.tag.upsert({
-        where: { name: tagName },
-        create: { name: tagName },
-        update: {},
-        select: { id: true },
-      });
-      tagIds.push(tag.id);
-    }
-
-    await prisma.question.update({
-      where: { id: question.id },
-      data: {
-        tags: {
-          deleteMany: {},
-          create: tagIds.map((tagId) => ({
-            tag: { connect: { id: tagId } },
-          })),
-        },
-      },
-    });
-
-    tagLinks += tagIds.length;
+    tagLinks += cleanTags.length;
     processed += 1;
   }
 

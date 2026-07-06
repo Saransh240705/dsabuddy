@@ -143,10 +143,10 @@ export function Revision() {
                     <div className="flex flex-wrap gap-1.5 mt-1">
                       {q.tags.slice(0, 3).map((t) => (
                         <span
-                          key={t.tag.id}
+                          key={t}
                           className="text-[10px] font-mono text-neutral-500 bg-neutral-900 px-1.5 py-0.5 rounded"
                         >
-                          {t.tag.name}
+                          {t}
                         </span>
                       ))}
                     </div>

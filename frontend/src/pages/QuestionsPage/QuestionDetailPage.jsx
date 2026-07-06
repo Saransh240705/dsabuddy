@@ -55,7 +55,7 @@ export default function QuestionDetailPage() {
   };
 
   const externalUrl = question?.sourceUrl || question?.leetcodeUrl;
-  const tags = question?.tags?.map(t => t.tag) || [];
+  const tags = question?.tags || [];
   const companies = question?.companies || [];
   const related = [
     ...(question?.relatedFrom?.map(r => r.to) || []),
@@ -174,8 +174,8 @@ export default function QuestionDetailPage() {
                 <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '28px' }}>
                   {tags.map(t => (
                     <Link
-                      key={t.id}
-                      to={`/questions?tagId=${t.id}`}
+                      key={t}
+                      to={`/questions?tag=${encodeURIComponent(t)}`}
                       style={{
                         background: 'rgba(124,58,237,0.1)', color: '#a78bfa',
                         border: '1px solid rgba(124,58,237,0.2)',
@@ -185,7 +185,7 @@ export default function QuestionDetailPage() {
                       onMouseEnter={e => e.currentTarget.style.background = 'rgba(124,58,237,0.2)'}
                       onMouseLeave={e => e.currentTarget.style.background = 'rgba(124,58,237,0.1)'}
                     >
-                      {t.name}
+                      {t}
                     </Link>
                   ))}
                 </div>

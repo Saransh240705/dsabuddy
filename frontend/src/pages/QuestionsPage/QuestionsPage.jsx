@@ -28,6 +28,7 @@ export default function QuestionsPage() {
   // Filters from URL
   const q          = searchParams.get('q') || '';
   const difficulty = searchParams.get('difficulty') || '';
+  const tag        = searchParams.get('tag') || '';
   const page       = Number(searchParams.get('page') || 1);
 
   // Local search input (debounced into URL)
@@ -45,12 +46,14 @@ export default function QuestionsPage() {
 
   // Debounce search input → URL
   useEffect(() => {
+    if (searchInput.trim() === q.trim()) return;
+
     clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
       setParam('q', searchInput.trim());
     }, 350);
     return () => clearTimeout(debounceRef.current);
-  }, [searchInput, setParam]);
+  }, [searchInput, q, setParam]);
 
   // Fetch questions
   useEffect(() => {
@@ -60,6 +63,7 @@ export default function QuestionsPage() {
     questionService.list({
       q: q || undefined,
       difficulty: difficulty || undefined,
+      tag: tag || undefined,
       take: PAGE_SIZE,
       skip: (page - 1) * PAGE_SIZE,
     })
@@ -73,7 +77,7 @@ export default function QuestionsPage() {
       })
       .finally(() => { if (!cancelled) setLoading(false); });
     return () => { cancelled = true; };
-  }, [q, difficulty, page]);
+  }, [q, difficulty, tag, page]);
 
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
 
@@ -163,6 +167,29 @@ export default function QuestionsPage() {
             </button>
           ))}
 
+          {/* Active Tag filter */}
+          {tag && (
+            <div style={{
+              display: 'inline-flex', alignItems: 'center', gap: '6px',
+              background: 'rgba(124,58,237,0.15)', border: '1px solid rgba(124,58,237,0.3)',
+              borderRadius: '10px', padding: '9px 14px', color: '#a78bfa',
+              fontSize: '13px', fontWeight: 600,
+            }}>
+              <span>Tag: {tag}</span>
+              <button
+                onClick={() => setParam('tag', '')}
+                style={{
+                  background: 'none', border: 'none', color: '#a78bfa',
+                  cursor: 'pointer', padding: 0, display: 'inline-flex',
+                  alignItems: 'center', fontSize: '16px', fontWeight: 'bold',
+                  marginLeft: '4px',
+                }}
+              >
+                ×
+              </button>
+            </div>
+          )}
+
           {/* Total count chip */}
           {!loading && (
             <span style={{ marginLeft: 'auto', color: '#475569', fontSize: '13px' }}>
@@ -221,7 +248,7 @@ export default function QuestionsPage() {
           {/* Rows */}
           {!loading && questions.map((q, idx) => {
             const userStatus = q.userStatuses?.[0]?.status || null;
-            const tags = q.tags?.map(t => t.tag) || [];
+            const tags = q.tags || [];
             const platform = q.sourcePlatform;
             const acceptancePct = q.acceptanceRate != null
               ? `${(q.acceptanceRate * (q.acceptanceRate > 1 ? 1 : 100)).toFixed(1)}%`
@@ -261,7 +288,7 @@ export default function QuestionsPage() {
                   </div>
                   {tags.length > 0 && (
                     <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
-                      {tags.slice(0, 3).map(t => <TagPill key={t.id} name={t.name} />)}
+                      {tags.slice(0, 3).map(t => <TagPill key={t} name={t} />)}
                       {tags.length > 3 && (
                         <span style={{ fontSize: '11px', color: '#475569', alignSelf: 'center' }}>
                           +{tags.length - 3}

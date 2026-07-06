@@ -5,7 +5,7 @@ const LEETCODE_GQL = "https://leetcode.com/graphql";
 
 const PROBLEMSET_QUERY = `
 query problemsetQuestionList($categorySlug: String, $limit: Int, $skip: Int, $filters: QuestionListFilterInput) {
-  problemsetQuestionList: problemsetQuestionList(categorySlug: $categorySlug, limit: $limit, skip: $skip, filters: $filters) {
+  problemsetQuestionList: problemsetQuestionListV2(categorySlug: $categorySlug, limit: $limit, skip: $skip, filters: $filters) {
     total: total
     questions: questions {
       acRate
@@ -151,6 +151,9 @@ export async function syncLeetCodeProblemsByTags({
           const difficulty = mapDifficultyFromLeetCode(q.difficulty);
           const title = q.title ?? titleSlug;
 
+          const topicTags = Array.isArray(q.topicTags) ? q.topicTags : [];
+          const cleanTags = topicTags.map((t) => t?.name).filter(Boolean);
+
           const saved = await prisma.question.upsert({
             where: {
               sourcePlatform_sourceId: {
@@ -170,6 +173,7 @@ export async function syncLeetCodeProblemsByTags({
               acceptanceRate:
                 typeof q.acRate === "number" ? q.acRate : (q.acRate ?? null),
               paidOnly: Boolean(q.paidOnly),
+              tags: cleanTags,
             },
             update: {
               title,
@@ -180,39 +184,13 @@ export async function syncLeetCodeProblemsByTags({
               acceptanceRate:
                 typeof q.acRate === "number" ? q.acRate : (q.acRate ?? null),
               paidOnly: Boolean(q.paidOnly),
+              tags: cleanTags,
             },
             select: { id: true },
           });
 
           upserted += 1;
-
-          const topicTags = Array.isArray(q.topicTags) ? q.topicTags : [];
-          const tagIds = [];
-          for (const t of topicTags) {
-            const name = t?.name;
-            if (!name) continue;
-            const tag = await prisma.tag.upsert({
-              where: { name },
-              create: { name },
-              update: {},
-              select: { id: true },
-            });
-            tagIds.push(tag.id);
-          }
-
-          await prisma.question.update({
-            where: { id: saved.id },
-            data: {
-              tags: {
-                deleteMany: {},
-                create: tagIds.map((tagId) => ({
-                  tag: { connect: { id: tagId } },
-                })),
-              },
-            },
-          });
-
-          tagLinks += tagIds.length;
+          tagLinks += cleanTags.length;
           processed += 1;
         }
       }

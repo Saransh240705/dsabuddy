@@ -3,7 +3,7 @@ import { prisma } from "../config/prismaClient.js";
 const getAuthUserId = (req) => req.user?.userId ?? null;
 
 export const listQuestions = async (req, res) => {
-  const { q, difficulty, tagId, companyId } = req.query;
+  const { q, difficulty, tag, companyId } = req.query;
   const take = Number(req.query.take ?? 50);
   const skip = Number(req.query.skip ?? 0);
 
@@ -19,7 +19,7 @@ export const listQuestions = async (req, res) => {
         }
       : {}),
     ...(difficulty ? { difficulty } : {}),
-    ...(tagId ? { tags: { some: { tagId } } } : {}),
+    ...(tag ? { tags: { has: tag } } : {}),
     ...(companyId ? { companies: { some: { companyId } } } : {}),
   };
 
@@ -45,9 +45,7 @@ export const listQuestions = async (req, res) => {
         frequency: true,
         acceptedCount: true,
         submissionCount: true,
-        tags: {
-          select: { tag: { select: { id: true, name: true } } },
-        },
+        tags: true,
         companies: {
           select: { company: { select: { id: true, name: true, slug: true } } },
         },
@@ -102,9 +100,7 @@ export const getRevisionQuestions = async (req, res) => {
       sourceRating: true,
       acceptanceRate: true,
       frequency: true,
-      tags: {
-        select: { tag: { select: { id: true, name: true } } },
-      },
+      tags: true,
       companies: {
         select: { company: { select: { id: true, name: true, slug: true } } },
       },
@@ -147,9 +143,7 @@ export const getQuestionById = async (req, res) => {
       constraints: true,
       acceptedCount: true,
       submissionCount: true,
-      tags: {
-        select: { tag: { select: { id: true, name: true } } },
-      },
+      tags: true,
       companies: {
         select: {
           company: {
@@ -187,20 +181,12 @@ export const getQuestionById = async (req, res) => {
 };
 
 export const createQuestion = async (req, res) => {
-  const { tagIds, companyIds, relatedQuestionIds, ...data } = req.body;
+  const { tags, companyIds, relatedQuestionIds, ...data } = req.body;
 
   const created = await prisma.question.create({
     data: {
       ...data,
-      ...(tagIds?.length
-        ? {
-            tags: {
-              create: tagIds.map((tagId) => ({
-                tag: { connect: { id: tagId } },
-              })),
-            },
-          }
-        : {}),
+      tags: Array.isArray(tags) ? tags : [],
       ...(companyIds?.length
         ? {
             companies: {
@@ -228,22 +214,13 @@ export const createQuestion = async (req, res) => {
 
 export const updateQuestion = async (req, res) => {
   const { id } = req.params;
-  const { tagIds, companyIds, relatedQuestionIds, ...data } = req.body;
+  const { tags, companyIds, relatedQuestionIds, ...data } = req.body;
 
   const updated = await prisma.question.update({
     where: { id },
     data: {
       ...data,
-      ...(Array.isArray(tagIds)
-        ? {
-            tags: {
-              deleteMany: {},
-              create: tagIds.map((tagId) => ({
-                tag: { connect: { id: tagId } },
-              })),
-            },
-          }
-        : {}),
+      ...(Array.isArray(tags) ? { tags } : {}),
       ...(Array.isArray(companyIds)
         ? {
             companies: {

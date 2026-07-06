@@ -105,7 +105,7 @@ export const createQuestionBodySchema = z
     constraints: z.any().optional().nullable(),
     acceptedCount: z.number().int().min(0).optional().nullable(),
     submissionCount: z.number().int().min(0).optional().nullable(),
-    tagIds: z.array(cuidSchema).optional(),
+    tags: z.array(z.string()).optional(),
     companyIds: z.array(cuidSchema).optional(),
     relatedQuestionIds: z.array(cuidSchema).optional(),
   })
@@ -117,7 +117,7 @@ export const listQuestionsQuerySchema = z
   .object({
     q: z.string().optional(),
     difficulty: z.enum(["EASY", "MEDIUM", "HARD"]).optional(),
-    tagId: cuidSchema.optional(),
+    tag: z.string().optional(),
     companyId: cuidSchema.optional(),
     take: z.coerce.number().int().min(1).max(100).optional(),
     skip: z.coerce.number().int().min(0).optional(),
@@ -125,7 +125,7 @@ export const listQuestionsQuerySchema = z
   .strict();
 
 export const tagIdParamSchema = z.object({
-  id: cuidSchema,
+  id: z.string(),
 });
 
 export const createTagBodySchema = z

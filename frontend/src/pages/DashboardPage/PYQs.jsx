@@ -241,7 +241,7 @@ export function PYQs({ companies }) {
             difficulty: cq.question?.difficulty || "MEDIUM",
             url: cq.question?.leetcodeUrl || "",
             frequency: cq.frequency || "OCCASIONAL",
-            tags: cq.question?.tags?.map((t) => t.tag.name) || [],
+            tags: cq.question?.tags || [],
           }));
           setQuestions(mappedQuestions);
         }

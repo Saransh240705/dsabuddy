@@ -210,15 +210,7 @@ export const listCompanyQuestions = async (req, res) => {
           displayName: true,
           difficulty: true,
           leetcodeUrl: true,
-          tags: {
-            select: {
-              tag: {
-                select: {
-                  name: true,
-                },
-              },
-            },
-          },
+          tags: true,
         },
       },
     },
