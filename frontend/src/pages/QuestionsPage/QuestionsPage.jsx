@@ -6,6 +6,7 @@ import { breadcrumbSchema } from '@/config/seo';
 import { questionService } from '@/api/services/questionService';
 import { useUserStore } from '@/store/useUserStore';
 import { DIFFICULTY_COLORS, PLATFORM_LABELS } from '@/config/constants';
+import { PLATFORMS as PLATFORM_ICONS } from '@/utils';
 import { Search, ChevronLeft, ChevronRight } from 'lucide-react';
 import {
   DifficultyBadge,
@@ -250,6 +251,9 @@ export default function QuestionsPage() {
             const userStatus = q.userStatuses?.[0]?.status || null;
             const tags = q.tags || [];
             const platform = q.sourcePlatform;
+            const platformKey = platform?.toLowerCase();
+            const platformInfo = PLATFORM_ICONS[platformKey];
+            const PlatformIconComponent = platformInfo?.Icon;
             const acceptancePct = q.acceptanceRate != null
               ? `${(q.acceptanceRate * (q.acceptanceRate > 1 ? 1 : 100)).toFixed(1)}%`
               : '—';
@@ -302,9 +306,17 @@ export default function QuestionsPage() {
                 <div><DifficultyBadge difficulty={q.difficulty} /></div>
 
                 {/* Platform */}
-                <span style={{ color: '#64748b', fontSize: '13px' }}>
-                  {PLATFORM_LABELS[platform] || platform || '—'}
-                </span>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  {PlatformIconComponent ? (
+                    <span style={{ color: platformInfo.color }} title={platformInfo.name}>
+                      <PlatformIconComponent className="w-5 h-5" />
+                    </span>
+                  ) : (
+                    <span style={{ color: '#64748b', fontSize: '13px' }}>
+                      {PLATFORM_LABELS[platform] || platform || '—'}
+                    </span>
+                  )}
+                </div>
 
                 {/* Acceptance */}
                 <span style={{ color: '#64748b', fontSize: '13px' }}>{acceptancePct}</span>

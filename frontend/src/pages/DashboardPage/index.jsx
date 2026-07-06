@@ -84,12 +84,13 @@ export function DashboardPage() {
       setError(null);
 
       const u = useUserStore.getState().user;
+      const fetchUser = force || !u;
 
       const [platRes, analyticsRes, compRes, userRes] = await Promise.all([
         apiClient.get('/platform-connections'),
         apiClient.get('/daily-activity/analytics'),
         apiClient.get('/companies'),
-        apiClient.get('/auth/me'),
+        fetchUser ? apiClient.get('/auth/me') : Promise.resolve(null),
       ]);
 
       const p = platRes.platformConnections || platRes;
@@ -100,13 +101,13 @@ export function DashboardPage() {
       const companiesArray = Array.isArray(compRes) ? compRes : compRes.companies || [];
       setCompanies(companiesArray);
 
-      const updatedUser = userRes?.user || userRes;
+      const updatedUser = userRes ? (userRes.user || userRes) : u;
       if (updatedUser) {
         setUser(updatedUser);
       }
 
       const updatedCache = {
-        user: updatedUser || u,
+        user: updatedUser,
         platforms: p,
         analytics: analyticsRes,
         companies: companiesArray,

@@ -5,14 +5,14 @@ const LEETCODE_GQL = "https://leetcode.com/graphql";
 
 const PROBLEMSET_QUERY = `
 query problemsetQuestionList($categorySlug: String, $limit: Int, $skip: Int, $filters: QuestionListFilterInput) {
-  problemsetQuestionList: problemsetQuestionListV2(categorySlug: $categorySlug, limit: $limit, skip: $skip, filters: $filters) {
-    total: total
-    questions: questions {
+  problemsetQuestionList: questionList(categorySlug: $categorySlug, limit: $limit, skip: $skip, filters: $filters) {
+    total: totalNum
+    questions: data {
       acRate
       difficulty
       title
       titleSlug
-      paidOnly: paidOnly
+      paidOnly: isPaidOnly
       topicTags { name slug }
     }
   }

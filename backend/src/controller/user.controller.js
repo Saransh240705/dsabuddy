@@ -11,6 +11,19 @@ const PLATFORM_SORT_MAP = {
 export const enrichUserWithRanks = async (user) => {
   if (!user) return null;
   const points = user.points ?? 0;
+  const cacheKey = `user:ranks:${user.id}:${points}`;
+
+  try {
+    const cachedRanks = await getCache(cacheKey);
+    if (cachedRanks) {
+      return {
+        ...user,
+        ...cachedRanks,
+      };
+    }
+  } catch (err) {
+    console.error("Error reading user ranks cache:", err);
+  }
 
   const [overallRank, collegeRank, branchRank, yearRank] = await Promise.all([
     prisma.user.count({
@@ -33,12 +46,22 @@ export const enrichUserWithRanks = async (user) => {
       : Promise.resolve(null),
   ]);
 
-  return {
-    ...user,
+  const ranks = {
     overallRank,
     collegeRank,
     branchRank,
     yearRank,
+  };
+
+  try {
+    await setCache(cacheKey, ranks, 300); // cache for 5 minutes
+  } catch (err) {
+    console.error("Error writing user ranks cache:", err);
+  }
+
+  return {
+    ...user,
+    ...ranks,
   };
 };
 
@@ -277,6 +300,7 @@ export const updateMe = async (req, res) => {
     },
   });
 
+  await deleteCacheByPattern(`user:ranks:${userId}:*`);
   const enriched = await enrichUserWithRanks(updated);
   await deleteCacheByPattern("leaderboard:*");
   return res.status(200).json({ user: enriched });

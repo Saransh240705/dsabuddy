@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { PLATFORMS as PLATFORM_ICONS } from '@/utils/platformUtils';
 
 export function PlatformCard({ platform }) {
   const navigate = useNavigate();
@@ -13,6 +14,9 @@ export function PlatformCard({ platform }) {
   const isSynced = platform?.synced !== false;
   const isConnected = platform?.username && platform?.username !== 'Not Connected';
 
+  const platformInfo = PLATFORM_ICONS[platform?.id];
+  const IconComponent = platformInfo?.Icon;
+
   return (
     <div className="bg-[#161B22] rounded-xl p-6 border border-[#1F2937] hover:border-[#35b9f1]/20 transition-all flex flex-col justify-between">
       <div>
@@ -22,12 +26,8 @@ export function PlatformCard({ platform }) {
               className="w-12 h-12 rounded-lg flex items-center justify-center"
               style={{ backgroundColor: `${color}20` }}
             >
-              {platform?.logo ? (
-                <img 
-                  src={platform.logo} 
-                  alt={platform.name} 
-                  className={`w-7 h-7 object-contain ${isConnected ? '' : 'grayscale opacity-40'}`} 
-                />
+              {IconComponent ? (
+                <IconComponent className={`w-7 h-7 ${isConnected ? '' : 'grayscale opacity-40 text-neutral-600'}`} style={{ color }} />
               ) : (
                 <span className="text-xl font-bold" style={{ color }}>{platform?.name?.[0] || 'L'}</span>
               )}

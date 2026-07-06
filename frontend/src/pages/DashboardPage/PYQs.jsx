@@ -210,7 +210,11 @@ export function PYQs({ companies }) {
     const fetchCompanyData = async () => {
       setLoadingCompanyData(true);
       try {
-        const compRes = await apiClient.get(`/companies/${normSelected}`);
+        const [compRes, questionsRes] = await Promise.all([
+          apiClient.get(`/companies/${normSelected}`),
+          apiClient.get(`/companies/${normSelected}/questions`),
+        ]);
+
         if (compRes.company) {
           const c = compRes.company;
           setMetadata({
@@ -234,7 +238,6 @@ export function PYQs({ companies }) {
           setPlacementsInfo(mappedPlacements);
         }
 
-        const questionsRes = await apiClient.get(`/companies/${normSelected}/questions`);
         if (questionsRes.companyQuestions) {
           const mappedQuestions = questionsRes.companyQuestions.map((cq) => ({
             title: cq.question?.title || "",

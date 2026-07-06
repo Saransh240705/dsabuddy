@@ -6,6 +6,7 @@ import { Trophy, Award, Calendar, School, BookOpen, Activity, AlertCircle, Link2
 import { useUserStore } from '@/store/useUserStore';
 
 import { PLATFORMS } from '@/config/constants';
+import { PLATFORMS as PLATFORM_ICONS } from '@/utils/platformUtils';
 
 export function UserProfileModal({ isOpen, onClose, userName }) {
   const { user: currentUser } = useUserStore();
@@ -240,11 +241,12 @@ export function UserProfileModal({ isOpen, onClose, userName }) {
                         <div 
                           className="w-10 h-10 rounded-lg flex items-center justify-center bg-[#0D1117] overflow-hidden"
                         >
-                          <img 
-                            src={conn.logo} 
-                            alt={conn.name} 
-                            className={`w-6 h-6 object-contain ${conn.connected ? '' : 'grayscale opacity-40'}`} 
-                          />
+                          {(() => {
+                            const IconComponent = PLATFORM_ICONS[conn.id]?.Icon;
+                            return IconComponent ? (
+                              <IconComponent className={`w-6 h-6 ${conn.connected ? '' : 'grayscale opacity-40 text-neutral-600'}`} style={{ color: conn.color }} />
+                            ) : null;
+                          })()}
                         </div>
                         <div>
                           <h5 className="text-[#E5E7EB] font-bold text-sm">{conn.name}</h5>

@@ -3,6 +3,7 @@ import { Camera, CheckCircle2, AlertCircle, User, Link2, GraduationCap } from 'l
 import { Card, Button, Input } from '@/components/common';
 import { userService, platformService } from '@/api/services';
 import { BRANCHES, PLATFORMS } from '@/config/constants';
+import { PLATFORMS as PLATFORM_ICONS } from '@/utils/platformUtils';
 import { useUserStore } from '@/store/useUserStore';
 import apiClient from '@/api/client';
 
@@ -357,11 +358,12 @@ export function Settings({ user: propUser, platforms, onUpdate }) {
               >
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-[#161B22] border border-[#1F2937] overflow-hidden shrink-0">
-                    <img
-                      src={platform.logo}
-                      alt={platform.name}
-                      className={`w-6 h-6 object-contain ${platform.synced ? '' : 'grayscale opacity-40'}`}
-                    />
+                    {(() => {
+                      const IconComponent = PLATFORM_ICONS[platform.id]?.Icon;
+                      return IconComponent ? (
+                        <IconComponent className={`w-6 h-6 ${platform.synced ? '' : 'grayscale opacity-40 text-neutral-600'}`} style={{ color: platform.color }} />
+                      ) : null;
+                    })()}
                   </div>
                   <div className="flex-1 min-w-0">
                     <h4 className="text-[#E5E7EB] font-semibold truncate">{platform.name}</h4>
