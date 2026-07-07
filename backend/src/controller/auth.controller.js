@@ -7,6 +7,7 @@ import {
 import { prisma } from "../config/prismaClient.js";
 import { enrichUserWithRanks } from "./user.controller.js";
 import { sendWelcomeEmail } from "./mailerController.js";
+import { deriveGraduationYearFromEmail } from "../utils/graduationYear.js";
 
 export const signup = async (req, res) => {
   const validationResult = await signupPostRequestBodySchema.safeParseAsync(
@@ -33,6 +34,11 @@ export const signup = async (req, res) => {
     return res.status(400).json({ error: "User already exists" });
   }
 
+  const year = deriveGraduationYearFromEmail(email);
+  if (!year) {
+    return res.status(400).json({ error: "Could not determine graduation year from email." });
+  }
+
   const salt = await bcrypt.genSalt(10);
   const passwordHash = await bcrypt.hash(password, salt);
 
@@ -43,6 +49,7 @@ export const signup = async (req, res) => {
       email,
       passwordHash,
       salt,
+      year,
     },
     select: {
       id: true,

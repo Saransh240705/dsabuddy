@@ -30,6 +30,7 @@ import contactRoutes from "./routes/contact.routes.js";
 import sheetRoutes from "./routes/sheet.routes.js";
 import { pointsWorker } from "./queues/pointsWorker.js";
 import { scheduleFanOutJob } from "./queues/pointsQueue.js";
+import { deriveGraduationYearFromEmail } from "./utils/graduationYear.js";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -95,12 +96,17 @@ passport.use(
         let user = await prisma.user.findUnique({ where: { email } });
 
         if (!user) {
+          const year = deriveGraduationYearFromEmail(email);
+          if (!year) {
+            return done(new Error("Could not determine graduation year from email."), null);
+          }
           user = await prisma.user.create({
             data: {
               email,
               name: profile.displayName || profile.emails[0].value.split("@")[0],
               userName: `user_${profile.id}`,
               avatarUrl: profile.photos?.[0]?.value || null,
+              year,
             },
           });
           // Send welcome email asynchronously

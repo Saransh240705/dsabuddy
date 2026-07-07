@@ -2,14 +2,13 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   UserPlus, 
-  IdCard, 
-  Link as LinkIcon, 
-  HelpCircle, 
-  Check, 
-  ArrowRight, 
-  ArrowLeft, 
-  Cpu, 
-  Calendar as CalendarIcon,
+  IdCard,
+  Link,
+  HelpCircle,
+  Check,
+  ArrowRight,
+  ArrowLeft,
+  Cpu,
   Loader2,
   ChevronDown
 } from 'lucide-react';
@@ -38,7 +37,6 @@ export default function OnboardingPage() {
     avatarUrl: '',
     college: 'Netaji Subhas University of Technology',
     branch: '',
-    year: '',
   });
 
   const [platforms, setPlatforms] = useState({
@@ -75,7 +73,6 @@ export default function OnboardingPage() {
             avatarUrl: u.avatarUrl || '',
             college: u.college || 'Netaji Subhas University of Technology',
             branch: u.branch || '',
-            year: u.year || '',
           }));
         }
 
@@ -156,22 +153,9 @@ export default function OnboardingPage() {
     setError(null);
     setWarning(null);
 
-    // Validation for branch and year
+    // Validation for branch
     if (!formData.branch || !formData.branch.trim()) {
       setError("Branch / Stream selection is required.");
-      setLoading(false);
-      return;
-    }
-
-    if (!formData.year || !formData.year.trim()) {
-      setError("Graduation year is required.");
-      setLoading(false);
-      return;
-    }
-
-    const gradYear = formData.year.trim();
-    if (!/^\d{4}$/.test(gradYear)) {
-      setError("Please enter a valid 4-digit graduation year (e.g. 2026).");
       setLoading(false);
       return;
     }
@@ -183,7 +167,6 @@ export default function OnboardingPage() {
         avatarUrl: formData.avatarUrl || null,
         college: formData.college.trim() || null,
         branch: formData.branch.trim() || null,
-        year: gradYear || null,
       });
 
       if (updateRes?.user) {
@@ -361,7 +344,7 @@ export default function OnboardingPage() {
             {/* Sync Platforms Section */}
             <div>
               <div className="flex items-center gap-2 mb-3">
-                <LinkIcon className="w-5 h-5 text-[#35b9f1]" />
+                <Link className="w-5 h-5 text-[#35b9f1]" />
                 <h3 className="text-lg font-bold text-white tracking-tight">
                   Sync Platforms
                 </h3>
@@ -489,23 +472,6 @@ export default function OnboardingPage() {
                     ))}
                   </select>
                   <ChevronDown className="w-4 h-4 text-gray-400 shrink-0 pointer-events-none" />
-                </label>
-              </div>
-
-              {/* Graduation Year */}
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-bold text-gray-400 tracking-wider uppercase">Graduation Year</label>
-                <label className="flex items-center bg-[#0D1117] border border-gray-600 rounded-xl px-5 py-4 shadow-inner onboarding-input-wrapper cursor-text transition-all">
-                  <CalendarIcon className="w-5 h-5 text-gray-400 shrink-0" />
-                  <input 
-                    type="text" 
-                    name="year"
-                    value={formData.year}
-                    onChange={handleInputChange}
-                    placeholder="e.g. 2028"
-                    required
-                    className="bg-transparent border-none outline-none text-white text-sm w-full ml-3 placeholder-gray-500 focus:ring-0 font-medium font-mono"
-                  />
                 </label>
               </div>
 

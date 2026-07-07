@@ -60,7 +60,7 @@ router.get("/google/callback", (req, res, next) => {
         domain: process.env.COOKIE_DOMAIN || undefined,
       });
 
-      const needsOnboarding = !user.branch || !user.year;
+      const needsOnboarding = !user.branch;
       const targetPath = needsOnboarding ? "/onboarding" : "/dashboard";
       return res.redirect(`${state}${targetPath}`);
     });

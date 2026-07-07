@@ -32,7 +32,7 @@ export const updateMeBodySchema = z
     avatarUrl: z.string().url().or(z.string().startsWith("data:")).optional().nullable(),
     college: z.string().min(1).optional().nullable(),
     branch: z.string().min(1).optional().nullable(),
-    year: z.string().min(1).optional().nullable(),
+    // year is derived from email at signup and not user-editable
   })
   .strict();
 

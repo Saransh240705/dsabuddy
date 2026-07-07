@@ -47,7 +47,7 @@ model User {
   avatarUrl String?
   college   String?
   branch    String?
-  year      String?
+  year      String // graduation year, derived from email's "ugYY" admission-year code
   role      String? // e.g. "CS - 2024" (can be derived but stored for convenience)
   branchChangesCount Int @default(0)
 

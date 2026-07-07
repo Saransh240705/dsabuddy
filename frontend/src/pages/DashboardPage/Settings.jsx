@@ -25,7 +25,6 @@ export function Settings({ user: propUser, platforms, onUpdate }) {
     email: user?.email || '',
     avatar: user?.avatarUrl || user?.avatar || '',
     branch: user?.branch || '',
-    year: user?.year || '',
   });
 
   const getMappedPlatforms = (platList) => {
@@ -97,7 +96,6 @@ export function Settings({ user: propUser, platforms, onUpdate }) {
         email: user.email || '',
         avatar: user.avatarUrl || user.avatar || '',
         branch: user.branch || '',
-        year: user.year || '',
       });
     }
   }, [user]);
@@ -129,7 +127,6 @@ export function Settings({ user: propUser, platforms, onUpdate }) {
         name: profileData.name,
         avatarUrl: profileData.avatar || null,
         branch: profileData.branch || null,
-        year: profileData.year || null,
       });
       if (res?.user) {
         useUserStore.getState().setUser(res.user);
@@ -233,9 +230,9 @@ export function Settings({ user: propUser, platforms, onUpdate }) {
                   {profileData.branch}
                 </span>
               )}
-              {profileData.year && (
+              {user?.year && (
                 <span className="px-3 py-1 rounded-full bg-[#0D1117] border border-[#1F2937] text-xs font-mono text-[#9CA3AF]">
-                  {profileData.year}
+                  Batch of {user.year}
                 </span>
               )}
               <span className="px-3 py-1 rounded-full bg-[#0D1117] border border-[#1F2937] text-xs font-mono text-[#9CA3AF]">
@@ -277,38 +274,28 @@ export function Settings({ user: propUser, platforms, onUpdate }) {
               inputClassName="py-2.5 border-[#1F2937] opacity-60 cursor-not-allowed"
             />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-[#E5E7EB] text-sm font-medium mb-2">Branch</label>
-                <select
-                  value={profileData.branch}
-                  onChange={(e) => handleProfileChange('branch', e.target.value)}
-                  disabled={user?.branchChangesCount >= 1}
-                  className={`w-full bg-[#0D1117] border border-[#1F2937] rounded-lg px-4 py-2.5 text-[#E5E7EB] focus:outline-none focus:border-[#35b9f1] transition-colors font-mono cursor-pointer ${
-                    user?.branchChangesCount >= 1 ? 'opacity-60 cursor-not-allowed border-dashed' : ''
-                  }`}
-                >
-                  <option value="" disabled>Select your branch</option>
-                  {BRANCHES.map((b) => (
-                    <option key={b} value={b} className="bg-[#161B22]">
-                      {b}
-                    </option>
-                  ))}
-                </select>
-                {user?.branchChangesCount >= 1 && (
-                  <p className="text-[#6B7280] text-[10px] mt-1 font-mono">
-                    Branch can only be changed once after onboarding.
-                  </p>
-                )}
-              </div>
-
-              <Input
-                label="Year"
-                value={profileData.year}
-                onChange={(e) => handleProfileChange('year', e.target.value)}
-                labelClassName="font-medium text-[#E5E7EB] normal-case text-sm mb-2 block"
-                inputClassName="py-2.5 border-[#1F2937]"
-              />
+            <div>
+              <label className="block text-[#E5E7EB] text-sm font-medium mb-2">Branch</label>
+              <select
+                value={profileData.branch}
+                onChange={(e) => handleProfileChange('branch', e.target.value)}
+                disabled={user?.branchChangesCount >= 1}
+                className={`w-full bg-[#0D1117] border border-[#1F2937] rounded-lg px-4 py-2.5 text-[#E5E7EB] focus:outline-none focus:border-[#35b9f1] transition-colors font-mono cursor-pointer ${
+                  user?.branchChangesCount >= 1 ? 'opacity-60 cursor-not-allowed border-dashed' : ''
+                }`}
+              >
+                <option value="" disabled>Select your branch</option>
+                {BRANCHES.map((b) => (
+                  <option key={b} value={b} className="bg-[#161B22]">
+                    {b}
+                  </option>
+                ))}
+              </select>
+              {user?.branchChangesCount >= 1 && (
+                <p className="text-[#6B7280] text-[10px] mt-1 font-mono">
+                  Branch can only be changed once after onboarding.
+                </p>
+              )}
             </div>
 
             {profileError && (
