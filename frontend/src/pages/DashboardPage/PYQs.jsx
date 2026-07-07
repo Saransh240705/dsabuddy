@@ -82,11 +82,28 @@ export function PYQs({ companies }) {
       );
   }, [combinedCompaniesMap]);
 
+  const [companySearchInput, setCompanySearchInput] = useState("");
   const [companySearchQuery, setCompanySearchQuery] = useState("");
   const [branchFilter, setBranchFilter] = useState("all");
   const [cgpaFilter, setCgpaFilter] = useState("all");
   const [showFilters, setShowFilters] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setCompanySearchQuery(companySearchInput);
+    }, 300);
+    return () => clearTimeout(handler);
+  }, [companySearchInput]);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setSearchQuery(searchInput);
+    }, 300);
+    return () => clearTimeout(handler);
+  }, [searchInput]);
+
   const [difficultyFilter, setDifficultyFilter] = useState("all");
   const [activeTab, setActiveTab] = useState("overview");
 
@@ -262,7 +279,16 @@ export function PYQs({ companies }) {
   const [experiences, setExperiences] = useState([]);
   const [selectedExperience, setSelectedExperience] = useState(null);
   const [loadingExperiences, setLoadingExperiences] = useState(false);
+  const [experienceSearchInput, setExperienceSearchInput] = useState("");
   const [experienceSearchQuery, setExperienceSearchQuery] = useState("");
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setExperienceSearchQuery(experienceSearchInput);
+    }, 300);
+    return () => clearTimeout(handler);
+  }, [experienceSearchInput]);
+
   const [creatingExperience, setCreatingExperience] = useState(false);
   const loggedInUser = useUserStore((state) => state.user);
 
@@ -667,8 +693,8 @@ export function PYQs({ companies }) {
               <input
                 type="text"
                 placeholder="Search companies (e.g., Goldman Sachs, JPMorgan, Apple...)"
-                value={companySearchQuery}
-                onChange={(e) => setCompanySearchQuery(e.target.value)}
+                value={companySearchInput}
+                onChange={(e) => setCompanySearchInput(e.target.value)}
                 className="w-full bg-[#161B22] border border-[#1F2937] rounded-xl pl-11 pr-4 py-2.5 text-xs text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-[#35b9f1]/40 focus:ring-1 focus:ring-[#35b9f1]/40 transition-all"
               />
             </div>
@@ -750,6 +776,7 @@ export function PYQs({ companies }) {
                 onClick={() => {
                   setBranchFilter("all");
                   setCgpaFilter("all");
+                  setCompanySearchInput("");
                   setCompanySearchQuery("");
                 }}
                 className="text-[#35b9f1] hover:underline cursor-pointer font-bold uppercase text-[10px] tracking-wider"
@@ -997,6 +1024,7 @@ export function PYQs({ companies }) {
             onClick={() => {
               setActiveTab(tab.id);
               setDifficultyFilter("all");
+              setSearchInput("");
               setSearchQuery("");
             }}
             className={`px-6 py-3.5 text-xs tracking-widest uppercase transition-all duration-200 cursor-pointer border-b-2 font-bold ${
@@ -1298,8 +1326,8 @@ export function PYQs({ companies }) {
               <input
                 type="text"
                 placeholder="Search problems..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
                 className="bg-neutral-950 border border-neutral-900 rounded-lg pl-9 pr-4 py-2 text-xs text-neutral-300 placeholder-neutral-600 focus:outline-none focus:border-[#35b9f1]/40 transition-all w-48"
               />
             </div>
@@ -1695,8 +1723,8 @@ export function PYQs({ companies }) {
                 <Input
                   type="text"
                   placeholder="Search experiences..."
-                  value={experienceSearchQuery}
-                  onChange={(e) => setExperienceSearchQuery(e.target.value)}
+                  value={experienceSearchInput}
+                  onChange={(e) => setExperienceSearchInput(e.target.value)}
                   icon={Search}
                   className="w-full md:w-80"
                   inputClassName="py-2.5 bg-neutral-950 border-neutral-900 rounded-xl placeholder-neutral-600 text-white"

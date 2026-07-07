@@ -5,16 +5,24 @@ import { Seo } from '@/components/common';
 import { breadcrumbSchema } from '@/config/seo';
 import { questionService } from '@/api/services/questionService';
 import { useUserStore } from '@/store/useUserStore';
-import { DIFFICULTY_COLORS, PLATFORM_LABELS } from '@/config/constants';
+import { PLATFORM_LABELS } from '@/config/constants';
 import { PLATFORMS as PLATFORM_ICONS } from '@/utils';
-import { Search, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, ChevronLeft, ChevronRight, Circle, CheckCircle2 } from 'lucide-react';
 import {
   DifficultyBadge,
-  StatusBadge,
   TagPill,
 } from './components';
 
 const PAGE_SIZE = 50;
+
+const DIFFICULTY_FILTER_CLASSES = {
+  '':       'bg-violet-500/15 text-violet-400 border-violet-500/35',
+  EASY:     'bg-green-500/10 text-green-500 border-green-500/25',
+  MEDIUM:   'bg-yellow-500/10 text-yellow-500 border-yellow-500/25',
+  HARD:     'bg-red-500/10 text-red-500 border-red-500/25',
+};
+
+const ROW_GRID = 'grid grid-cols-[24px_1fr_70px] md:grid-cols-[24px_1fr_110px_120px_100px]';
 
 export default function QuestionsPage() {
   const navigate = useNavigate();
@@ -56,6 +64,13 @@ export default function QuestionsPage() {
     return () => clearTimeout(debounceRef.current);
   }, [searchInput, q, setParam]);
 
+  // Sync search input with URL search param only when they differ (trimmed)
+  useEffect(() => {
+    if (searchInput.trim() !== q.trim()) {
+      setSearchInput(q);
+    }
+  }, [q]);
+
   // Fetch questions
   useEffect(() => {
     let cancelled = false;
@@ -92,7 +107,7 @@ export default function QuestionsPage() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: '#000000', color: '#fff', display: 'flex', flexDirection: 'column' }}>
+    <div className="flex min-h-screen flex-col bg-black text-white">
       <Seo
         title="DSA Questions Bank"
         description="Browse and filter thousands of DSA questions from LeetCode, Codeforces, CodeChef and GFG. Filter by difficulty, topic, and company."
@@ -104,29 +119,23 @@ export default function QuestionsPage() {
       />
       <Navbar />
 
-      <main style={{ flex: 1, maxWidth: '1280px', margin: '0 auto', padding: '120px 24px 64px', width: '100%' }}>
+      <main className="mx-auto w-full max-w-[1280px] flex-1 px-6 pb-16 pt-[120px]">
 
         {/* Header */}
-        <div style={{ marginBottom: '32px' }}>
-          <h1 style={{ fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 800, margin: '0 0 10px', letterSpacing: '-0.02em' }}>
+        <div className="mb-8">
+          <h1 className="mb-2.5 text-[clamp(28px,4vw,40px)] font-extrabold tracking-tight">
             Questions Bank
           </h1>
-          <p style={{ color: '#94a3b8', fontSize: '15px', margin: 0 }}>
+          <p className="m-0 text-[15px] text-slate-400">
             {total > 0 ? `${total.toLocaleString()} questions` : 'Browse questions'} from LeetCode, Codeforces, CodeChef & GFG
           </p>
         </div>
 
         {/* Filters bar */}
-        <div style={{
-          display: 'flex', gap: '12px', marginBottom: '24px',
-          flexWrap: 'wrap', alignItems: 'center',
-        }}>
+        <div className="mb-6 flex flex-wrap items-center gap-3">
           {/* Search */}
-          <div style={{ position: 'relative', flex: '1', minWidth: '220px', maxWidth: '420px' }}>
-            <span style={{
-              position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)',
-              color: '#64748b', pointerEvents: 'none',
-            }}>
+          <div className="relative min-w-[220px] max-w-[420px] flex-1">
+            <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500">
               <Search size={16} />
             </span>
             <input
@@ -134,14 +143,7 @@ export default function QuestionsPage() {
               placeholder="Search questions…"
               value={searchInput}
               onChange={e => setSearchInput(e.target.value)}
-              style={{
-                width: '100%', background: '#0f0f1a', border: '1px solid #1e1e3a',
-                borderRadius: '10px', padding: '10px 14px 10px 40px', color: '#fff',
-                fontSize: '14px', outline: 'none', boxSizing: 'border-box',
-                transition: 'border-color 0.2s',
-              }}
-              onFocus={e => e.target.style.borderColor = '#7c3aed'}
-              onBlur={e => e.target.style.borderColor = '#1e1e3a'}
+              className="w-full rounded-[10px] border border-[#1e1e3a] bg-[#0f0f1a] py-2.5 pl-10 pr-3.5 text-sm text-white outline-none transition-colors focus:border-violet-600"
             />
           </div>
 
@@ -150,19 +152,11 @@ export default function QuestionsPage() {
             <button
               key={d}
               onClick={() => setParam('difficulty', d)}
-              style={{
-                padding: '9px 18px', borderRadius: '10px', fontSize: '13px', fontWeight: 600,
-                cursor: 'pointer', transition: 'all 0.15s', border: '1px solid',
-                background: difficulty === d
-                  ? (d ? DIFFICULTY_COLORS[d].bg : 'rgba(124,58,237,0.15)')
-                  : 'transparent',
-                color: difficulty === d
-                  ? (d ? DIFFICULTY_COLORS[d].text : '#a78bfa')
-                  : '#64748b',
-                borderColor: difficulty === d
-                  ? (d ? DIFFICULTY_COLORS[d].border : 'rgba(124,58,237,0.35)')
-                  : '#1e1e3a',
-              }}
+              className={`rounded-[10px] border px-4.5 py-2 text-[13px] font-semibold transition-all ${
+                difficulty === d
+                  ? DIFFICULTY_FILTER_CLASSES[d]
+                  : 'border-[#1e1e3a] bg-transparent text-slate-500'
+              }`}
             >
               {d || 'All'}
             </button>
@@ -170,21 +164,11 @@ export default function QuestionsPage() {
 
           {/* Active Tag filter */}
           {tag && (
-            <div style={{
-              display: 'inline-flex', alignItems: 'center', gap: '6px',
-              background: 'rgba(124,58,237,0.15)', border: '1px solid rgba(124,58,237,0.3)',
-              borderRadius: '10px', padding: '9px 14px', color: '#a78bfa',
-              fontSize: '13px', fontWeight: 600,
-            }}>
+            <div className="inline-flex items-center gap-1.5 rounded-[10px] border border-violet-500/30 bg-violet-500/15 px-3.5 py-2 text-[13px] font-semibold text-violet-400">
               <span>Tag: {tag}</span>
               <button
                 onClick={() => setParam('tag', '')}
-                style={{
-                  background: 'none', border: 'none', color: '#a78bfa',
-                  cursor: 'pointer', padding: 0, display: 'inline-flex',
-                  alignItems: 'center', fontSize: '16px', fontWeight: 'bold',
-                  marginLeft: '4px',
-                }}
+                className="ml-1 inline-flex items-center border-none bg-transparent p-0 text-base font-bold text-violet-400"
               >
                 ×
               </button>
@@ -193,7 +177,7 @@ export default function QuestionsPage() {
 
           {/* Total count chip */}
           {!loading && (
-            <span style={{ marginLeft: 'auto', color: '#475569', fontSize: '13px' }}>
+            <span className="ml-auto text-[13px] text-slate-600">
               Page {page} of {totalPages}
             </span>
           )}
@@ -201,54 +185,35 @@ export default function QuestionsPage() {
 
         {/* Error state */}
         {error && (
-          <div style={{
-            background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)',
-            borderRadius: '12px', padding: '16px 20px', color: '#fca5a5', marginBottom: '24px',
-          }}>
+          <div className="mb-6 rounded-xl border border-red-500/20 bg-red-500/10 px-5 py-4 text-red-300">
             {error}
           </div>
         )}
 
         {/* Table */}
-        <div style={{
-          background: '#0a0a14', border: '1px solid #1a1a2e',
-          borderRadius: '16px', overflow: 'hidden',
-        }}>
+        <div className="overflow-hidden rounded-2xl border border-[#1a1a2e] bg-[#0a0a14]">
           {/* Table header */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: '48px 1fr 110px 120px 100px 80px',
-            padding: '12px 20px', borderBottom: '1px solid #1a1a2e',
-            color: '#475569', fontSize: '12px', fontWeight: 600, letterSpacing: '0.06em',
-            textTransform: 'uppercase',
-          }}>
-            <span>#</span>
+          <div className={`${ROW_GRID} border-b border-[#1a1a2e] px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600`}>
+            <span />
             <span>Title</span>
-            <span>Difficulty</span>
-            <span>Platform</span>
-            <span>Acceptance</span>
-            <span style={{ textAlign: 'right' }}>Status</span>
+            <span className="text-right">Difficulty</span>
+            <span className="hidden md:block">Platform</span>
+            <span className="hidden md:block">Acceptance</span>
           </div>
 
           {/* Loading skeleton */}
           {loading && Array.from({ length: 10 }).map((_, i) => (
-            <div key={i} style={{
-              display: 'grid', gridTemplateColumns: '48px 1fr 110px 120px 100px 80px',
-              padding: '14px 20px', borderBottom: '1px solid #111120',
-              alignItems: 'center', gap: '8px',
-            }}>
-              <div style={{ height: '16px', width: '28px', background: '#1a1a2e', borderRadius: '4px', animation: 'pulse 1.5s ease-in-out infinite' }} />
-              <div style={{ height: '16px', width: '70%', background: '#1a1a2e', borderRadius: '4px', animation: 'pulse 1.5s ease-in-out infinite' }} />
-              <div style={{ height: '22px', width: '64px', background: '#1a1a2e', borderRadius: '6px', animation: 'pulse 1.5s ease-in-out infinite' }} />
-              <div style={{ height: '16px', width: '80px', background: '#1a1a2e', borderRadius: '4px', animation: 'pulse 1.5s ease-in-out infinite' }} />
-              <div style={{ height: '16px', width: '48px', background: '#1a1a2e', borderRadius: '4px', animation: 'pulse 1.5s ease-in-out infinite' }} />
-              <div style={{ height: '22px', width: '60px', background: '#1a1a2e', borderRadius: '6px', animation: 'pulse 1.5s ease-in-out infinite', marginLeft: 'auto' }} />
+            <div key={i} className={`${ROW_GRID} items-center gap-2 border-b border-[#111120] px-5 py-3.5`}>
+              <div className="h-5 w-5 animate-pulse rounded-full bg-[#1a1a2e]" />
+              <div className="h-4 w-[70%] animate-pulse rounded bg-[#1a1a2e]" />
+              <div className="ml-auto h-4 w-14 animate-pulse rounded bg-[#1a1a2e]" />
+              <div className="hidden h-4 w-20 animate-pulse rounded bg-[#1a1a2e] md:block" />
+              <div className="hidden h-4 w-12 animate-pulse rounded bg-[#1a1a2e] md:block" />
             </div>
           ))}
 
           {/* Rows */}
-          {!loading && questions.map((q, idx) => {
-            const userStatus = q.userStatuses?.[0]?.status || null;
+          {!loading && questions.map((q) => {
             const tags = q.tags || [];
             const platform = q.sourcePlatform;
             const platformKey = platform?.toLowerCase();
@@ -257,45 +222,38 @@ export default function QuestionsPage() {
             const acceptancePct = q.acceptanceRate != null
               ? `${(q.acceptanceRate * (q.acceptanceRate > 1 ? 1 : 100)).toFixed(1)}%`
               : '—';
-            const rowNum = (page - 1) * PAGE_SIZE + idx + 1;
+            const solved = q.userStatuses?.[0]?.status === 'SOLVED';
 
             return (
               <div
                 key={q.id}
                 onClick={() => navigate(`/questions/${q.id}`)}
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: '48px 1fr 110px 120px 100px 80px',
-                  padding: '14px 20px', borderBottom: '1px solid #111120',
-                  alignItems: 'center', cursor: 'pointer',
-                  transition: 'background 0.15s',
-                }}
-                onMouseEnter={e => e.currentTarget.style.background = '#0d0d1f'}
-                onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                className={`${ROW_GRID} cursor-pointer items-center border-b border-[#111120] px-5 py-3.5 transition-colors hover:bg-[#0d0d1f]`}
               >
-                {/* # */}
-                <span style={{ color: '#334155', fontSize: '13px' }}>{rowNum}</span>
+                {/* Checklist */}
+                <div className="flex items-center">
+                  {solved
+                    ? <CheckCircle2 className="h-5 w-5 text-green-500" />
+                    : <Circle className="h-5 w-5 text-slate-700" />
+                  }
+                </div>
 
                 {/* Title + tags */}
-                <div style={{ minWidth: 0 }}>
-                  <div style={{
-                    fontWeight: 600, fontSize: '14px', color: '#e2e8f0',
-                    whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
-                    marginBottom: tags.length ? '5px' : 0,
-                  }}>
+                <div className="min-w-0">
+                  <div className={`truncate text-sm font-semibold text-slate-200 ${tags.length ? 'mb-1.5' : ''}`}>
                     {q.displayName || q.title}
                     {q.paidOnly && (
-                      <span style={{ marginLeft: '8px', fontSize: '10px', color: '#eab308', fontWeight: 700 }}>
+                      <span className="ml-2 text-[10px] font-bold text-yellow-500">
                         💰 PAID
                       </span>
                     )}
                   </div>
                   {tags.length > 0 && (
-                    <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
-                      {tags.slice(0, 3).map(t => <TagPill key={t} name={t} />)}
-                      {tags.length > 3 && (
-                        <span style={{ fontSize: '11px', color: '#475569', alignSelf: 'center' }}>
-                          +{tags.length - 3}
+                    <div className="flex flex-wrap gap-1">
+                      {tags.slice(0, 2).map(t => <TagPill key={t} name={t} />)}
+                      {tags.length > 2 && (
+                        <span className="self-center text-[11px] text-slate-600">
+                          +{tags.length - 2}
                         </span>
                       )}
                     </div>
@@ -303,42 +261,31 @@ export default function QuestionsPage() {
                 </div>
 
                 {/* Difficulty */}
-                <div><DifficultyBadge difficulty={q.difficulty} /></div>
+                <div className="text-right"><DifficultyBadge difficulty={q.difficulty} /></div>
 
                 {/* Platform */}
-                <div style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="hidden items-center md:flex">
                   {PlatformIconComponent ? (
                     <span style={{ color: platformInfo.color }} title={platformInfo.name}>
-                      <PlatformIconComponent className="w-5 h-5" />
+                      <PlatformIconComponent className="h-5 w-5" />
                     </span>
                   ) : (
-                    <span style={{ color: '#64748b', fontSize: '13px' }}>
+                    <span className="text-[13px] text-slate-500">
                       {PLATFORM_LABELS[platform] || platform || '—'}
                     </span>
                   )}
                 </div>
 
                 {/* Acceptance */}
-                <span style={{ color: '#64748b', fontSize: '13px' }}>{acceptancePct}</span>
-
-                {/* Status */}
-                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                  {userStatus
-                    ? <StatusBadge status={userStatus} />
-                    : <span style={{ color: '#1e293b', fontSize: '12px' }}>—</span>
-                  }
-                </div>
+                <span className="hidden text-[13px] text-slate-500 md:block">{acceptancePct}</span>
               </div>
             );
           })}
 
           {/* Empty state */}
           {!loading && questions.length === 0 && (
-            <div style={{
-              padding: '80px 20px', textAlign: 'center',
-              color: '#334155', fontSize: '15px',
-            }}>
-              <div style={{ fontSize: '48px', marginBottom: '16px' }}>🔍</div>
+            <div className="px-5 py-20 text-center text-[15px] text-slate-700">
+              <div className="mb-4 text-5xl">🔍</div>
               No questions found. Try adjusting your filters.
             </div>
           )}
@@ -346,17 +293,14 @@ export default function QuestionsPage() {
 
         {/* Pagination */}
         {totalPages > 1 && !loading && (
-          <div style={{
-            display: 'flex', justifyContent: 'center', alignItems: 'center',
-            gap: '8px', marginTop: '32px', flexWrap: 'wrap',
-          }}>
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
             <PaginationButton disabled={page <= 1} onClick={() => goPage(page - 1)}>
               <ChevronLeft size={16} /> Prev
             </PaginationButton>
 
             {paginationRange(page, totalPages).map((p, i) =>
               p === '…' ? (
-                <span key={`e${i}`} style={{ color: '#334155', padding: '0 4px' }}>…</span>
+                <span key={`e${i}`} className="px-1 text-slate-700">…</span>
               ) : (
                 <PaginationButton key={p} active={p === page} onClick={() => goPage(p)}>
                   {p}
@@ -372,13 +316,6 @@ export default function QuestionsPage() {
       </main>
 
       <Footer />
-
-      <style>{`
-        @keyframes pulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.4; }
-        }
-      `}</style>
     </div>
   );
 }
@@ -388,17 +325,15 @@ function PaginationButton({ children, active, disabled, onClick }) {
     <button
       onClick={onClick}
       disabled={disabled}
-      style={{
-        display: 'flex', alignItems: 'center', gap: '4px',
-        padding: '8px 14px', borderRadius: '10px', fontSize: '13px', fontWeight: 600,
-        cursor: disabled ? 'not-allowed' : 'pointer',
-        border: '1px solid',
-        background: active ? '#7c3aed' : 'transparent',
-        color: active ? '#fff' : disabled ? '#1e293b' : '#94a3b8',
-        borderColor: active ? '#7c3aed' : '#1a1a2e',
-        transition: 'all 0.15s',
-        opacity: disabled ? 0.4 : 1,
-      }}
+      className={`flex items-center gap-1 rounded-[10px] border px-3.5 py-2 text-[13px] font-semibold transition-all ${
+        disabled ? 'cursor-not-allowed opacity-40' : 'cursor-pointer'
+      } ${
+        active
+          ? 'border-violet-600 bg-violet-600 text-white'
+          : disabled
+            ? 'border-[#1a1a2e] text-slate-800'
+            : 'border-[#1a1a2e] text-slate-400'
+      }`}
     >
       {children}
     </button>

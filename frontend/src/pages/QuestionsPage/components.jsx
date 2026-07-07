@@ -1,25 +1,34 @@
-import { DIFFICULTY_COLORS, STATUS_COLORS } from '@/config/constants';
+const DIFFICULTY_TEXT_CLASSES = {
+  EASY:   'text-green-500',
+  MEDIUM: 'text-yellow-500',
+  HARD:   'text-red-500',
+};
+
+const DIFFICULTY_BOX_CLASSES = {
+  EASY:   'bg-green-500/10 text-green-500 border-green-500/25',
+  MEDIUM: 'bg-yellow-500/10 text-yellow-500 border-yellow-500/25',
+  HARD:   'bg-red-500/10 text-red-500 border-red-500/25',
+};
+
+const STATUS_CLASSES = {
+  SOLVED:    'bg-green-500/15 text-green-500',
+  ATTEMPTED: 'bg-yellow-500/15 text-yellow-500',
+  SKIPPED:   'bg-slate-400/15 text-slate-400',
+};
 
 export function DifficultyBadge({ difficulty }) {
-  const c = DIFFICULTY_COLORS[difficulty] || DIFFICULTY_COLORS.MEDIUM;
+  const c = DIFFICULTY_TEXT_CLASSES[difficulty] || DIFFICULTY_TEXT_CLASSES.MEDIUM;
   return (
-    <span style={{
-      background: c.bg, color: c.text, border: `1px solid ${c.border}`,
-      borderRadius: '6px', padding: '2px 10px', fontSize: '12px', fontWeight: 600,
-      letterSpacing: '0.02em', whiteSpace: 'nowrap',
-    }}>
+    <span className={`inline-block whitespace-nowrap text-xs font-semibold tracking-wide ${c}`}>
       {difficulty}
     </span>
   );
 }
 
 export function DifficultyBadgeLarge({ difficulty }) {
-  const c = DIFFICULTY_COLORS[difficulty] || DIFFICULTY_COLORS.MEDIUM;
+  const c = DIFFICULTY_BOX_CLASSES[difficulty] || DIFFICULTY_BOX_CLASSES.MEDIUM;
   return (
-    <span style={{
-      background: c.bg, color: c.text, border: `1px solid ${c.border}`,
-      borderRadius: '8px', padding: '4px 14px', fontSize: '13px', fontWeight: 700,
-    }}>
+    <span className={`inline-block rounded-lg border px-3.5 py-1 text-[13px] font-bold ${c}`}>
       {difficulty}
     </span>
   );
@@ -27,12 +36,9 @@ export function DifficultyBadgeLarge({ difficulty }) {
 
 export function StatusBadge({ status }) {
   if (!status) return null;
-  const c = STATUS_COLORS[status] || STATUS_COLORS.SKIPPED;
+  const c = STATUS_CLASSES[status] || STATUS_CLASSES.SKIPPED;
   return (
-    <span style={{
-      background: c.bg, color: c.text,
-      borderRadius: '6px', padding: '2px 8px', fontSize: '11px', fontWeight: 600,
-    }}>
+    <span className={`inline-block rounded-md px-2 py-0.5 text-[11px] font-semibold ${c}`}>
       {status}
     </span>
   );
@@ -40,12 +46,7 @@ export function StatusBadge({ status }) {
 
 export function TagPill({ name }) {
   return (
-    <span style={{
-      background: 'rgba(124,58,237,0.12)', color: '#a78bfa',
-      border: '1px solid rgba(124,58,237,0.2)',
-      borderRadius: '20px', padding: '2px 9px', fontSize: '11px', fontWeight: 500,
-      whiteSpace: 'nowrap',
-    }}>
+    <span className="whitespace-nowrap rounded-full border border-violet-500/20 bg-violet-500/10 px-2.5 py-0.5 text-[11px] font-medium text-violet-400">
       {name}
     </span>
   );
@@ -56,11 +57,8 @@ export function TagPill({ name }) {
 /** Section heading + content wrapper used in the detail page. */
 export function Section({ title, children }) {
   return (
-    <div style={{ marginBottom: '32px' }}>
-      <h2 style={{
-        fontSize: '16px', fontWeight: 700, color: '#94a3b8',
-        margin: '0 0 14px', textTransform: 'uppercase', letterSpacing: '0.08em',
-      }}>
+    <div className="mb-8">
+      <h2 className="mb-3.5 text-base font-bold uppercase tracking-wider text-slate-400">
         {title}
       </h2>
       {children}
@@ -71,9 +69,9 @@ export function Section({ title, children }) {
 /** Animated skeleton pulse block. */
 export function SkeletonBlock({ width = '100%', height = '16px', radius = '4px' }) {
   return (
-    <div style={{
-      width, height, background: '#1a1a2e', borderRadius: radius,
-      animation: 'pulse 1.5s ease-in-out infinite',
-    }} />
+    <div
+      className="animate-pulse bg-[#1a1a2e]"
+      style={{ width, height, borderRadius: radius }}
+    />
   );
 }

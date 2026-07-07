@@ -8,6 +8,7 @@ import { useUserStore } from '@/store/useUserStore';
 import { STATUS_COLORS, STATUS_OPTIONS } from '@/config/constants';
 import { ChevronLeft, ExternalLink } from 'lucide-react';
 import {
+  DifficultyBadge,
   DifficultyBadgeLarge,
   Section,
 } from './components';
@@ -63,7 +64,7 @@ export default function QuestionDetailPage() {
   ];
 
   return (
-    <div style={{ minHeight: '100vh', background: '#000000', color: '#fff', display: 'flex', flexDirection: 'column' }}>
+    <div className="flex min-h-screen flex-col bg-black text-white">
       <Seo
         title={question ? question.displayName || question.title : 'Question'}
         description={question ? `Solve ${question.title} on DSABuddy. Difficulty: ${question.difficulty}. Platform: ${question.sourcePlatform || 'LeetCode'}.` : ''}
@@ -76,78 +77,72 @@ export default function QuestionDetailPage() {
       />
       <Navbar />
 
-      <main style={{ flex: 1, maxWidth: '1100px', margin: '0 auto', padding: '120px 24px 64px', width: '100%' }}>
+      <main className="mx-auto w-full max-w-[1100px] flex-1 px-4 pb-12 pt-[100px] sm:px-6 sm:pt-[120px] sm:pb-16">
 
         {/* Back link */}
         <button
           onClick={() => navigate(-1)}
-          style={{
-            display: 'inline-flex', alignItems: 'center', gap: '6px',
-            color: '#64748b', fontSize: '14px', fontWeight: 500, background: 'none',
-            border: 'none', cursor: 'pointer', padding: '4px 0', marginBottom: '28px',
-            transition: 'color 0.15s',
-          }}
-          onMouseEnter={e => e.currentTarget.style.color = '#a78bfa'}
-          onMouseLeave={e => e.currentTarget.style.color = '#64748b'}
+          className="mb-7 inline-flex items-center gap-1.5 border-none bg-none py-1 text-sm font-medium text-slate-500 transition-colors hover:text-violet-400"
         >
           <ChevronLeft size={16} strokeWidth={2.5} /> Back to Questions
         </button>
 
         {/* Loading */}
         {loading && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div className="flex flex-col gap-4">
             {[240, 32, 180, 120].map((w, i) => (
-              <div key={i} style={{ height: i === 0 ? '40px' : '20px', width: `${w}px`, maxWidth: '100%', background: '#0f0f1a', borderRadius: '8px', animation: 'pulse 1.5s ease-in-out infinite' }} />
+              <div
+                key={i}
+                className="max-w-full animate-pulse rounded-lg bg-[#0f0f1a]"
+                style={{ height: i === 0 ? '40px' : '20px', width: `${w}px` }}
+              />
             ))}
           </div>
         )}
 
         {/* Error */}
         {error && (
-          <div style={{
-            background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)',
-            borderRadius: '12px', padding: '24px', color: '#fca5a5', textAlign: 'center',
-          }}>
+          <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-6 text-center text-red-300">
             {error}
           </div>
         )}
 
         {/* Content */}
         {question && !loading && (
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '28px', alignItems: 'start' }}>
+          <div className="grid grid-cols-1 items-start gap-7 lg:grid-cols-[1fr_300px]">
 
             {/* Left — main content */}
             <div>
               {/* Title row */}
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '14px', flexWrap: 'wrap', marginBottom: '20px' }}>
-                <h1 style={{ fontSize: 'clamp(22px, 3.5vw, 32px)', fontWeight: 800, margin: 0, flex: 1, lineHeight: 1.2, letterSpacing: '-0.02em' }}>
+              <div className="mb-5 flex flex-wrap items-start gap-3.5">
+                <h1 className="m-0 flex-1 text-[clamp(22px,3.5vw,32px)] font-extrabold leading-tight tracking-tight">
                   {question.displayName || question.title}
                 </h1>
-              <DifficultyBadgeLarge difficulty={question.difficulty} />
+                <DifficultyBadgeLarge difficulty={question.difficulty} />
               </div>
 
               {/* Meta row */}
-              <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', marginBottom: '24px', alignItems: 'center' }}>
+              <div className="mb-6 flex flex-wrap items-center gap-4">
                 {question.sourcePlatform && (
-                  <span style={{ color: '#64748b', fontSize: '13px' }}>
+                  <span className="text-[13px] text-slate-500">
                     {question.sourcePlatform}
                     {question.sourceId && ` #${question.sourceId}`}
                   </span>
                 )}
                 {question.acceptanceRate != null && (
-                  <span style={{ color: '#64748b', fontSize: '13px' }}>
-                    Acceptance: <span style={{ color: '#94a3b8' }}>
+                  <span className="text-[13px] text-slate-500">
+                    Acceptance: <span className="text-slate-400">
                       {(question.acceptanceRate * (question.acceptanceRate > 1 ? 1 : 100)).toFixed(1)}%
                     </span>
                   </span>
                 )}
                 {question.sourceRating && (
-                  <span style={{ color: '#64748b', fontSize: '13px' }}>
-                    Rating: <span style={{ color: '#94a3b8' }}>{question.sourceRating}</span>
+                  <span className="text-[13px] text-slate-500">
+                    Rating: <span className="text-slate-400">{question.sourceRating}</span>
                   </span>
                 )}
                 {question.paidOnly && (
-                  <span style={{ color: '#eab308', fontSize: '12px', fontWeight: 700 }}>💰 Premium</span>
+                  <span className="text-xs font-bold text-yellow-500">💰 Premium</span>
                 )}
                 {externalUrl && (
                   <a
@@ -155,14 +150,7 @@ export default function QuestionDetailPage() {
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={e => e.stopPropagation()}
-                    style={{
-                      display: 'inline-flex', alignItems: 'center', gap: '5px',
-                      color: '#7c3aed', fontSize: '13px', fontWeight: 600, textDecoration: 'none',
-                      background: 'rgba(124,58,237,0.1)', border: '1px solid rgba(124,58,237,0.2)',
-                      borderRadius: '8px', padding: '4px 12px', transition: 'all 0.15s',
-                    }}
-                    onMouseEnter={e => e.currentTarget.style.background = 'rgba(124,58,237,0.2)'}
-                    onMouseLeave={e => e.currentTarget.style.background = 'rgba(124,58,237,0.1)'}
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-violet-500/20 bg-violet-500/10 px-3 py-1 text-[13px] font-semibold text-violet-600 no-underline transition-colors hover:bg-violet-500/20"
                   >
                     Solve Now <ExternalLink size={14} />
                   </a>
@@ -171,19 +159,12 @@ export default function QuestionDetailPage() {
 
               {/* Tags */}
               {tags.length > 0 && (
-                <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '28px' }}>
+                <div className="mb-7 flex flex-wrap gap-1.5">
                   {tags.map(t => (
                     <Link
                       key={t}
                       to={`/questions?tag=${encodeURIComponent(t)}`}
-                      style={{
-                        background: 'rgba(124,58,237,0.1)', color: '#a78bfa',
-                        border: '1px solid rgba(124,58,237,0.2)',
-                        borderRadius: '20px', padding: '4px 12px', fontSize: '12px',
-                        fontWeight: 500, textDecoration: 'none', transition: 'all 0.15s',
-                      }}
-                      onMouseEnter={e => e.currentTarget.style.background = 'rgba(124,58,237,0.2)'}
-                      onMouseLeave={e => e.currentTarget.style.background = 'rgba(124,58,237,0.1)'}
+                      className="rounded-full border border-violet-500/20 bg-violet-500/10 px-3 py-1 text-xs font-medium text-violet-400 no-underline transition-colors hover:bg-violet-500/20"
                     >
                       {t}
                     </Link>
@@ -195,7 +176,7 @@ export default function QuestionDetailPage() {
               {question.statement && (
                 <Section title="Problem Statement">
                   <div
-                    style={{ color: '#cbd5e1', fontSize: '15px', lineHeight: 1.75, whiteSpace: 'pre-wrap' }}
+                    className="whitespace-pre-wrap text-[15px] leading-[1.75] text-slate-300"
                     dangerouslySetInnerHTML={{ __html: question.statement }}
                   />
                 </Section>
@@ -205,12 +186,11 @@ export default function QuestionDetailPage() {
               {question.examples && (
                 <Section title="Examples">
                   {(Array.isArray(question.examples) ? question.examples : [question.examples]).map((ex, i) => (
-                    <div key={i} style={{
-                      background: '#0a0a14', border: '1px solid #1a1a2e', borderRadius: '10px',
-                      padding: '16px 18px', marginBottom: '12px', fontSize: '13px',
-                      fontFamily: 'monospace', color: '#94a3b8', whiteSpace: 'pre-wrap',
-                    }}>
-                      <span style={{ color: '#64748b', fontSize: '11px', fontWeight: 700, letterSpacing: '0.08em', display: 'block', marginBottom: '8px' }}>
+                    <div
+                      key={i}
+                      className="mb-3 whitespace-pre-wrap rounded-[10px] border border-[#1a1a2e] bg-[#0a0a14] px-[18px] py-4 font-mono text-[13px] text-slate-400"
+                    >
+                      <span className="mb-2 block text-[11px] font-bold tracking-wider text-slate-500">
                         EXAMPLE {i + 1}
                       </span>
                       {typeof ex === 'string' ? ex : JSON.stringify(ex, null, 2)}
@@ -222,11 +202,7 @@ export default function QuestionDetailPage() {
               {/* Constraints */}
               {question.constraints && (
                 <Section title="Constraints">
-                  <div style={{
-                    background: '#0a0a14', border: '1px solid #1a1a2e', borderRadius: '10px',
-                    padding: '16px 18px', fontSize: '13px', fontFamily: 'monospace',
-                    color: '#94a3b8', whiteSpace: 'pre-wrap',
-                  }}>
+                  <div className="whitespace-pre-wrap rounded-[10px] border border-[#1a1a2e] bg-[#0a0a14] px-[18px] py-4 font-mono text-[13px] text-slate-400">
                     {typeof question.constraints === 'string'
                       ? question.constraints
                       : JSON.stringify(question.constraints, null, 2)}
@@ -237,22 +213,15 @@ export default function QuestionDetailPage() {
               {/* Related questions */}
               {related.length > 0 && (
                 <Section title="Related Questions">
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <div className="flex flex-col gap-2">
                     {related.map(r => (
                       <Link
                         key={r.id}
                         to={`/questions/${r.id}`}
-                        style={{
-                          display: 'flex', alignItems: 'center', gap: '12px',
-                          background: '#0a0a14', border: '1px solid #1a1a2e',
-                          borderRadius: '10px', padding: '12px 16px', textDecoration: 'none',
-                          transition: 'all 0.15s',
-                        }}
-                        onMouseEnter={e => e.currentTarget.style.borderColor = '#7c3aed'}
-                        onMouseLeave={e => e.currentTarget.style.borderColor = '#1a1a2e'}
+                        className="flex items-center gap-3 rounded-[10px] border border-[#1a1a2e] bg-[#0a0a14] px-4 py-3 no-underline transition-colors hover:border-violet-600"
                       >
                         <DifficultyBadge difficulty={r.difficulty} />
-                        <span style={{ color: '#e2e8f0', fontSize: '14px', fontWeight: 500 }}>{r.title}</span>
+                        <span className="text-sm font-medium text-slate-200">{r.title}</span>
                       </Link>
                     ))}
                   </div>
@@ -261,17 +230,14 @@ export default function QuestionDetailPage() {
             </div>
 
             {/* Right sidebar */}
-            <div style={{ position: 'sticky', top: '100px' }}>
+            <div className="static top-[100px] lg:sticky">
 
               {/* Mark status */}
-              <div style={{
-                background: '#0a0a14', border: '1px solid #1a1a2e',
-                borderRadius: '14px', padding: '20px', marginBottom: '20px',
-              }}>
-                <p style={{ color: '#64748b', fontSize: '12px', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', margin: '0 0 14px' }}>
+              <div className="mb-5 rounded-2xl border border-[#1a1a2e] bg-[#0a0a14] p-5">
+                <p className="m-0 mb-3.5 text-xs font-bold uppercase tracking-wider text-slate-500">
                   My Status
                 </p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <div className="flex flex-col gap-2">
                   {STATUS_OPTIONS.map(s => {
                     const c = STATUS_COLORS[s];
                     const isActive = currentStatus === s;
@@ -280,29 +246,26 @@ export default function QuestionDetailPage() {
                         key={s}
                         onClick={() => handleSetStatus(s)}
                         disabled={statusLoading || !user}
+                        className="flex w-full items-center gap-2 rounded-[10px] border px-4 py-2.5 text-left text-[13px] font-bold transition-colors disabled:cursor-not-allowed"
                         style={{
-                          padding: '10px 16px', borderRadius: '10px', fontSize: '13px', fontWeight: 700,
                           cursor: statusLoading || !user ? 'not-allowed' : 'pointer',
-                          border: `1px solid ${isActive ? c.border : '#1e1e3a'}`,
+                          borderColor: isActive ? c.border : '#1e1e3a',
                           background: isActive ? c.bg : 'transparent',
                           color: isActive ? c.text : '#475569',
-                          transition: 'all 0.15s', textAlign: 'left', width: '100%',
-                          display: 'flex', alignItems: 'center', gap: '8px',
                           opacity: statusLoading ? 0.6 : 1,
                         }}
                       >
-                        <span style={{
-                          width: '8px', height: '8px', borderRadius: '50%',
-                          background: isActive ? c.text : '#1e293b',
-                          flexShrink: 0,
-                        }} />
+                        <span
+                          className="h-2 w-2 flex-shrink-0 rounded-full"
+                          style={{ background: isActive ? c.text : '#1e293b' }}
+                        />
                         {s}
                       </button>
                     );
                   })}
                   {!user && (
-                    <p style={{ color: '#334155', fontSize: '12px', margin: '4px 0 0', textAlign: 'center' }}>
-                      <Link to="/login" style={{ color: '#7c3aed' }}>Log in</Link> to track your progress
+                    <p className="m-0 mt-1 text-center text-xs text-slate-700">
+                      <Link to="/login" className="text-violet-600">Log in</Link> to track your progress
                     </p>
                   )}
                 </div>
@@ -310,35 +273,22 @@ export default function QuestionDetailPage() {
 
               {/* Companies */}
               {companies.length > 0 && (
-                <div style={{
-                  background: '#0a0a14', border: '1px solid #1a1a2e',
-                  borderRadius: '14px', padding: '20px',
-                }}>
-                  <p style={{ color: '#64748b', fontSize: '12px', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', margin: '0 0 14px' }}>
+                <div className="rounded-2xl border border-[#1a1a2e] bg-[#0a0a14] p-5">
+                  <p className="m-0 mb-3.5 text-xs font-bold uppercase tracking-wider text-slate-500">
                     Asked By
                   </p>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <div className="flex flex-col gap-2">
                     {companies.map(({ company, frequency }) => (
                       <Link
                         key={company.id}
                         to={`/dashboard/pyqs/${company.slug}`}
-                        style={{
-                          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                          background: '#0d0d1f', border: '1px solid #1a1a2e',
-                          borderRadius: '8px', padding: '9px 12px', textDecoration: 'none',
-                          transition: 'border-color 0.15s',
-                        }}
-                        onMouseEnter={e => e.currentTarget.style.borderColor = '#7c3aed'}
-                        onMouseLeave={e => e.currentTarget.style.borderColor = '#1a1a2e'}
+                        className="flex items-center justify-between rounded-lg border border-[#1a1a2e] bg-[#0d0d1f] px-3 py-2.5 no-underline transition-colors hover:border-violet-600"
                       >
-                        <span style={{ color: '#cbd5e1', fontSize: '13px', fontWeight: 600 }}>
+                        <span className="text-[13px] font-semibold text-slate-300">
                           {company.name}
                         </span>
                         {frequency && (
-                          <span style={{
-                            fontSize: '11px', color: '#7c3aed', fontWeight: 600,
-                            background: 'rgba(124,58,237,0.1)', borderRadius: '4px', padding: '2px 7px',
-                          }}>
+                          <span className="rounded bg-violet-500/10 px-1.5 py-0.5 text-[11px] font-semibold text-violet-600">
                             {frequency}
                           </span>
                         )}
@@ -354,14 +304,6 @@ export default function QuestionDetailPage() {
       </main>
 
       <Footer />
-
-      <style>{`
-        @keyframes pulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.4; }
-        }
-      `}</style>
     </div>
   );
 }
-

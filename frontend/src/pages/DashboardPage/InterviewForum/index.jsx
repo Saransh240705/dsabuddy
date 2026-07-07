@@ -299,7 +299,16 @@ export function InterviewForum() {
   const [submittingPost, setSubmittingPost] = useState(false);
   const [submittingComment, setSubmittingComment] = useState(false);
   
+  const [searchInput, setSearchInput] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setSearchQuery(searchInput);
+    }, 350);
+    return () => clearTimeout(handler);
+  }, [searchInput]);
+
   const [selectedTag, setSelectedTag] = useState('');
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [editingPostId, setEditingPostId] = useState(null);
@@ -883,8 +892,8 @@ export function InterviewForum() {
             <Input
               type="text"
               placeholder="Search experiences..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
               icon={Search}
               className="w-full md:w-80"
               inputClassName="py-2.5 bg-[#161B22] border-[#1F2937] rounded-xl"
