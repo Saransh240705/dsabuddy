@@ -1,5 +1,6 @@
 import { ChevronRight } from "lucide-react";
 import { LogoImage } from "./LogoImage";
+import { getCompanyLogoUrl } from "./companyLogos";
 
 export function CompanyHeader({
   onBack,
@@ -11,6 +12,8 @@ export function CompanyHeader({
   onTabChange,
   questionsCount,
 }) {
+  const logoUrl = companyDetail?.logoUrl || getCompanyLogoUrl(selectedCompany);
+
   return (
     <>
       {/* ── Breadcrumb ── */}
@@ -30,10 +33,10 @@ export function CompanyHeader({
       {/* ── Company header ── */}
       <div className="flex items-center gap-4 mb-8">
         <div className="w-24 h-24 bg-white rounded-lg flex items-center justify-center flex-shrink-0 text-black font-extrabold text-base select-none shadow-md overflow-hidden">
-          {companyDetail?.logoUrl ? (
+          {logoUrl ? (
             <LogoImage
               name={selectedCompany}
-              logoUrl={companyDetail.logoUrl}
+              logoUrl={logoUrl}
               size="w-36 h-36 text-base"
             />
           ) : (

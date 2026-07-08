@@ -15,7 +15,6 @@ import {
   CompanyExperiencesTab,
   parseMarkdownToHTML,
   buildCommentTree,
-  normalizeName,
   getCompanyLogoUrl,
 } from "./components/pyqs";
 
@@ -167,7 +166,13 @@ export function PYQs() {
   }, [companyName, companyPage, companySearchQuery, branchFilter, cgpaFilter]);
 
   // ── Route validation and data loading (placed at the top to satisfy Rules of Hooks) ────────────────
-  const normSelected = companyName ? normalizeName(companyName) : "";
+  const slugify = (name) =>
+    (name || "")
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "");
+  const normSelected = companyName ? slugify(companyName) : "";
   const [companyDetail, setCompanyDetail] = useState(null);
   const selectedCompany = companyDetail ? companyDetail.name : (companyName || "");
 
@@ -661,7 +666,7 @@ export function PYQs() {
         setCompanyPage={setCompanyPage}
         companiesPerPage={companiesPerPage}
         totalCompanyPages={totalCompanyPages}
-        onCompanyClick={(company) => navigate(`/dashboard/pyqs/${company.name}`)}
+        onCompanyClick={(company) => navigate(`/dashboard/pyqs/${company.slug}`)}
       />
     );
   }
