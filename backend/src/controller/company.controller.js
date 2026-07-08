@@ -17,26 +17,53 @@ const buildCompaniesWhere = ({ search, branch, cgpa }) => {
     andFilters.push({ name: { contains: search, mode: "insensitive" } });
   }
 
+  const placementConditions = [];
+
   if (branch && branch !== "all") {
     const targetCode = branch.toLowerCase();
-    const branchOr = [
-      { placements: { some: { eligibleBranches: { has: targetCode } } } },
-      { placements: { some: { eligibleBranches: { has: "all" } } } },
-    ];
-    if (DEFAULT_ELIGIBLE_BRANCHES.includes(targetCode)) {
-      branchOr.push({ placements: { none: {} } });
-    }
-    andFilters.push({ OR: branchOr });
+    placementConditions.push({
+      OR: [
+        { eligibleBranches: { has: targetCode } },
+        { eligibleBranches: { has: "all" } },
+      ],
+    });
   }
 
   if (cgpa !== undefined) {
-    andFilters.push({
+    placementConditions.push({
       OR: [
-        { placements: { none: {} } },
-        { placements: { some: { minCgpa: { lte: cgpa } } } },
-        { placements: { every: { minCgpa: null } } },
+        { minCgpa: { lte: cgpa } },
+        { minCgpa: null },
       ],
     });
+  }
+
+  if (placementConditions.length > 0) {
+    const somePlacement = {
+      placements: {
+        some: {
+          AND: placementConditions,
+        },
+      },
+    };
+
+    let allowNoPlacements = false;
+    if (branch && branch !== "all") {
+      const targetCode = branch.toLowerCase();
+      if (DEFAULT_ELIGIBLE_BRANCHES.includes(targetCode)) {
+        allowNoPlacements = true;
+      }
+    } else {
+      allowNoPlacements = true;
+    }
+
+    if (allowNoPlacements) {
+      andFilters.push({
+        OR: [somePlacement, { placements: { none: {} } }],
+      });
+    } else {
+      andFilters.push(somePlacement);
+    }
   }
 
   return { AND: andFilters };
