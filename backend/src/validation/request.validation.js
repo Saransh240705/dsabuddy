@@ -7,6 +7,7 @@ export const signupPostRequestBodySchema = z.object({
         message: "Only NSUT email addresses (@nsut.ac.in) are allowed."
     }),
     password: z.string().min(6),
+    year: z.string().optional(),
 })
 
 export const loginPostRequestBodySchema = z.object({

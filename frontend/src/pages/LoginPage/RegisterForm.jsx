@@ -17,10 +17,27 @@ export const RegisterForm = () => {
     email: "",
     password: "",
     confirmPassword: "",
+    year: "",
   });
 
   const [error, setError] = useState();
   const [loading, setLoading] = useState(false);
+
+  const UG_YEAR_PATTERN = /(?:^|[._-])ug(\d{2})/i;
+  const PG_YEAR_PATTERN = /(?:^|[._-])pg(\d{2})/i;
+
+  const deriveYear = (email) => {
+    const emailStr = String(email || "");
+    const ugMatch = emailStr.match(UG_YEAR_PATTERN);
+    if (ugMatch) return String(2004 + parseInt(ugMatch[1], 10));
+    const pgMatch = emailStr.match(PG_YEAR_PATTERN);
+    if (pgMatch) return String(2002 + parseInt(pgMatch[1], 10));
+    return null;
+  };
+
+  const emailEndsWithNsut = formData.email.toLowerCase().endsWith("@nsut.ac.in");
+  const canParseYear = deriveYear(formData.email);
+  const showManualYear = emailEndsWithNsut && !canParseYear;
 
   const handleGoogleLogin = () => {
     window.location.href = `${API_BASE_URL}/oauth/google`;
@@ -44,6 +61,18 @@ export const RegisterForm = () => {
       return;
     }
 
+    if (showManualYear) {
+      if (!formData.year.trim()) {
+        setError("Please enter your graduation year.");
+        return;
+      }
+      const parsed = parseInt(formData.year, 10);
+      if (isNaN(parsed) || parsed < 2020 || parsed > 2100) {
+        setError("Please enter a valid graduation year between 2020 and 2100.");
+        return;
+      }
+    }
+
     if (formData.password !== formData.confirmPassword) {
       setError("Password do not match");
       return;
@@ -55,6 +84,7 @@ export const RegisterForm = () => {
         email: formData.email,
         password: formData.password,
         userName: formData.userName,
+        ...(showManualYear ? { year: formData.year } : {}),
       });
       setUser(res.user || res);
       navigate("/onboarding");
@@ -100,6 +130,18 @@ export const RegisterForm = () => {
             onChange={handleChange}
             required
           />
+
+          {showManualYear && (
+            <FormField
+              label="Graduation Year"
+              type="text"
+              placeholder="e.g. 2027"
+              name="year"
+              value={formData.year}
+              onChange={handleChange}
+              required
+            />
+          )}
 
           <div className="w-full flex flex-col sm:flex-row gap-4">
             <FormField

@@ -18,7 +18,7 @@ export const signup = async (req, res) => {
     return res.status(400).json({ error: validationResult.error.format() });
   }
 
-  const { name, userName, email, password } = validationResult.data;
+  const { name, userName, email, password, year: manualYear } = validationResult.data;
 
   const existingByEmail = await prisma.user.findUnique({
     where: { email },
@@ -34,9 +34,17 @@ export const signup = async (req, res) => {
     return res.status(400).json({ error: "User already exists" });
   }
 
-  const year = deriveGraduationYearFromEmail(email);
+  let year = deriveGraduationYearFromEmail(email);
   if (!year) {
-    return res.status(400).json({ error: "Could not determine graduation year from email." });
+    if (manualYear) {
+      const parsedYear = parseInt(manualYear, 10);
+      if (isNaN(parsedYear) || parsedYear < 2020 || parsedYear > 2100) {
+        return res.status(400).json({ error: "Please provide a valid graduation year between 2020 and 2100." });
+      }
+      year = String(parsedYear);
+    } else {
+      return res.status(400).json({ error: "Could not determine graduation year from email. Please provide graduation year manually." });
+    }
   }
 
   const salt = await bcrypt.genSalt(10);
