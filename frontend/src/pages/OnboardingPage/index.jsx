@@ -31,12 +31,26 @@ export default function OnboardingPage() {
   const [error, setError] = useState(null);
   const [warning, setWarning] = useState(null);
 
+  // Helper to get default college name from email
+  const getDefaultCollege = (email) => {
+    if (!email) return 'Netaji Subhas University of Technology';
+    const lower = email.toLowerCase();
+    if (lower.endsWith('nsut.ac.in')) {
+      return 'Netaji Subhas University of Technology';
+    }
+    if (lower.endsWith('dtu.ac.in')) {
+      return 'Delhi Technological University';
+    }
+    return '';
+  };
+
   // Form states
   const [formData, setFormData] = useState({
     userName: '',
     avatarUrl: '',
-    college: 'Netaji Subhas University of Technology',
+    college: user?.college || getDefaultCollege(user?.email),
     branch: '',
+    year: user?.year === 'N/A' ? '' : (user?.year || ''),
   });
 
   const [platforms, setPlatforms] = useState({
@@ -71,8 +85,9 @@ export default function OnboardingPage() {
             ...prev,
             userName: isDefaultUserName ? '' : (u.userName || ''),
             avatarUrl: u.avatarUrl || '',
-            college: u.college || 'Netaji Subhas University of Technology',
+            college: u.college || getDefaultCollege(u.email),
             branch: u.branch || '',
+            year: u.year === 'N/A' ? '' : (u.year || ''),
           }));
         }
 
@@ -162,12 +177,29 @@ export default function OnboardingPage() {
 
     try {
       // 1. Save profile details
-      const updateRes = await userService.updateProfile({
+      const updateData = {
         userName: formData.userName.trim(),
         avatarUrl: formData.avatarUrl || null,
         college: formData.college.trim() || null,
         branch: formData.branch.trim() || null,
-      });
+      };
+
+      if (user?.year === 'N/A' || !user?.year) {
+        if (!formData.year || !formData.year.trim()) {
+          setError("Graduation year is required.");
+          setLoading(false);
+          return;
+        }
+        const parsedYear = parseInt(formData.year, 10);
+        if (isNaN(parsedYear) || parsedYear < 2020 || parsedYear > 2100) {
+          setError("Please enter a valid graduation year between 2020 and 2100.");
+          setLoading(false);
+          return;
+        }
+        updateData.year = String(parsedYear);
+      }
+
+      const updateRes = await userService.updateProfile(updateData);
 
       if (updateRes?.user) {
         setUser(updateRes.user);
@@ -452,6 +484,19 @@ export default function OnboardingPage() {
             {/* Inputs */}
             <div className="space-y-8 pt-4">
 
+              {/* College */}
+              <div className="flex flex-col gap-1.5 animate-fadeIn">
+                <label className="text-xs font-bold text-gray-400 tracking-wider uppercase">College / University</label>
+                <Input
+                  name="college"
+                  value={formData.college}
+                  onChange={handleInputChange}
+                  required
+                  placeholder="e.g. Netaji Subhas University of Technology"
+                  inputClassName="py-4 border-gray-600 rounded-xl focus:border-[#35b9f1]"
+                />
+              </div>
+
               {/* Branch */}
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-bold text-gray-400 tracking-wider uppercase">Branch</label>
@@ -474,6 +519,21 @@ export default function OnboardingPage() {
                   <ChevronDown className="w-4 h-4 text-gray-400 shrink-0 pointer-events-none" />
                 </label>
               </div>
+
+              {/* Graduation Year */}
+              {(user?.year === 'N/A' || !user?.year) && (
+                <div className="flex flex-col gap-1.5 animate-fadeIn">
+                  <label className="text-xs font-bold text-gray-400 tracking-wider uppercase">Graduation Year</label>
+                  <Input
+                    name="year"
+                    value={formData.year}
+                    onChange={handleInputChange}
+                    required
+                    placeholder="e.g. 2027"
+                    inputClassName="py-4 border-gray-600 rounded-xl focus:border-[#35b9f1]"
+                  />
+                </div>
+              )}
 
             </div>
 

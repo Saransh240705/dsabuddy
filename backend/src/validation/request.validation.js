@@ -3,8 +3,19 @@ import { z } from 'zod';
 export const signupPostRequestBodySchema = z.object({
     name: z.string(),
     userName: z.string(),
-    email: z.string().email().refine(val => val.toLowerCase().endsWith("@nsut.ac.in"), {
-        message: "Only NSUT email addresses (@nsut.ac.in) are allowed."
+    email: z.string().email().refine(val => {
+        const lower = val.toLowerCase();
+        const parts = lower.split('@');
+        if (parts.length !== 2) return false;
+        const domain = parts[1];
+        return (
+            domain === "nsut.ac.in" ||
+            domain === "dtu.ac.in" ||
+            domain.endsWith(".nsut.ac.in") ||
+            domain.endsWith(".dtu.ac.in")
+        );
+    }, {
+        message: "Only NSUT (@nsut.ac.in) and DTU (@dtu.ac.in) email addresses are allowed."
     }),
     password: z.string().min(6),
     year: z.string().optional(),

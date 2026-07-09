@@ -53,8 +53,8 @@ export const updateMeBodySchema = z
       .nullable(),
     college: z.string().min(1).optional().nullable(),
     branch: z.string().min(1).optional().nullable(),
+    year: z.string().optional(),
     socialLinks: socialLinksSchema.optional(),
-    // year is derived from email at signup and not user-editable
   })
   .strict();
 

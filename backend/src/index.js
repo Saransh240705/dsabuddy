@@ -79,15 +79,26 @@ passport.use(
           return done(new Error("No email found in Google profile"), null);
         }
         const email = profile.emails[0].value.toLowerCase();
-        if (!email.endsWith("@nsut.ac.in")) {
-          return done(new Error("Only NSUT email addresses (@nsut.ac.in) are allowed."), null);
+        const parts = email.split('@');
+        if (parts.length !== 2) {
+          return done(new Error("Invalid email format"), null);
+        }
+        const domain = parts[1];
+        const isAllowedEmail = 
+          domain === "nsut.ac.in" || 
+          domain === "dtu.ac.in" || 
+          domain.endsWith(".nsut.ac.in") || 
+          domain.endsWith(".dtu.ac.in");
+
+        if (!isAllowedEmail) {
+          return done(new Error("Only NSUT (@nsut.ac.in) and DTU (@dtu.ac.in) email addresses are allowed."), null);
         }
         let user = await prisma.user.findUnique({ where: { email } });
 
         if (!user) {
-          const year = deriveGraduationYearFromEmail(email);
+          let year = deriveGraduationYearFromEmail(email);
           if (!year) {
-            return done(new Error("Could not determine graduation year from email."), null);
+            year = "N/A";
           }
           user = await prisma.user.create({
             data: {

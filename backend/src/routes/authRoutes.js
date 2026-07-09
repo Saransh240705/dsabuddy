@@ -39,7 +39,7 @@ router.get("/google/callback", (req, res, next) => {
   passport.authenticate("google", { session: false }, (err, user, info) => {
     if (err || !user) {
       const errMsg = err?.message || "";
-      const errCode = errMsg.includes("NSUT") ? "email_not_nsut" : "auth_failed";
+      const errCode = errMsg.includes("NSUT") || errMsg.includes("academic") ? "email_not_allowed" : "auth_failed";
       return res.redirect(`${state}/login?error=${errCode}`);
     }
 
@@ -65,7 +65,7 @@ router.get("/google/callback", (req, res, next) => {
 // Failed login
 router.get("/fail", (req, res) => {
   const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
-  res.redirect(`${frontendUrl}/login?error=email_not_nsut`);
+  res.redirect(`${frontendUrl}/login?error=email_not_allowed`);
 });
 
 // Logout — clear the JWT cookie (auth is stateless, so there's no session to destroy)

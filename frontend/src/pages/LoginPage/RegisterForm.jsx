@@ -35,9 +35,22 @@ export const RegisterForm = () => {
     return null;
   };
 
-  const emailEndsWithNsut = formData.email.toLowerCase().endsWith("@nsut.ac.in");
+  const isAllowedEmail = (email) => {
+    const lower = String(email || "").toLowerCase();
+    const parts = lower.split('@');
+    if (parts.length !== 2) return false;
+    const domain = parts[1];
+    return (
+      domain === "nsut.ac.in" ||
+      domain === "dtu.ac.in" ||
+      domain.endsWith(".nsut.ac.in") ||
+      domain.endsWith(".dtu.ac.in")
+    );
+  };
+
+  const allowedEmail = isAllowedEmail(formData.email);
   const canParseYear = deriveYear(formData.email);
-  const showManualYear = emailEndsWithNsut && !canParseYear;
+  const showManualYear = allowedEmail && !canParseYear;
 
   const handleGoogleLogin = () => {
     window.location.href = `${API_BASE_URL}/oauth/google`;
@@ -56,8 +69,8 @@ export const RegisterForm = () => {
     e.preventDefault();
     setError("");
 
-    if (!formData.email.toLowerCase().endsWith("@nsut.ac.in")) {
-      setError("Only NSUT email addresses (@nsut.ac.in) are allowed to register.");
+    if (!isAllowedEmail(formData.email)) {
+      setError("Only NSUT (@nsut.ac.in) and DTU (@dtu.ac.in) email addresses are allowed to register.");
       return;
     }
 

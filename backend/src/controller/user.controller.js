@@ -327,7 +327,7 @@ export const updateMe = async (req, res) => {
 
   const currentUser = await prisma.user.findUnique({
     where: { id: userId },
-    select: { branch: true, branchChangesCount: true },
+    select: { branch: true, branchChangesCount: true, year: true },
   });
 
   if (!currentUser) return res.status(404).json({ error: "User not found" });
@@ -347,6 +347,17 @@ export const updateMe = async (req, res) => {
       }
       updateData.branchChangesCount = { increment: 1 };
     }
+  }
+
+  if (updateData.year !== undefined && updateData.year !== currentUser.year) {
+    if (currentUser.year && currentUser.year !== "N/A") {
+      return res.status(400).json({ error: "Graduation year cannot be changed once set." });
+    }
+    const parsedYear = parseInt(updateData.year, 10);
+    if (isNaN(parsedYear) || parsedYear < 2020 || parsedYear > 2100) {
+      return res.status(400).json({ error: "Please provide a valid graduation year between 2020 and 2100." });
+    }
+    updateData.year = String(parsedYear);
   }
 
   let updated;
