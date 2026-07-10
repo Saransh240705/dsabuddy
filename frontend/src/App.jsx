@@ -45,14 +45,16 @@ function PublicRoute({ children }) {
 function App() {
   const user = useUserStore((state) => state.user);
   const setUser = useUserStore((state) => state.setUser);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (user) {
-      userService.getMe()
-        .then(res => setUser(res.user || res))
-        .catch(() => {});
-    }
+    userService.getMe()
+      .then(res => setUser(res.user || res))
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, []);
+
+  if (loading) return null;
 
   return (
     <Router>
