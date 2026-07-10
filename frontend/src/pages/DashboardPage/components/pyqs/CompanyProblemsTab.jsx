@@ -25,6 +25,7 @@ export function CompanyProblemsTab({
   setQuestionPage,
   questionsPerPage,
   totalQuestionPages,
+  showStats = true,
 }) {
   return (
     <div className="font-mono">
@@ -34,7 +35,7 @@ export function CompanyProblemsTab({
             {subTitle || "Software Engineering Opportunities"}
           </p>
         </div>
-        {placementStats?.maxCtc && (
+        {showStats && placementStats?.maxCtc && (
           <div className="text-left md:text-right">
             <span className="text-xs text-neutral-500 block mb-1 font-mono">
               MAX CTC *

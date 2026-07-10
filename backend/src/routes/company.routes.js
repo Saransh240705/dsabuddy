@@ -32,13 +32,14 @@ import {
 
 const router = Router();
 
-router.get("/", validate({ query: listCompaniesQuerySchema }), listCompanies);
+router.get("/", authMiddleware, validate({ query: listCompaniesQuerySchema }), listCompanies);
 router.get(
   "/:slug/questions",
+  authMiddleware,
   validate({ params: companySlugParamSchema }),
   listCompanyQuestions
 );
-router.get("/:slug", validate({ params: companySlugParamSchema }), getCompanyBySlug);
+router.get("/:slug", authMiddleware, validate({ params: companySlugParamSchema }), getCompanyBySlug);
 
 router.post(
   "/",

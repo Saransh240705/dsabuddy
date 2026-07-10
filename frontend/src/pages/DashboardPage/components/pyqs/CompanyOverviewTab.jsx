@@ -11,6 +11,7 @@ export function CompanyOverviewTab({
   questionsCount,
   onViewProblems,
   showEligibility = true,
+  showStats = true,
 }) {
   return (
     <div className="flex flex-col lg:flex-row gap-8">
@@ -113,7 +114,7 @@ export function CompanyOverviewTab({
         )}
 
         {/* Placement History */}
-        {placementStats && (
+        {showStats && placementStats && (
           <div className="border border-neutral-900 bg-neutral-950/10 rounded-xl p-5">
             <p className="text-xs tracking-wider uppercase text-neutral-500 mb-4 font-bold">
               Placements
@@ -171,13 +172,15 @@ export function CompanyOverviewTab({
         )}
 
         {/* Disclaimer Footnote */}
-        <div className="border border-neutral-900/60 bg-neutral-950/5 rounded-xl p-5">
-          <p className="text-[10px] text-neutral-500 leading-relaxed">
-            * Note: CGPA requirements and CTC stats are based on historical
-            placement history and are subject to change for upcoming
-            recruiting seasons.
-          </p>
-        </div>
+        {(showEligibility || showStats) && (
+          <div className="border border-neutral-900/60 bg-neutral-950/5 rounded-xl p-5">
+            <p className="text-[10px] text-neutral-500 leading-relaxed">
+              * Note: CGPA requirements and CTC stats are based on historical
+              placement history and are subject to change for upcoming
+              recruiting seasons.
+            </p>
+          </div>
+        )}
 
         {/* CTA */}
         {questionsCount > 0 && (

@@ -764,6 +764,7 @@ export function PYQs() {
           questionsCount={questions.length}
           onViewProblems={() => setActiveTab("problems")}
           showEligibility={isNsutUser}
+          showStats={isNsutUser}
         />
       )}
 
@@ -781,6 +782,7 @@ export function PYQs() {
           setQuestionPage={setQuestionPage}
           questionsPerPage={questionsPerPage}
           totalQuestionPages={totalQuestionPages}
+          showStats={isNsutUser}
         />
       )}
 

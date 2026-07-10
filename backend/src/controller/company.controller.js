@@ -123,62 +123,79 @@ export const getCompanyBySlug = async (req, res) => {
 
   const cacheKey = `company:${slug}`;
 
+  let companyData;
   const cachedCompany = await getCache(cacheKey);
 
   if (cachedCompany) {
-    return res.status(200).json(cachedCompany);
+    companyData = cachedCompany.company;
+  } else {
+    const company = await prisma.company.findUnique({
+      where: { slug },
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        questionCount: true,
+        logoUrl: true,
+        interviewSets: {
+          orderBy: { createdAt: "desc" },
+          select: {
+            id: true,
+            name: true,
+            tag: true,
+            lastUpdated: true,
+            easyCount: true,
+            easyTotal: true,
+            mediumCount: true,
+            mediumTotal: true,
+            hardCount: true,
+            hardTotal: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+        },
+        placements: {
+          select: {
+            role: true,
+            ctcLpa: true,
+            stipendMonth: true,
+            type: true,
+            category: true,
+            eligibleBranches: true,
+            minCgpa: true,
+          },
+        },
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+
+    if (!company) {
+      return res.status(404).json({ error: "Company not found" });
+    }
+
+    const response = { company };
+    await setCache(cacheKey, response, 300);
+    companyData = company;
   }
 
-  const company = await prisma.company.findUnique({
-    where: { slug },
-    select: {
-      id: true,
-      name: true,
-      slug: true,
-      questionCount: true,
-      logoUrl: true,
-      interviewSets: {
-        orderBy: { createdAt: "desc" },
-        select: {
-          id: true,
-          name: true,
-          tag: true,
-          lastUpdated: true,
-          easyCount: true,
-          easyTotal: true,
-          mediumCount: true,
-          mediumTotal: true,
-          hardCount: true,
-          hardTotal: true,
-          createdAt: true,
-          updatedAt: true,
-        },
-      },
-      placements: {
-        select: {
-          role: true,
-          ctcLpa: true,
-          stipendMonth: true,
-          type: true,
-          category: true,
-          eligibleBranches: true,
-          minCgpa: true,
-        },
-      },
-      createdAt: true,
-      updatedAt: true,
-    },
-  });
+  // Clone to avoid mutating in-memory cache directly
+  const responseCompany = JSON.parse(JSON.stringify(companyData));
 
-  if (!company) {
-    return res.status(404).json({ error: "Company not found" });
+  // Check if user is NSUT
+  const isNsut = !!(req.user && req.user.email?.toLowerCase().endsWith("nsut.ac.in"));
+
+  if (!isNsut && responseCompany.placements) {
+    responseCompany.placements = responseCompany.placements.map(p => ({
+      ...p,
+      ctcLpa: null,
+      stipendMonth: null,
+      minCgpa: null,
+      eligibleBranches: [],
+    }));
   }
 
-  const response = { company };
-
-  await setCache(cacheKey, response, 300);
-
-  return res.status(200).json(response);
+  return res.status(200).json({ company: responseCompany });
 };
 
 export const createCompany = async (req, res) => {
