@@ -13,7 +13,13 @@ export const authMiddleware = async (req, res, next) => {
         req.user = decoded;
         return next();
     } catch (error) {
-        return res.status(401).json({ error: "Invalid or expired token" });
+        res.clearCookie("token", {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "lax",
+            domain: process.env.NODE_ENV === "production" ? process.env.COOKIE_DOMAIN : undefined,
+        });
+        return next();
     }
 }
 

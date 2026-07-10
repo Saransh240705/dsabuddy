@@ -94,7 +94,7 @@ export const signup = async (req, res) => {
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
     maxAge: 7 * 24 * 60 * 60 * 1000,
-    domain: process.env.COOKIE_DOMAIN || undefined,
+    domain: process.env.NODE_ENV === "production" ? process.env.COOKIE_DOMAIN : undefined,
   });
 
   return res
@@ -160,7 +160,7 @@ export const login = async (req, res) => {
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
     maxAge: 7 * 24 * 60 * 60 * 1000,
-    domain: process.env.COOKIE_DOMAIN || undefined,
+    domain: process.env.NODE_ENV === "production" ? process.env.COOKIE_DOMAIN : undefined,
   });
 
   return res.status(200).json({ status: "success" });
@@ -172,7 +172,7 @@ export const logoutUser = async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
-      domain: process.env.COOKIE_DOMAIN || undefined,
+      domain: process.env.NODE_ENV === "production" ? process.env.COOKIE_DOMAIN : undefined,
     });
     return res
       .status(200)

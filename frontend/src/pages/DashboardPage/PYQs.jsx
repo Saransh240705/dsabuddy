@@ -7,6 +7,7 @@ import { customCompanyDetails } from "../../data/company_details";
 import Fuse from "fuse.js";
 import { forumService } from "@/api/services/forumService";
 import { useUserStore } from "@/store/useUserStore";
+import { isNsutOnly } from "@/utils";
 import {
   CompanyDirectory,
   CompanyHeader,
@@ -271,6 +272,7 @@ export function PYQs() {
 
   const [creatingExperience, setCreatingExperience] = useState(false);
   const loggedInUser = useUserStore((state) => state.user);
+  const isNsutUser = isNsutOnly(loggedInUser);
 
   // Form state for adding comments
   const [commentContent, setCommentContent] = useState("");
@@ -747,6 +749,7 @@ export function PYQs() {
         activeTab={activeTab}
         onTabChange={handleTabChange}
         questionsCount={questions.length}
+        showStats={isNsutUser}
       />
 
       {activeTab === "overview" && (
@@ -760,6 +763,7 @@ export function PYQs() {
           popularTopics={popularTopics}
           questionsCount={questions.length}
           onViewProblems={() => setActiveTab("problems")}
+          showEligibility={isNsutUser}
         />
       )}
 

@@ -10,6 +10,7 @@ export function CompanyOverviewTab({
   popularTopics,
   questionsCount,
   onViewProblems,
+  showEligibility = true,
 }) {
   return (
     <div className="flex flex-col lg:flex-row gap-8">
@@ -76,38 +77,40 @@ export function CompanyOverviewTab({
       {/* ── Right Sidebar ── */}
       <div className="w-full lg:w-64 flex-shrink-0 space-y-4 font-mono">
         {/* Eligibility */}
-        <div className="border border-neutral-900 bg-neutral-950/10 rounded-xl p-5">
-          <p className="text-xs tracking-wider uppercase text-neutral-500 mb-4 font-bold">
-            Eligibility
-          </p>
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-xs text-neutral-400">CGPA</span>
-              <span className="text-[#35b9f1] text-xs font-bold">
-                {cgpaDisplay}
-              </span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-xs text-neutral-400">Backlogs</span>
-              <span className="text-[#FF453A] text-xs font-bold tracking-wider uppercase">
-                NONE
-              </span>
-            </div>
-            <div className="flex items-start justify-between gap-4">
-              <span className="text-xs text-neutral-400 whitespace-nowrap">
-                Branches
-              </span>
-              <span className="text-neutral-200 text-xs font-bold tracking-wider uppercase text-right break-words">
-                {placementStats?.branches?.length > 0 &&
-                placementStats.branches.includes("all")
-                  ? "ALL OPEN"
-                  : eligibilityBranches?.includes("all")
+        {showEligibility && (
+          <div className="border border-neutral-900 bg-neutral-950/10 rounded-xl p-5">
+            <p className="text-xs tracking-wider uppercase text-neutral-500 mb-4 font-bold">
+              Eligibility
+            </p>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-neutral-400">CGPA</span>
+                <span className="text-[#35b9f1] text-xs font-bold">
+                  {cgpaDisplay}
+                </span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-neutral-400">Backlogs</span>
+                <span className="text-[#FF453A] text-xs font-bold tracking-wider uppercase">
+                  NONE
+                </span>
+              </div>
+              <div className="flex items-start justify-between gap-4">
+                <span className="text-xs text-neutral-400 whitespace-nowrap">
+                  Branches
+                </span>
+                <span className="text-neutral-200 text-xs font-bold tracking-wider uppercase text-right break-words">
+                  {placementStats?.branches?.length > 0 &&
+                  placementStats.branches.includes("all")
                     ? "ALL OPEN"
-                    : branchesDisplay}
-              </span>
+                    : eligibilityBranches?.includes("all")
+                      ? "ALL OPEN"
+                      : branchesDisplay}
+                </span>
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Placement History */}
         {placementStats && (

@@ -11,6 +11,7 @@ export function CompanyHeader({
   activeTab,
   onTabChange,
   questionsCount,
+  showStats = true,
 }) {
   const logoUrl = companyDetail?.logoUrl || getCompanyLogoUrl(selectedCompany);
 
@@ -54,24 +55,26 @@ export function CompanyHeader({
       </div>
 
       {/* ── Stats grid ── */}
-      <div className="border border-neutral-900 rounded-xl mb-8 bg-neutral-950/20 font-mono">
-        <div className="grid grid-cols-2 md:grid-cols-5 divide-x divide-y md:divide-y-0 divide-neutral-900">
-          {stats.map((stat, i) => (
-            <div key={i} className="px-5 py-5 text-center md:text-left">
-              <p className="text-[10px] tracking-widest uppercase text-neutral-500 mb-2">
-                {stat.label}
-              </p>
-              <p
-                className={`text-sm font-semibold tracking-wide ${
-                  i === 0 ? "text-[#35b9f1]" : "text-neutral-200"
-                }`}
-              >
-                {stat.value}
-              </p>
-            </div>
-          ))}
+      {showStats && (
+        <div className="border border-neutral-900 rounded-xl mb-8 bg-neutral-950/20 font-mono">
+          <div className="grid grid-cols-2 md:grid-cols-5 divide-x divide-y md:divide-y-0 divide-neutral-900">
+            {stats.map((stat, i) => (
+              <div key={i} className="px-5 py-5 text-center md:text-left">
+                <p className="text-[10px] tracking-widest uppercase text-neutral-500 mb-2">
+                  {stat.label}
+                </p>
+                <p
+                  className={`text-sm font-semibold tracking-wide ${
+                    i === 0 ? "text-[#35b9f1]" : "text-neutral-200"
+                  }`}
+                >
+                  {stat.value}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* ── Tab Navigation ── */}
       <div className="flex items-center gap-0 border-b border-neutral-900 mb-8 font-mono">

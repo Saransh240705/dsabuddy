@@ -477,3 +477,12 @@ export const updateMe = async (req, res) => {
   await deleteCacheByPattern("leaderboard:*");
   return res.status(200).json({ user: enriched });
 };
+
+export const isNsutOnly = (user) => {
+  if (!user) return false;
+  const email = user.email?.toLowerCase() || '';
+  return (
+    email.endsWith('nsut.ac.in')
+  );
+};
+

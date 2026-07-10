@@ -49,3 +49,12 @@ export function getErrorMessage(error) {
   }
   return error.message || "An unexpected error occurred.";
 }
+
+export const isNsutOnly = (user) => {
+  if (!user) return false;
+  const email = user.email?.toLowerCase() || '';
+  return (
+    email.endsWith('nsut.ac.in')
+  );
+};
+

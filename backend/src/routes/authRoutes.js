@@ -53,7 +53,7 @@ router.get("/google/callback", (req, res, next) => {
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       maxAge: 7 * 24 * 60 * 60 * 1000,
-      domain: process.env.COOKIE_DOMAIN || undefined,
+      domain: process.env.NODE_ENV === "production" ? process.env.COOKIE_DOMAIN : undefined,
     });
 
     const needsOnboarding = !user.branch;
@@ -74,7 +74,7 @@ router.get("/logout", (req, res) => {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
-    domain: process.env.COOKIE_DOMAIN || undefined,
+    domain: process.env.NODE_ENV === "production" ? process.env.COOKIE_DOMAIN : undefined,
   });
   const redirectUrl = req.headers.referer || process.env.FRONTEND_URL || "http://localhost:5173";
   res.redirect(redirectUrl);

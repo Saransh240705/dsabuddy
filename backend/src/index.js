@@ -122,7 +122,7 @@ passport.use(
             userName: user.userName,
           },
           process.env.JWT_SECRET,
-          { expiresIn: process.env.JWT_EXPIRES || '7d' }
+          { expiresIn: '7d' }
         );
 
         return done(null, { ...user, token });
