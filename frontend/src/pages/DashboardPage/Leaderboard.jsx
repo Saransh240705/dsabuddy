@@ -4,6 +4,7 @@ import { LeaderboardRow } from './components';
 import { TrendingUp } from 'lucide-react';
 import { userService } from '@/api/services';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useUserStore } from '@/store/useUserStore';
 
 const LEADERBOARD_FILTERS = [
   { id: "college", label: "College" },
@@ -17,6 +18,7 @@ export function Leaderboard({ user, onRankChange }) {
   const [activeFilter, setActiveFilter] = useState('college');
   const [activeSubFilter, setActiveSubFilter] = useState('all');
   const [leaderboardData, setLeaderboardData] = useState([]);
+  const [userRank, setUserRank] = useState('-');
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -30,6 +32,7 @@ export function Leaderboard({ user, onRankChange }) {
     setSkip(0);
     setLeaderboardData([]);
     setHasMore(true);
+    setUserRank('-');
   }, [activeFilter, activeSubFilter]);
 
   useEffect(() => {
@@ -37,6 +40,16 @@ export function Leaderboard({ user, onRankChange }) {
       try {
         if (skip === 0) {
           setLoading(true);
+          const loggedInUser = useUserStore.getState().user;
+          if (loggedInUser) {
+            userService.getMe()
+              .then(res => {
+                if (res?.user) {
+                  useUserStore.getState().setUser(res.user);
+                }
+              })
+              .catch(err => console.error("Failed to refresh user profile on leaderboard load:", err));
+          }
         } else {
           setLoadingMore(true);
         }
@@ -55,6 +68,9 @@ export function Leaderboard({ user, onRankChange }) {
           }));
           setLeaderboardData(prev => skip === 0 ? mapped : [...prev, ...mapped]);
           setHasMore(mapped.length === 10);
+          if (skip === 0) {
+            setUserRank(res.currentUserRank ?? '-');
+          }
         }
       } catch (e) {
         console.error("Failed to fetch leaderboard", e);
@@ -72,12 +88,7 @@ export function Leaderboard({ user, onRankChange }) {
     if (currentUser.userName && u.userName) return u.userName === currentUser.userName;
     return false;
   });
-  const currentUserRank = matchedUser?.rank
-    ?? (activeFilter === 'college' ? currentUser.collegeRank
-      : activeFilter === 'branch' ? currentUser.branchRank
-      : activeFilter === 'year' ? currentUser.yearRank
-      : activeFilter === 'class' ? currentUser.classRank
-      : currentUser.overallRank) ?? '-';
+  const currentUserRank = matchedUser?.rank ?? userRank;
 
   useEffect(() => {
     if (onRankChange) {

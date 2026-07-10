@@ -149,7 +149,7 @@ export function Settings({ user: propUser, platforms, onUpdate }) {
         useUserStore.getState().setUser(res.user);
       }
       setProfileSuccess('Profile updated successfully!');
-      if (onUpdate) await onUpdate();
+      if (onUpdate) await onUpdate(true);
     } catch (err) {
       console.error(err);
       setProfileError(err.message || 'Failed to update profile.');
@@ -183,7 +183,7 @@ export function Settings({ user: propUser, platforms, onUpdate }) {
         }
       }
       setPlatformsSuccess('Platform connections updated successfully!');
-      if (onUpdate) await onUpdate();
+      if (onUpdate) await onUpdate(true);
     } catch (err) {
       console.error(err);
       setPlatformsError(err.message || 'Failed to update platform connections.');

@@ -24,7 +24,7 @@ export function Dashboard({ user, platforms, analytics, leaderboard, onUpdate })
       );
       
       if (onUpdate) {
-        await onUpdate();
+        await onUpdate(true);
       }
     } catch (err) {
       console.error("Failed to sync platforms:", err);

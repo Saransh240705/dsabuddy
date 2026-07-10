@@ -89,6 +89,65 @@ export const enrichUserWithRanks = async (user) => {
   };
 };
 
+const getRequestingUserRank = async (requestingUserId, requestingUserPoints, filter, whereClause, sortBy, platformKey) => {
+  if (!requestingUserId) return null;
+
+  if (platformKey) {
+    const userConnection = await prisma.platformConnection.findFirst({
+      where: { userId: requestingUserId, platform: platformKey },
+      select: { rating: true }
+    });
+    const requestingUserRating = userConnection?.rating ?? -1;
+
+    const [higherRatingCount, equalRatingHigherPointsCount] = await Promise.all([
+      prisma.user.count({
+        where: {
+          ...whereClause,
+          platformConnections: {
+            some: {
+              platform: platformKey,
+              rating: { gt: requestingUserRating }
+            }
+          }
+        }
+      }),
+      prisma.user.count({
+        where: {
+          ...whereClause,
+          OR: [
+            {
+              points: { gt: requestingUserPoints },
+              platformConnections: {
+                some: {
+                  platform: platformKey,
+                  rating: requestingUserRating
+                }
+              }
+            },
+            ...(requestingUserRating === -1 ? [
+              {
+                points: { gt: requestingUserPoints },
+                platformConnections: {
+                  none: { platform: platformKey }
+                }
+              }
+            ] : [])
+          ]
+        }
+      })
+    ]);
+
+    return higherRatingCount + equalRatingHigherPointsCount + 1;
+  }
+
+  // Default points sort
+  const rank = await prisma.user.count({
+    where: { ...whereClause, points: { gt: requestingUserPoints } }
+  }).then(n => n + 1);
+
+  return rank;
+};
+
 export const getLeaderboard = async (req, res) => {
   const take = parseInt(req.query.take ?? 50, 10);
   const skip = parseInt(req.query.skip ?? 0, 10);
@@ -102,7 +161,7 @@ export const getLeaderboard = async (req, res) => {
   if (requestingUserId) {
     requestingUser = await prisma.user.findUnique({
       where: { id: requestingUserId },
-      select: { college: true, branch: true, year: true },
+      select: { college: true, branch: true, year: true, points: true },
     });
   }
 
@@ -128,119 +187,137 @@ export const getLeaderboard = async (req, res) => {
   }
   const cacheKey = `leaderboard:${filter ?? "all"}:${filterValue ?? "none"}:${sortBy ?? "points"}:${take}:${skip}`;
 
+  let leaderboardResult = null;
   const cachedLeaderboard = await getCache(cacheKey);
 
   if (cachedLeaderboard) {
-    return res.status(200).json(cachedLeaderboard);
-  }
+    leaderboardResult = cachedLeaderboard;
+  } else {
+    const platformKey = PLATFORM_SORT_MAP[sortBy]; // undefined when sortBy is 'all' or absent
 
-  const platformKey = PLATFORM_SORT_MAP[sortBy]; // undefined when sortBy is 'all' or absent
-
-  if (platformKey) {
-    // Fetch users with their platform connections so we can sort by platform rating in JS
-    const allUsers = await prisma.user.findMany({
-      where: whereClause,
-      select: {
-        id: true,
-        name: true,
-        userName: true,
-        avatarUrl: true,
-        branch: true,
-        year: true,
-        points: true,
-        platformConnections: {
-          where: { platform: platformKey },
-          select: { rating: true },
-          take: 1,
+    if (platformKey) {
+      // Fetch users with their platform connections so we can sort by platform rating in JS
+      const allUsers = await prisma.user.findMany({
+        where: whereClause,
+        select: {
+          id: true,
+          name: true,
+          userName: true,
+          avatarUrl: true,
+          branch: true,
+          year: true,
+          points: true,
+          platformConnections: {
+            where: { platform: platformKey },
+            select: { rating: true },
+            take: 1,
+          },
         },
-      },
-    });
+      });
 
-    // Sort by the platform rating descending (users with no connection go to the bottom)
-    // Use overall points as a tie-breaker if ratings are equal
-    allUsers.sort((a, b) => {
-      const ratingA = a.platformConnections[0]?.rating ?? -1;
-      const ratingB = b.platformConnections[0]?.rating ?? -1;
-      if (ratingB !== ratingA) {
-        return ratingB - ratingA;
+      // Sort by the platform rating descending (users with no connection go to the bottom)
+      // Use overall points as a tie-breaker if ratings are equal
+      allUsers.sort((a, b) => {
+        const ratingA = a.platformConnections[0]?.rating ?? -1;
+        const ratingB = b.platformConnections[0]?.rating ?? -1;
+        if (ratingB !== ratingA) {
+          return ratingB - ratingA;
+        }
+        return (b.points ?? 0) - (a.points ?? 0);
+      });
+
+      // Competition ranking: equal ratings share the same rank (matches the
+      // rank shown on a user's profile), instead of a dense row index.
+      let rank = 0;
+      let prevRating = null;
+      const usersWithRank = allUsers.map((u, idx) => {
+        const { platformConnections, ...rest } = u;
+        const rating = platformConnections[0]?.rating ?? -1;
+        if (idx === 0 || rating !== prevRating) {
+          rank = idx + 1;
+        }
+        prevRating = rating;
+        return {
+          ...rest,
+          overallRank: rank,
+          displayValue: platformConnections[0]?.rating ?? null,
+          displayLabel: `${sortBy} rating`,
+        };
+      });
+
+      const paginatedUsers = usersWithRank.slice(skip, skip + take);
+      leaderboardResult = { users: paginatedUsers };
+    } else {
+      // Default: sort by overall points, paginated at the DB level.
+      const pageUsers = await prisma.user.findMany({
+        where: whereClause,
+        orderBy: [{ points: "desc" }, { createdAt: "asc" }],
+        skip,
+        take,
+        select: {
+          id: true,
+          name: true,
+          userName: true,
+          avatarUrl: true,
+          branch: true,
+          year: true,
+          points: true,
+        },
+      });
+
+      let usersWithRank = [];
+      if (pageUsers.length > 0) {
+        const rankOffset = await prisma.user.count({
+          where: { ...whereClause, points: { gt: pageUsers[0].points } },
+        });
+
+        let rank = rankOffset + 1;
+        let prevPoints = pageUsers[0].points;
+        usersWithRank = pageUsers.map((u, i) => {
+          if (i > 0 && u.points !== prevPoints) {
+            rank = skip + i + 1;
+          }
+          prevPoints = u.points;
+          return {
+            ...u,
+            overallRank: rank,
+            displayValue: u.points,
+            displayLabel: "points",
+          };
+        });
       }
-      return (b.points ?? 0) - (a.points ?? 0);
-    });
+      leaderboardResult = { users: usersWithRank };
+    }
 
-    // Competition ranking: equal ratings share the same rank (matches the
-    // rank shown on a user's profile), instead of a dense row index.
-    let rank = 0;
-    let prevRating = null;
-    const usersWithRank = allUsers.map((u, idx) => {
-      const { platformConnections, ...rest } = u;
-      const rating = platformConnections[0]?.rating ?? -1;
-      if (idx === 0 || rating !== prevRating) {
-        rank = idx + 1;
-      }
-      prevRating = rating;
-      return {
-        ...rest,
-        overallRank: rank,
-        displayValue: platformConnections[0]?.rating ?? null,
-        displayLabel: `${sortBy} rating`,
-      };
-    });
-
-    const paginatedUsers = usersWithRank.slice(skip, skip + take);
-    const response = { users: paginatedUsers };
-
-    await setCache(cacheKey, response, 300);
-
-    return res.status(200).json(response);
+    try {
+      await setCache(cacheKey, leaderboardResult, 300);
+    } catch (err) {
+      console.error("Error writing leaderboard cache:", err);
+    }
   }
 
-  // Default: sort by overall points, paginated at the DB level.
-  const pageUsers = await prisma.user.findMany({
-    where: whereClause,
-    orderBy: [{ points: "desc" }, { createdAt: "asc" }],
-    skip,
-    take,
-    select: {
-      id: true,
-      name: true,
-      userName: true,
-      avatarUrl: true,
-      branch: true,
-      year: true,
-      points: true,
-    },
+  // Calculate the requesting user's rank dynamically (not cached)
+  let currentUserRank = null;
+  if (requestingUserId && requestingUser) {
+    const platformKey = PLATFORM_SORT_MAP[sortBy];
+    try {
+      currentUserRank = await getRequestingUserRank(
+        requestingUserId,
+        requestingUser.points,
+        filter,
+        whereClause,
+        sortBy,
+        platformKey
+      );
+    } catch (err) {
+      console.error("Error calculating current user rank:", err);
+    }
+  }
+
+  return res.status(200).json({
+    ...leaderboardResult,
+    currentUserRank,
   });
-
-  // Competition ranking (ties share a rank), consistent with the profile's
-  // `count(points > mine) + 1`. Only one extra count query is needed to find
-  // the rank offset of the first row on this page.
-  let usersWithRank = [];
-  if (pageUsers.length > 0) {
-    const rankOffset = await prisma.user.count({
-      where: { ...whereClause, points: { gt: pageUsers[0].points } },
-    });
-
-    let rank = rankOffset + 1;
-    let prevPoints = pageUsers[0].points;
-    usersWithRank = pageUsers.map((u, i) => {
-      if (i > 0 && u.points !== prevPoints) {
-        rank = skip + i + 1;
-      }
-      prevPoints = u.points;
-      return {
-        ...u,
-        overallRank: rank,
-        displayValue: u.points,
-        displayLabel: "points",
-      };
-    });
-  }
-
-  const response = { users: usersWithRank };
-
-  await setCache(cacheKey, response, 300);
-
-  return res.status(200).json(response);
 };
 
 export const getUserByUserName = async (req, res) => {

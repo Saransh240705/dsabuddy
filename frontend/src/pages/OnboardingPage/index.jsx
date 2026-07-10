@@ -203,7 +203,6 @@ export default function OnboardingPage() {
 
       if (updateRes?.user) {
         setUser(updateRes.user);
-        localStorage.setItem('dsabuddy_user', JSON.stringify(updateRes.user));
       }
 
       // 2. Link platform connections

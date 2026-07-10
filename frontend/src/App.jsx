@@ -43,6 +43,17 @@ function PublicRoute({ children }) {
 }
 
 function App() {
+  const user = useUserStore((state) => state.user);
+  const setUser = useUserStore((state) => state.setUser);
+
+  useEffect(() => {
+    if (user) {
+      userService.getMe()
+        .then(res => setUser(res.user || res))
+        .catch(() => {});
+    }
+  }, []);
+
   return (
     <Router>
       <Suspense fallback={null}>

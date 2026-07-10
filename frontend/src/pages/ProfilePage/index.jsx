@@ -187,7 +187,6 @@ export default function ProfilePage({ embedded = false, username: usernameProp }
       console.error("Logout failed:", e);
     }
     setUser(null);
-    localStorage.removeItem("dsabuddy_dashboard_cache");
     window.location.href = "/login";
   };
 

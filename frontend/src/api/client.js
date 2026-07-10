@@ -17,11 +17,13 @@ apiClient.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       useUserStore.getState().setUser(null);
-      localStorage.removeItem('dsabuddy_dashboard_cache');
       
       const isPublicPath = 
         window.location.pathname === '/' || 
         window.location.pathname.startsWith('/about') || 
+        window.location.pathname.startsWith('/contact') || 
+        window.location.pathname.startsWith('/leaderboard') || 
+        window.location.pathname.startsWith('/questions') || 
         window.location.pathname.startsWith('/profile');
         
       if (!isPublicPath) {

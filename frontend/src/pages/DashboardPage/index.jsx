@@ -46,7 +46,6 @@ export function DashboardPage() {
       console.error("Logout failed:", e);
     }
     setUser(null);
-    localStorage.removeItem("dsabuddy_dashboard_cache");
     lastDashboardFetchAt = 0; // force a fresh fetch on next login
     window.location.href = "/login";
   };
@@ -82,13 +81,10 @@ export function DashboardPage() {
     try {
       setError(null);
 
-      const u = useUserStore.getState().user;
-      const fetchUser = force || !u;
-
       const [platRes, analyticsRes, userRes] = await Promise.all([
         apiClient.get('/platform-connections'),
         apiClient.get('/daily-activity/analytics'),
-        fetchUser ? apiClient.get('/auth/me') : Promise.resolve(null),
+        apiClient.get('/auth/me'),
       ]);
 
       const p = platRes.platformConnections || platRes;
@@ -96,24 +92,9 @@ export function DashboardPage() {
 
       setAnalytics(analyticsRes);
 
-      const updatedUser = userRes ? (userRes.user || userRes) : u;
+      const updatedUser = userRes ? (userRes.user || userRes) : null;
       if (updatedUser) {
         setUser(updatedUser);
-      }
-
-      const updatedCache = {
-        user: updatedUser,
-        platforms: p,
-        analytics: analyticsRes,
-      };
-
-      try {
-        localStorage.setItem(
-          "dsabuddy_dashboard_cache",
-          JSON.stringify(updatedCache),
-        );
-      } catch (e) {
-        console.error("Failed to write dashboard cache", e);
       }
 
       lastDashboardFetchAt = Date.now();
@@ -126,21 +107,8 @@ export function DashboardPage() {
   }, [setUser]);
 
   useEffect(() => {
-    // Load from cache immediately so the user has something to see instantly
-    try {
-      const cachedData = localStorage.getItem("dsabuddy_dashboard_cache");
-      if (cachedData) {
-        const parsed = JSON.parse(cachedData);
-        if (parsed.user) setUser(parsed.user);
-        if (parsed.platforms) setPlatforms(parsed.platforms);
-        if (parsed.analytics) setAnalytics(parsed.analytics);
-      }
-    } catch (e) {
-      console.error("Failed to load dashboard cache", e);
-    }
-
     fetchData();
-  }, [fetchData, setUser]);
+  }, [fetchData]);
 
   const renderSection = () => {
     if (firstLoad && !storeUser) {
