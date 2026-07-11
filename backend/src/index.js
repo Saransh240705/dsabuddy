@@ -87,11 +87,13 @@ passport.use(
         const isAllowedEmail = 
           domain === "nsut.ac.in" || 
           domain === "dtu.ac.in" || 
+          domain === "igdtuw.ac.in" || 
           domain.endsWith(".nsut.ac.in") || 
-          domain.endsWith(".dtu.ac.in");
+          domain.endsWith(".dtu.ac.in") || 
+          domain.endsWith(".igdtuw.ac.in");
 
         if (!isAllowedEmail) {
-          return done(new Error("Only NSUT (@nsut.ac.in) and DTU (@dtu.ac.in) email addresses are allowed."), null);
+          return done(new Error("Only NSUT, DTU, and IGDTUW email addresses are allowed."), null);
         }
         let user = await prisma.user.findUnique({ where: { email } });
 

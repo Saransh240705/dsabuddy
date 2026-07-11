@@ -47,8 +47,10 @@ export const RegisterForm = () => {
     return (
       domain === "nsut.ac.in" ||
       domain === "dtu.ac.in" ||
+      domain === "igdtuw.ac.in" ||
       domain.endsWith(".nsut.ac.in") ||
-      domain.endsWith(".dtu.ac.in")
+      domain.endsWith(".dtu.ac.in") ||
+      domain.endsWith(".igdtuw.ac.in")
     );
   };
 
@@ -74,7 +76,7 @@ export const RegisterForm = () => {
     setError("");
 
     if (!isAllowedEmail(formData.email)) {
-      setError("Only NSUT (@nsut.ac.in) and DTU (@dtu.ac.in) email addresses are allowed to register.");
+      setError("Only NSUT, DTU, and IGDTUW email addresses are allowed to register.");
       return;
     }
 

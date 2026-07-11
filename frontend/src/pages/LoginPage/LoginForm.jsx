@@ -24,7 +24,7 @@ export const LoginForm = () => {
     const params = new URLSearchParams(window.location.search);
     const errorParam = params.get("error");
     if (errorParam === "email_not_allowed" || errorParam === "email_not_nsut") {
-      setError("Only NSUT (@nsut.ac.in) and DTU (@dtu.ac.in) email addresses are allowed.");
+      setError("Only NSUT, DTU, and IGDTUW email addresses are allowed.");
       window.history.replaceState({}, document.title, window.location.pathname);
     } else if (errorParam === "auth_token_missing") {
       setError("Authentication token missing. Please try again.");

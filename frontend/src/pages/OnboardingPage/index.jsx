@@ -41,6 +41,9 @@ export default function OnboardingPage() {
     if (lower.endsWith('dtu.ac.in')) {
       return 'Delhi Technological University';
     }
+    if (lower.endsWith('igdtuw.ac.in')) {
+      return 'Indira Gandhi Delhi Technical University for Women';
+    }
     return '';
   };
 
