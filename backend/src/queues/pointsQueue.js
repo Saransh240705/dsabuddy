@@ -8,8 +8,8 @@ export const pointsQueue = new Queue(POINTS_QUEUE_NAME, {
   defaultJobOptions: {
     attempts: 3,
     backoff: { type: "exponential", delay: 5000 },
-    removeOnComplete: { count: 1000 },
-    removeOnFail: { count: 1000 },
+    removeOnComplete: { count: 20, age: 3600 },
+    removeOnFail: { count: 100, age: 86400 },
   },
 });
 

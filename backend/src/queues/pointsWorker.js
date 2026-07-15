@@ -59,6 +59,7 @@ export const pointsWorker = new Worker(
     connection: bullConnection,
     concurrency: 5,
     limiter: { max: 10, duration: 1000 }, // throttle external platform API calls
+    drainDelay: 30,
   }
 );
 
